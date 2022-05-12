@@ -40,7 +40,7 @@
           <span class="h5"><i class="icon fas fa-exclamation-triangle"></i>Your supervisor has added a comment.</span>
           </div>
         @endif
-        <div class="card-footer d-flex align-items-center">
+        <div class="card-footer align-items-center">
             @if(Auth::user()->reporteesCount() > 0 && (request()->is('goal/current') || request()->is('goal/library')))
                 @include('goal.partials.goal-share-with-dropdown')
             @endif
@@ -66,14 +66,13 @@
                 @else
                     <x-goal-status :status="$goal->status"></x-goal-status>
                 @endif
-            </div>
-            @endif
-            @if (!$goal->is_library)
-            <x-button
+                <x-button
                 :href='route("goal.show", $goal->id)'
                 :tooltip="__('Click to view the details of this goal.')"
                 tooltipPosition="bottom" class="ml-2">{{__('View')}}</x-button>
+            </div>
             @endif
+            
             @if(($type ?? '') === 'supervisor' && !$disableEdit)
                 <form action="{{route('goal.supervisor.copy', $goal->id)}}" method="post" onSubmit="return confirm('This goal will be copied to your Current Goals tab. You can access and edit it there without impacting your supervisor\'s goal. Continue?');">
                     @csrf
