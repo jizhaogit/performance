@@ -97,5 +97,14 @@ class DashboardController extends Controller
         return redirect()->back();
         // return response()->json(['success'=>"Notification(s) updated successfully."]);
     }
+    
+    
+    public function revertIdentity(Request $request) {
+         $oldUserId = $request->session()->get('existing_user_id');
+         Auth::loginUsingId($oldUserId);
+         $request->session()->forget('existing_user_id');
+         $request->session()->forget('user_is_switched');
+         return redirect()->back();
+    }
 
 }

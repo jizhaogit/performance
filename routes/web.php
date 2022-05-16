@@ -39,3 +39,4 @@ use Illuminate\Support\Facades\Route;
         return view('my-performance');
     })->middleware(['auth'])->name('my-performance');
     require __DIR__.'/auth.php';
+    Route::get('dashboard/revert-identity', [DashboardController::class, 'revertIdentity'])->name('dashboard.revert-identity');

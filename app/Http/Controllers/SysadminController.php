@@ -840,9 +840,32 @@ class SysadminController extends Controller
         ];
     }
 
-    public function switchIdentity() {
-        return view('sysadmin.switch-identity.index');
-    }
+    public function switchIdentity(Request $request) {
+        //$query = User::orderby('name','asc')->select('id','name','email');
+         
+        if ($request->has('new_user_id') && $request->new_user_id) {
+            $request->session()->put('existing_user_id', Auth::user()->id);
+            $request->session()->put('user_is_switched', true);
+            $newuserId = $request->new_user_id;
+            Auth::loginUsingId($newuserId);
+            return redirect()->to('/');
+        }    
+   
+        $username = '';
+        $users = array();
+
+        if ($request->has('username') && $request->username) {
+            $username = $request->username;
+            $query = User::where('name', "LIKE", "%$request->username%");
+            $users = $query->get()->toArray();
+        }         
+        $count = count($users);
+
+        //return view('sysadmin.switch-identity.index', $users);
+        return view('sysadmin.switch-identity.index', compact('users', 'username', 'count'));
+        
+        //return view('sysadmin.switch-identity.index');
+    }    
 
     public function getOrganizations(Request $request) 
     {
