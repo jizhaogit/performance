@@ -2,7 +2,7 @@
 <div class="card p-3">
        
         <div class="form-row">
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-2">
             <label for="dd_level0">Organization</label>
             <select id="dd_level0" name="dd_level0" class="form-control select2">
                 @if ( old('dd_level0') && session()->get('level0') )
@@ -10,31 +10,31 @@
                 @endif
             </select>
           </div>
-          <div class="form-group col-md-3">
-            <label for="dd_level1">Program</label>
+          <div class="form-group col-md-2">
+            <label for="dd_level1">Level 1</label>
             <select id="dd_level1" name="dd_level1" class="form-control select2">
                 @if ( old('dd_level1') && session()->get('level1') )
                     <option value="{{ session()->get('level1')->id }}">{{ session()->get('level1')->name }}</option>
                 @endif
             </select>
           </div>
-          <div class="form-group col-md-3">
-            <label for="dd_level2">Division</label>
+          <div class="form-group col-md-2">
+            <label for="dd_level2">Level 2</label>
             <select id="dd_level2" name="dd_level2" class="form-control select2">
                 @if ( old('dd_level2') && session()->get('level2') )
                     <option value="{{ session()->get('level2')->id }}">{{ session()->get('level2')->name }}</option>
                 @endif
             </select>
           </div>
-          <div class="form-group col-md-3">
-            <label for="dd_level3">Branch</label>
+          <div class="form-group col-md-2">
+            <label for="dd_level3">Level 3</label>
             <select id="dd_level3" name="dd_level3" class="form-control select2">
                 @if ( old('dd_level3') && session()->get('level3') )
                     <option value="{{ session()->get('level3')->id }}">{{ session()->get('level3')->name }}</option>
                 @endif
             </select>
           </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-2">
             <label for="dd_level4">Level 4</label>
             <select id="dd_level4" name="dd_level4" class="form-control select2">
                 @if ( old('dd_level4') && session()->get('level4') )
@@ -43,14 +43,12 @@
             </select>
           </div>
 
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-2">
+          </div>
+
+          {{-- <div class="form-group col-md-3">
                 <label for="job_titles">Job Titles</label>
                 <select id="job_titles" name="job_titles[]" class="form-control select2" multiple="multiple">
-                    {{-- @if (old('job_titles') )
-                    @foreach( old('job_titles') as $job_title)
-                        <option value="{{ $job_title }}" selected>{{ $job_title }}</option>
-                    @endforeach
-                    @endif --}}
                     @if ( old('job_titles') && session()->get('job_titles') )
                     @foreach( session()->get('job_titles') as $job_title)
                         <option value="{{ $job_title }}" selected>{{ $job_title }}</option>
@@ -63,7 +61,7 @@
                 <input type="date" class="form-control" id="active_since" name="active_since" 
                     value="{{ old('active_since') }}">
             </div>
-
+ --}}
             <div class="form-group col-md-2">
                 <label for="criteria">Search Criteria</label>
                 <select id="criteria" name="criteria" class="form-control">
@@ -74,22 +72,22 @@
             </div>
 
             <div class="form-group col-md-2">
-                <label for="search_text">search</label>
+                <label for="search_text">Search Text</label>
                 <input type="text" id="search_text" name="search_text" class="form-control" 
                         value="{{ old('search_text') }}" placeholder="Employee name">
             </div>
 
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-12">
-              <span class="float-right">  
-               <button type="submit" class="btn btn-primary" name="btn_search" 
-                    value="btn_search" formaction="{{ route('sysadmin.accesspermissions.search') }}">Search</button>
-               <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">reset</button>
-              </span>
-            </div>
-        </div>
+            <div class="form-group col-md-2 p-3 float-left float-bottom" style="display: flex; flex-direction: column;">
+                <div class="form-group row"> </div>
+                <div class="form-group row">
+                    <span class="float-left float-bottom">  
+                    <button type="submit" class="btn btn-primary" name="btn_search" 
+                        value="btn_search" formaction="{{ route('sysadmin.accesspermissions.search') }}">Filter</button>
+                    <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
+                    </span>
+                </div>
+              </div>
+          </div>
 
 </div>
 
@@ -120,7 +118,7 @@
 
     <script>
     $('#dd_level0').select2({
-        placeholder: 'select organization',
+        placeholder: 'Select Organization',
         allowClear: true,
         ajax: {
             url: '/sysadmin/accesspermissions/org-organizations'
@@ -142,7 +140,7 @@
     });
 
     $('#dd_level1').select2({
-        placeholder: 'select program',
+        placeholder: 'Select Level 1',
         allowClear: true,
         ajax: {
             url: '/sysadmin/accesspermissions/org-programs' 
@@ -165,7 +163,7 @@
     });
 
     $('#dd_level2').select2({
-        placeholder: 'select division',
+        placeholder: 'Select Level 2',
         allowClear: true,
         ajax: {
             url: '/sysadmin/accesspermissions/org-divisions' 
@@ -189,7 +187,7 @@
     });
 
     $('#dd_level3').select2({
-        placeholder: 'select branch',
+        placeholder: 'Select Level 3',
         allowClear: true,
         ajax: {
             url: '/sysadmin/accesspermissions/org-branches' 
@@ -214,7 +212,7 @@
     });
 
     $('#dd_level4').select2({
-        placeholder: 'select level 4',
+        placeholder: 'Select level 4',
         allowClear: true,
         ajax: {
             url: '/sysadmin/accesspermissions/org-level4' 
@@ -265,27 +263,27 @@
         $('#dd_level4').val(null).trigger('change');
     });
 
-    $('#job_titles').select2({
-        placeholder: 'select job title',
-        allowClear: true,
-        ajax: {
-            url: '/sysadmin/accesspermissions/job-titles' 
-            , dataType: 'json'
-            , delay: 250
-            , data: function(params) {
-                var query = {
-                    'q': params.term
-                , }
-                return query;
-            }
-            , processResults: function(data) {
-                return {
-                    results: data
-                    };
-            }
-            , cache: false
-        }
-    });
+    // $('#job_titles').select2({
+    //     placeholder: 'select job title',
+    //     allowClear: true,
+    //     ajax: {
+    //         url: '/sysadmin/accesspermissions/job-titles' 
+    //         , dataType: 'json'
+    //         , delay: 250
+    //         , data: function(params) {
+    //             var query = {
+    //                 'q': params.term
+    //             , }
+    //             return query;
+    //         }
+    //         , processResults: function(data) {
+    //             return {
+    //                 results: data
+    //                 };
+    //         }
+    //         , cache: false
+    //     }
+    // });
 
     $('#btn_search_reset').click(function() {
         $('#dd_level0').val(null).trigger('change');
@@ -293,7 +291,7 @@
         $('#dd_level2').val(null).trigger('change');
         $('#dd_level3').val(null).trigger('change');
         $('#dd_level4').val(null).trigger('change');
-        $('#job_titles').val(null).trigger('change');
+        // $('#job_titles').val(null).trigger('change');
         $('#active_since').val(null);
         $('#search_text').val(null);
     });

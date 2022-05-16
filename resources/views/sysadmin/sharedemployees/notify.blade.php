@@ -13,8 +13,8 @@
 </div>
 
 
-<p class="px-3">All employees are required to complete a performance profile if they have worked more than 30 days within the Ministry's performance reporting cycle.  Employees may be excused from completing a profile <i>only</i> if they fit into one of the categories listed in the dropdown box below.</p>
-<p class="px-3"><b>Note:</b>  Employees that show up incorrectly in your list can be changed by contacting AskMyHR to change the reporting relationship.</p>
+<p class="px-3">Supervisors and Ministry Administrators may share an employee's MyPerformance profile with another supervisor, or staff who normally handle employee's permanent personnel records (ie. Public Service Agency) for a legitimate business reason; such as shared supervisory duties.  An employee may wish to share their profile with someone other than a direct supervisor (for example, a hiring manager).  In order to do this <b>- the employee's consent is required.</b></p>
+<p class="px-3">To continue, please use the functions below to select the employee profiles that you would like to share, the supervisor you would like to share the profiles with, which elements you would like to share, and your reason for sharing the profile.</p>
 
 
 
@@ -114,7 +114,7 @@
 <div class="card">
 	<div class="card-body">
 
-			<div class="form-row mb-2">
+		<div class="form-row mb-2">
 {{-- 
 			  <div class="col-6">
 				<label for="recipients">To</label>
@@ -133,68 +133,13 @@
 				@enderror
 			  </div>
  --}}				
-			  <div class="col-4">
-				<label for="sender_id" >From</label>
-				<select class="form-control select2 @error('sender_id') is-invalid @enderror" 
-						name="sender_id" id="sender_id" >
-					@if (old('sender_id')) 
-						@foreach ( Session::get('old_sender_ids') ?? [] as $key =>$value )
-							<option value="{{ $key }}" selected="selected">{{ $value }}</option>
-						@endforeach
-					@endif
-				</select>
-				@error('sender_id')
-					<span class="invalid-feedback">
-					{{  $message  }}
-					</span>
-				@enderror
-			  </div>
-			</div>
-			<div class="form-row mb-2">
-			  <div class="col-8">
-				<label for="subject">Subject</label>
-				<input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror" 
-				    placeholder="Subject" value="{{ old('subject') }}">
-				@error('subject')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-			  	@enderror
-			  </div>
 
-			  <div class="col-2">
-				<label for="alert_format">Alert format</label>
-				<select  class="form-control @error('alert_format') is-invalid @enderror" id="alert_format" name="alert_format">
-					@foreach ($alert_format_list as $key => $value)
-					  <option value="{{ $key }}" {{ old('alert_format') == $value ?? 'selected'}}>{{ $value }}</option>
-					@endforeach
-				  </select>     
-				@error('alert_format')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-			  	@enderror
-			  </div>
-
-			</div>
-			<div class="form-row mb-2">
-				<div class="col-10">
-				  <label for="body">Body</label>
-				  <textarea type="text" id="body" name="body" class="form-control  @error('body') is-invalid @enderror" 
-				     placeholder="Type the content here" rows="3">{{ old('body') }}</textarea>
-				  @error('body')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-				  @enderror
-				</div>
-			  </div>
-
+		</div>    
 	</div>    
 </div>   
 
 <br><h6 class="text-bold">Step 3. Enter Sharing Details</h6><br>
-<div class="card">
+{{-- <div class="card">
 	<div class="card-body">
 		<div class="form-row mb-2 p-3" style="text-align:center">
 			<input class="" type="checkbox"  id="chkbox_declare" name="chkbox_declare" value="">
@@ -205,7 +150,7 @@
 				<span class="h5" aria-hidden="true"><i class="icon fa fa-exclamation-triangle  "></i><b>Note:  By doing so, these employees will not show up in current and historical performance reports.</b></span>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 </div>
 
 <br><h6 class="text-bold">Step 4. Share selected profile(s)</h6><br>

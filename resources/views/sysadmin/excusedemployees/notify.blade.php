@@ -98,10 +98,6 @@
 		<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
 			<span class="sr-only">Loading...</span>
 		</div>
-{{-- 
-		@include('sysadmin.excusedemployees.partials.recipient-tree')
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.		
---}}
 	</div>
 
   </div>
@@ -133,63 +129,14 @@
 				@enderror
 			  </div>
  --}}				
-			  <div class="col-4">
-				<label for="sender_id" >From</label>
-				<select class="form-control select2 @error('sender_id') is-invalid @enderror" 
-						name="sender_id" id="sender_id" >
-					@if (old('sender_id')) 
-						@foreach ( Session::get('old_sender_ids') ?? [] as $key =>$value )
-							<option value="{{ $key }}" selected="selected">{{ $value }}</option>
-						@endforeach
-					@endif
-				</select>
-				@error('sender_id')
-					<span class="invalid-feedback">
-					{{  $message  }}
-					</span>
-				@enderror
-			  </div>
-			</div>
-			<div class="form-row mb-2">
-			  <div class="col-8">
-				<label for="subject">Subject</label>
-				<input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror" 
-				    placeholder="Subject" value="{{ old('subject') }}">
-				@error('subject')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-			  	@enderror
-			  </div>
+	{{-- <input type="date" label="From" class="form-control" name="excused_start" value="{{request()->excused_start ?? ''}}">
+	<input type="radio" name="indefinite" value="indefinite"> Indefinite
+	<b>or</b>
+	<input type="date" class="form-control" name="excused_end" value="{{request()->excused_end ?? ''}}"> --}}
+	{{-- <x-dropdown :list="$reasons" class="multiple" name="excuse_reason" :selected="request()->excused_reason"></x-dropdown> --}}
 
-			  <div class="col-2">
-				<label for="alert_format">Alert format</label>
-				<select  class="form-control @error('alert_format') is-invalid @enderror" id="alert_format" name="alert_format">
-					@foreach ($alert_format_list as $key => $value)
-					  <option value="{{ $key }}" {{ old('alert_format') == $value ?? 'selected'}}>{{ $value }}</option>
-					@endforeach
-				  </select>     
-				@error('alert_format')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-			  	@enderror
-			  </div>
 
-			</div>
-			<div class="form-row mb-2">
-				<div class="col-10">
-				  <label for="body">Body</label>
-				  <textarea type="text" id="body" name="body" class="form-control  @error('body') is-invalid @enderror" 
-				     placeholder="Type the content here" rows="3">{{ old('body') }}</textarea>
-				  @error('body')
-					<span class="invalid-feedback">
-						{{  $message  }}
-					</span>
-				  @enderror
-				</div>
-			  </div>
-
+</div>    
 	</div>    
 </div>   
 

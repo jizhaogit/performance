@@ -14,7 +14,7 @@
 	<div class="card-body">
 		<h6></h6>
 		<table class="table table-bordered" id="employee-list-table">
-			<thead>
+			{{-- <thead>
 				<tr>
                     <th><input name="select_all" value="1" id="employee-list-select-all" type="checkbox" /></th>
                     <th>Employee ID</th>
@@ -22,14 +22,16 @@
                     <th>Job Title</th>
 					<th>Email</th>
 					<th>Organization</th>
-					<th>Program</th>
-					<th>Division</th>
-					<th>Branch</th>
+					<th>Level 1</th>
+					<th>Level 2</th>
+					<th>Level 3</th>
                     <th>Level 4</th>
                     <th>Department </th>
                     <th>Action </th>
 				</tr>
-			</thead>
+			</thead> --}}
+            <tbody>
+            </tbody>
 		</table>
 
 	</div>    
@@ -112,18 +114,18 @@
                 // }
             },
             columns: [
-                {data: 'select_users', name: 'select_users', orderable: false, searchable: false},
-                {data: 'employee_id', name: 'employee_id'},
-                {data: 'employee_name', name: 'employee_name'},
-                {data: 'job_title', name: 'job_title'},
-                {data: 'employee_email', name: 'employee_email' },
-                {data: 'organization', name: 'organization'},
-                {data: 'level1_program', name: 'level1_program'},
-                {data: 'level2_division', name: 'level2_division'},
-                {data: 'level3_branch', name: 'level3_branch'},
-                {data: 'level4', name: 'level4'},
-                {data: 'deptid', name: 'deptid'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
+                {title: '<input name="select_all" value="1" id="employee-list-select-all" type="checkbox" />', ariaTitle: 'employee-list-select-all', target: 0, type: 'string', data: 'select_users', name: 'select_users', orderable: false, searchable: false},
+                {title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id'},
+                {title: 'Name', ariaTitle: 'Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name'},
+                {title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title'},
+                {title: 'Email', ariaTitle: 'Email', target: 0, type: 'string', data: 'employee_email', name: 'employee_email' },
+                {title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization'},
+                {title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program'},
+                {title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division'},
+                {title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch'},
+                {title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4'},
+                {title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', data: 'deptid', name: 'deptid'},
+                // {data: 'action', name: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
                     // {

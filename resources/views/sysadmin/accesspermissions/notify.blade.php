@@ -55,6 +55,7 @@
  <form id="notify-form" action="{{ route('sysadmin.accesspermissions.send') }}" method="post">
 	@csrf
 	<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
+	<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
 
 <!----modal starts here--->
@@ -106,6 +107,7 @@
 
   </div>
 
+{{-- </form> --}}
 
 
   <br><h6 class="text-bold">Step 2. Select access level and reason for assigning access</h6> <br>
@@ -127,10 +129,30 @@
 
 
 <br><h6 class="text-bold">Step 3. Select ministries to assign to (for HR Administrator only)</h6><br>
-<div class="nav nav-tabs" id="nav-tab" role="tablist">
-	<a class="nav-item nav-link" id="go-tree" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
 
-  </div>
+{{-- <form id="enotify-form" action="#" method="post"> --}}
+	{{-- <form id="enotify-form" action="{{ route('sysadmin.accesspermissions.send') }}" method="post"> --}}
+		@csrf
+	<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+
+	@include('sysadmin.accesspermissions.partials.filter2')
+
+
+
+
+	<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
+		{{-- <div class="tab-pane fade" id="enav-tree" role="tabpanel" aria-labelledby="enav-tree-tab" loaded="loaded"> --}}
+			<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
+		<span class="sr-only">Loading...</span>
+	</div>
+
+	{{-- @include('sysadmin.accesspermissions.partials.recipient-tree') --}}
+
+	{{-- @include('sysadmin.accesspermissions.partials.recipient-tree2') --}}
+
+</div>
+
+
 
 
 <br><h6 class="text-bold">Step 4. Assign selected employees</h6><br>
@@ -153,7 +175,7 @@
 
 .select2-container .select2-selection--single {
     height: 38px !important;
-}
+}EmployeeID
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
 	height: 38px !important;
@@ -188,320 +210,376 @@
 </x-slot>
 
 <x-slot name="js">
-	
-    <script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 
     <script>
-	let g_matched_employees = {!!json_encode($matched_emp_ids)!!};
-	let g_selected_employees = {!!json_encode($old_selected_emp_ids)!!};
-	let g_employees_by_org = [];
+		let g_matched_employees = {!!json_encode($matched_emp_ids)!!};
+		let g_selected_employees = {!!json_encode($old_selected_emp_ids)!!};
+		let g_selected_orgnodes = {!!json_encode($old_selected_org_nodes)!!};
+		let g_employees_by_org = [];
 
-	$('#accessselect').val(4);
-	$('#accessselect').prop('disabled', true);
+		// $('#accessselect').val(4);
+		// $('#accessselect').prop('disabled', true);
 
-	function confirmSendNotifyModal(){
-		count = g_selected_employees.length;
-		if (count == 0) {
-			$('#sendNotifyModal .modal-body p').html('Are you sure to grant administrator access ?');
-		} else {
-			$('#sendNotifyModal .modal-body p').html('Are you sure to grant administrator access to ' + count + ' selected users?');
+		function confirmSendNotifyModal(){
+			count = g_selected_employees.length;
+			if (count == 0) {
+				$('#sendNotifyModal .modal-body p').html('Are you sure to grant administrator access ?');
+			} else {
+				$('#sendNotifyModal .modal-body p').html('Are you sure to grant administrator access to ' + count + ' selected users?');
+			}
+			$('#sendNotifyModal').modal();
 		}
-		$('#sendNotifyModal').modal();
-	}
 
-	$(document).ready(function(){
+		$(document).ready(function(){
 
-		$('#pageLoader').hide();
+			$('#pageLoader').hide();
 
-		CKEDITOR.replace('body', {
-				toolbar: "Custom",
-				toolbar_Custom: [
-					["Bold", "Italic", "Underline"],
-					["NumberedList", "BulletedList"],
-					["Outdent", "Indent"],
-					["Blockquote", "Source"],
-				],
-		});
+			$('#notify-form').keydown(function (e) {
+				if (e.keyCode == 13) {
+					e.preventDefault();
+					return false;
+				}
+			});
 
-		$('#notify-form').keydown(function (e) {
-			if (e.keyCode == 13) {
-    			e.preventDefault();
-    			return false;
-			}
-		});
+			$('#notify-form').submit(function() {
 
-		$('#notify-form').submit(function() {
+				console.log('Search Button Clicked');			
 
-			console.log('submit trigger');			
-
-			// assign back the selected employees to server
-			var text = JSON.stringify(g_selected_employees);
-			$('#selected_emp_ids').val( text );
-			return true; // return false to cancel form action
-		});
+				// assign back the selected employees to server
+				var text = JSON.stringify(g_selected_employees);
+				$('#selected_emp_ids').val( text );
+				var text2 = JSON.stringify(g_selected_orgnodes);
+				$('#selected_org_nodes').val( text2 );
+				return true; // return false to cancel form action
+			});
 
 
-		// Tab  -- LIST Page  activate
-		$("#nav-list-tab").on("click", function(e) {
-			
-			table  = $('#employee-list-table').DataTable();
-			table.rows().invalidate().draw();
-		});
+			// Tab  -- LIST Page  activate
+			$("#nav-list-tab").on("click", function(e) {
+				
+				table  = $('#employee-list-table').DataTable();
+				table.rows().invalidate().draw();
+			});
 
 
-		// Tab  -- TREE activate
-		$("#nav-tree-tab").on("click", function(e) {
+			// Tab  -- TREE activate
+			$("#nav-tree-tab").on("click", function(e) {
 
-			target = $('#nav-tree'); 
+				target = $('#nav-tree'); 
 
-			// To do -- ajax called to load the tree
-			if($.trim($(target).attr('loaded'))=='') {
-	            //console.log('loading employees');
-				$.when( 
-						$.ajax({
-							url: '/sysadmin/accesspermissions/org-tree',
-							type: 'GET',
-							data: $("#notify-form").serialize(),
-							dataType: 'html',
-							beforeSend: function() {
-								$("#tree-loading-spinner").show();                    
-							},
-							success: function (result) {
-								$(target).html(''); 
-								$(target).html(result);
+				// To do -- ajax called to load the tree
+				if($.trim($(target).attr('loaded'))=='') {
+					$.when( 
+							$.ajax({
+								url: '/sysadmin/accesspermissions/org-tree',
+								type: 'GET',
+								data: $("#notify-form").serialize(),
+								dataType: 'html',
+								beforeSend: function() {
+									$("#tree-loading-spinner").show();                    
+								},
+								success: function (result) {
+									$(target).html(''); 
+									$(target).html(result);
 
-								$('#nav-tree').attr('loaded','loaded');
-							},
-							complete: function() {
-								
-							$(".tree-loading-spinner").hide();
-							},
-							error: function () {
-								alert("error");
-								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-							}
-						})
-					
-				).then(function( data, textStatus, jqXHR ) {
-  					//alert( jqXHR.status ); // Alerts 200
-					nodes = $('#accordion-level0 input:checkbox');
-					redrawTreeCheckboxes();	
-				}); 
-			
-			} else {
-					redrawTreeCheckboxes();
-			}
-		});
-
-		$('#accessselect').on('change', function(e) {
-
-			target = $('#go-tree'); 
-
-			// To do -- ajax called to load the tree
-			if($.trim($(target).attr('loaded'))=='') {
-	            //console.log('loading employees');
-				$.when( 
-						$.ajax({
-							url: '/sysadmin/accesspermissions/org-tree',
-							type: 'GET',
-							data: $("#notify-form").serialize(),
-							dataType: 'html',
-							beforeSend: function() {
-								$("#tree-loading-spinner").show();                    
-							},
-							success: function (result) {
-								$(target).html(''); 
-								$(target).html(result);
-
-								$('#go-tree').attr('loaded','loaded');
-							},
-							complete: function() {
-								
-							$(".tree-loading-spinner").hide();
-							},
-							error: function () {
-								alert("error");
-								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-							}
-						})
-					
-				).then(function( data, textStatus, jqXHR ) {
-  					//alert( jqXHR.status ); // Alerts 200
-					nodes = $('#accordion-level0 input:checkbox');
-					redrawTreeCheckboxes();	
-				}); 
-			
-			} else {
-					redrawTreeCheckboxes();
-			}
-		});
-
-
-		function redrawTreeCheckboxes() {
-			// redraw the selection 
-			//console.log('redraw triggered');
-			nodes = $('#accordion-level0 input:checkbox');
-			$.each( nodes, function( index, chkbox ) {
-				if (g_employees_by_org.hasOwnProperty(chkbox.value)) {
-					// console.log( 'org checkbox ' + chkbox.value);
-
-					all_emps = g_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
-
-					// console.log(all_emps);
-					// console.log(g_selected_employees);
-					b = all_emps.every(v=> g_selected_employees.indexOf(v) !== -1);
-
-					if (all_emps.every(v=> g_selected_employees.indexOf(v) !== -1)) {
-						$(chkbox).prop('checked', true);
-						$(chkbox).prop("indeterminate", false);
-					} else if (all_emps.some(v=> g_selected_employees.indexOf(v) !== -1)) {
-						$(chkbox).prop('checked', false);
-						$(chkbox).prop("indeterminate", true);
-					} else {
-						$(chkbox).prop('checked', false);
-						$(chkbox).prop("indeterminate", false);
-					}
-					
+									$('#nav-tree').attr('loaded','loaded');
+								},
+								complete: function() {
+									
+								$(".tree-loading-spinner").hide();
+								},
+								error: function () {
+									alert("error");
+									$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+								}
+							})
+						
+					).then(function( data, textStatus, jqXHR ) {
+						//alert( jqXHR.status ); // Alerts 200
+						nodes = $('#accordion-level0 input:checkbox');
+						redrawTreeCheckboxes();	
+					}); 
+				
 				} else {
-					if ( $(chkbox).attr('name') == 'userCheck[]') {
-						if (g_selected_employees.includes(chkbox.value)) {
+						redrawTreeCheckboxes();
+				}
+			});
+
+			$('#ebtn_search').click(function(e) {
+				// $('#accessselect').on('change', function(e) {
+
+				target = $('#enav-tree'); 
+
+				// To do -- ajax called to load the tree
+					$.when( 
+						$.ajax({
+							url: '/sysadmin/accesspermissions/eorg-tree',
+							type: 'GET',
+							data: $("#enotify-form").serialize(),
+							dataType: 'html',
+
+							beforeSend: function() {
+								$("#etree-loading-spinner").show();                    
+							},
+
+							success: function (result) {
+								$('#enav-tree').html(''); 
+								$('#enav-tree').html(result);
+								$('#enav-tree').attr('loaded','loaded');
+							},
+
+							complete: function() {
+								$(".etree-loading-spinner").hide();
+							},
+
+							error: function () {
+								alert("error");
+								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							}
+						})
+						
+					).then(function( data, textStatus, jqXHR ) {
+						//alert( jqXHR.status ); // Alerts 200
+						enodes = $('#eaccordion-level0 input:checkbox');
+						eredrawTreeCheckboxes();	
+					}); 
+				
+			});
+
+			function redrawTreeCheckboxes() {
+				// redraw the selection 
+				//console.log('redraw triggered');
+				nodes = $('#accordion-level0 input:checkbox');
+				$.each( nodes, function( index, chkbox ) {
+					if (g_employees_by_org.hasOwnProperty(chkbox.value)) {
+						all_emps = g_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
+						b = all_emps.every(v=> g_selected_employees.indexOf(v) !== -1);
+						if (all_emps.every(v=> g_selected_employees.indexOf(v) !== -1)) {
 							$(chkbox).prop('checked', true);
+							$(chkbox).prop("indeterminate", false);
+						} else if (all_emps.some(v=> g_selected_employees.indexOf(v) !== -1)) {
+							$(chkbox).prop('checked', false);
+							$(chkbox).prop("indeterminate", true);
 						} else {
 							$(chkbox).prop('checked', false);
+							$(chkbox).prop("indeterminate", false);
+						}
+					} else {
+						// if ( $(chkbox).attr('name') == 'userCheck[]') {
+						// 	if (g_selected_employees.includes(chkbox.value)) {
+						// 		$(chkbox).prop('checked', true);
+						// 	} else {
+						// 		$(chkbox).prop('checked', false);
+						// 	}
+						// }
+					}
+				});
+
+				// reset checkbox state
+				reverse_list = nodes.get().reverse();
+				$.each( reverse_list, function( index, chkbox ) {
+					if (g_employees_by_org.hasOwnProperty(chkbox.value)) {
+						pid = $(chkbox).attr('pid');
+						do {
+							value = '#orgCheck' + pid;
+							toggle_indeterminate( value );
+							pid = $('#orgCheck' + pid).attr('pid');    
+						} 
+						while (pid);
+					}
+				});
+
+			}
+
+			function eredrawTreeCheckboxes() {
+				// redraw the selection 
+				//console.log('eredraw triggered');
+				enodes = $('#eaccordion-level0 input:checkbox');
+				$.each( enodes, function( index, chkbox ) {
+					if (eg_employees_by_org.hasOwnProperty(chkbox.value)) {
+						eall_emps = eg_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
+						b = eall_emps.every(v=> g_selected_orgnodes.indexOf(v) !== -1);
+
+						if (eall_emps.every(v=> g_selected_orgnodes.indexOf(v) !== -1)) {
+							$(chkbox).prop('checked', true);
+							$(chkbox).prop("indeterminate", false);
+						} else if (eall_emps.some(v=> g_selected_orgnodes.indexOf(v) !== -1)) {
+							$(chkbox).prop('checked', false);
+							$(chkbox).prop("indeterminate", true);
+						} else {
+							$(chkbox).prop('checked', false);
+							$(chkbox).prop("indeterminate", false);
+						}
+					} else {
+						if ( $(chkbox).attr('name') == 'userCheck[]') {
+							if (g_selected_orgnodes.includes(chkbox.value)) {
+								$(chkbox).prop('checked', true);
+							} else {
+								$(chkbox).prop('checked', false);
+							}
 						}
 					}
-				}
-			});
+				});
 
-			// reset checkbox state
-			reverse_list = nodes.get().reverse();
-			$.each( reverse_list, function( index, chkbox ) {
-				if (g_employees_by_org.hasOwnProperty(chkbox.value)) {
-					pid = $(chkbox).attr('pid');
-					do {
-						value = '#orgCheck' + pid;
-						//console.log(  value );
-						toggle_indeterminate( value );
-						//console.log("parent : " + pid);                
-						pid = $('#orgCheck' + pid).attr('pid');    
-					} 
-					while (pid);
-				}
-			});
+				// reset checkbox state
+				ereverse_list = enodes.get().reverse();
+				$.each( ereverse_list, function( index, chkbox ) {
+					if (eg_employees_by_org.hasOwnProperty(chkbox.value)) {
+						pid = $(chkbox).attr('pid');
+						do {
+							value = '#eorgCheck' + pid;
+							etoggle_indeterminate( value );
+							pid = $('#eorgCheck' + pid).attr('pid');    
+						} 
+						while (pid);
+					}
+				});
 
-		}
+			}
 
-		// Set parent checkbox
-		function toggle_indeterminate( prev_input ) {
-
-			// Loop to checked the child
-			var c_indeterminated = 0;
-			var c_checked = 0;
-			var c_unchecked = 0;
-
-			prev_location = $(prev_input).parent().attr('href');
-			nodes = $(prev_location).find("input:checkbox[name='orgCheck[]']");
-			$.each( nodes, function( index, chkbox ) {
-				if (chkbox.checked) {
-					c_checked++;
-				} else if ( chkbox.indeterminate ) {
-					c_indeterminated++;
+			// Set parent checkbox
+			function toggle_indeterminate( prev_input ) {
+				// Loop to checked the child
+				var c_indeterminated = 0;
+				var c_checked = 0;
+				var c_unchecked = 0;
+				prev_location = $(prev_input).parent().attr('href');
+				nodes = $(prev_location).find("input:checkbox[name='orgCheck[]']");
+				$.each( nodes, function( index, chkbox ) {
+					if (chkbox.checked) {
+						c_checked++;
+					} else if ( chkbox.indeterminate ) {
+						c_indeterminated++;
+					} else {
+						c_unchecked++;
+					}
+				});
+				
+				if (c_indeterminated > 0) {
+					$(prev_input).prop('checked', false);
+					$(prev_input).prop("indeterminate", true);
+				} else if (c_checked > 0 && c_unchecked > 0) {
+					$(prev_input).prop('checked', false);
+					$(prev_input).prop("indeterminate", true);
+				} else if (c_checked > 0 && c_unchecked == 0 ) {
+					$(prev_input).prop('checked', true);
+					$(prev_input).prop("indeterminate", false);
 				} else {
-					c_unchecked++;
+					$(prev_input).prop('checked', false);
+					$(prev_input).prop("indeterminate", false);
 				}
+			}
+
+			// Set parent checkbox
+			function etoggle_indeterminate( prev_input ) {
+				// Loop to checked the child
+				var c_indeterminated = 0;
+				var c_checked = 0;
+				var c_unchecked = 0;
+				prev_location = $(prev_input).parent().attr('href');
+				nodes = $(prev_location).find("input:checkbox[name='eorgCheck[]']");
+				$.each( nodes, function( index, chkbox ) {
+					if (chkbox.checked) {
+						c_checked++;
+					} else if ( chkbox.indeterminate ) {
+						c_indeterminated++;
+					} else {
+						c_unchecked++;
+					}
+				});
+				
+				if (c_indeterminated > 0) {
+					$(prev_input).prop('checked', false);
+					$(prev_input).prop("indeterminate", true);
+				} else if (c_checked > 0 && c_unchecked > 0) {
+					$(prev_input).prop('checked', false);
+					$(prev_input).prop("indeterminate", true);
+				} else if (c_checked > 0 && c_unchecked == 0 ) {
+					$(prev_input).prop('checked', true);
+					$(prev_input).prop("indeterminate", false);
+				} else {
+					$(prev_input).prop('checked', false);
+					$(prev_input).prop("indeterminate", false);
+				}
+			}
+
+		});
+
+		$(window).on('beforeunload', function(){
+			$('#pageLoader').show();
+		});
+
+		$(window).resize(function(){
+			location.reload();
+			return;
+		});
+
+		// $("#recipients").select2({
+		//             width: '100%',
+		//             ajax: {
+		//                 url: '{{ route('sysadmin.accesspermissions.users.list') }}', // '/users', 
+		//                 dataType: 'json',
+		//                 data: function (params) {
+		//                     const query = {
+		//                         search: params.term,
+		//                         page: params.page || 1
+		//                     };
+		//                     return query;
+		//                 },
+		//                 processResults: function (response, params) {
+		//                     return {
+		//                         results: $.map(response.data.data, function (item) {
+		//                             return {
+		//                                 text: item.name,
+		//                                 id: item.id
+		//                             }
+		//                         }),
+		//                         pagination: {
+		//                             more: response.data.current_page !== response.data.last_page
+		//                         }
+		//                     }
+		//                 }
+		//             }
+		//         });
+
+		// $('#sender_id').select2({
+		// 		ajax: {
+		// 			url: '/graph-users'
+		// 			, dataType: 'json'
+		// 			, delay: 250
+		// 			, data: function(params) {
+		// 				var query = {
+		// 					'q': params.term
+		// 				, }
+		// 				return query;
+		// 			}
+		// 			, processResults: function(data) {
+		// 				return {
+		// 					results: data
+		// 					};
+		// 			}
+		// 			, cache: false
+		// 		}
+		// 	});
+
+		// Model -- Confirmation Box
+
+		var modalConfirm = function(callback){
+			$("#btn-confirm").on("click", function(){
+				$("#mi-modal").modal('show');
+			});
+			$("#modal-btn-si").on("click", function(){
+				callback(true);
+				$("#mi-modal").modal('hide');
 			});
 			
-			if (c_indeterminated > 0) {
-				$(prev_input).prop('checked', false);
-				$(prev_input).prop("indeterminate", true);
-			} else if (c_checked > 0 && c_unchecked > 0) {
-				$(prev_input).prop('checked', false);
-				$(prev_input).prop("indeterminate", true);
-			} else if (c_checked > 0 && c_unchecked == 0 ) {
-				$(prev_input).prop('checked', true);
-				$(prev_input).prop("indeterminate", false);
-			} else {
-				$(prev_input).prop('checked', false);
-				$(prev_input).prop("indeterminate", false);
-			}
-
-		}
-
-	});
-
-	$(window).on('beforeunload', function(){
-		$('#pageLoader').show();
-	});
-
-	// $("#recipients").select2({
-    //             width: '100%',
-    //             ajax: {
-    //                 url: '{{ route('sysadmin.accesspermissions.users.list') }}', // '/users', 
-    //                 dataType: 'json',
-    //                 data: function (params) {
-    //                     const query = {
-    //                         search: params.term,
-    //                         page: params.page || 1
-    //                     };
-    //                     return query;
-    //                 },
-    //                 processResults: function (response, params) {
-    //                     return {
-    //                         results: $.map(response.data.data, function (item) {
-    //                             return {
-    //                                 text: item.name,
-    //                                 id: item.id
-    //                             }
-    //                         }),
-    //                         pagination: {
-    //                             more: response.data.current_page !== response.data.last_page
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         });
-
-	$('#sender_id').select2({
-			ajax: {
-				url: '/graph-users'
-				, dataType: 'json'
-				, delay: 250
-				, data: function(params) {
-					var query = {
-						'q': params.term
-					, }
-					return query;
-				}
-				, processResults: function(data) {
-					return {
-						results: data
-						};
-				}
-				, cache: false
-			}
-		});
-
-	// Model -- Confirmation Box
-
-	var modalConfirm = function(callback){
-		$("#btn-confirm").on("click", function(){
-			$("#mi-modal").modal('show');
-		});
-
-		$("#modal-btn-si").on("click", function(){
-			callback(true);
-			$("#mi-modal").modal('hide');
-		});
-		
-		$("#modal-btn-no").on("click", function(){
-			callback(false);
-			$("#mi-modal").modal('hide');
-		});
-	};
+			$("#modal-btn-no").on("click", function(){
+				callback(false);
+				$("#mi-modal").modal('hide');
+			});
+		};
 
     </script>
-
 </x-slot>
-
 
 </x-side-layout>

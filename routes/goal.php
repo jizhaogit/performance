@@ -20,9 +20,7 @@ Route::get('goal', function () {
     return redirect()->route('goal.current');
 })->name('goal.index');
 
-Route::resource('goal', GoalController::class)->except([
-'index'
-]);
+Route::resource('goal', GoalController::class)->except(['index']);
 
 // Route::get('goal/{goal}/comment', [GoalController::class, 'getComments'])->name('get-comments');
 Route::post('goal/{goal}/comment', [GoalController::class, 'addComment'])->name('goal.add-comment');
