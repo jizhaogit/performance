@@ -1,4 +1,4 @@
-<form action="manageexistingaccessupdate" method="post" enctype="multipart/form-data">
+<form class="form-control" action="manageexistingaccessupdate" method="post" enctype="multipart/form-data">
     {{ method_field('PUT') }}
     {{ csrf_field() }}
     <div class="modal fade editModal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -19,8 +19,8 @@
                     </div>
                 </div>
                 <div class="modal-body p-3">
-                    <form id="access_form" action="" method="POST">
-                        @csrf
+                    {{-- <form id="access_form" action="manageexistingaccessupdate" method="POST"> --}}
+                        {{-- @csrf --}}
                         <div class="row  p-3">
                             <div class="col col-4">
                                 <input id="model_id" name="model_id" type="hidden" value="secret">
@@ -33,20 +33,20 @@
                                 </label>
                             </div>
                             <div class="col col-8">
-                                <x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
+                                <x-input class="form-control" id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
                             </div>
                         </div>
-                        <table class="table table-bordered admintable" id="admintable" style="width: 100%; overflow-x: auto; "></table>
-                    </form>
+                        {{-- <table class="table table-bordered admintable" id="admintable" style="width: 100%; overflow-x: auto; "></table> --}}
+                    {{-- </form> --}}
                 </div>
                 <div class="modal-footer p-3">
                     <div class="col">
-                        {{-- <form action="{{ route('sysadmin.accesspermissions.manageexistingaccess') }}" method="delete" enctype="multipart/form-data"> --}}
-                        <form action="#" method="delete" enctype="multipart/form-data">
-                            @method('DELETE')
-                            @csrf
+                        {{-- <form action="{{ route('sysadmin.accesspermissions.manageexistingaccessdelete') }}" method="delete" enctype="multipart/form-data"> --}}
+                        {{-- <form action="#" method="delete" enctype="multipart/form-data"> --}}
+                            {{-- @method('DELETE') --}}
+                            {{-- @csrf --}}
                             <button id="removeButton" name="removeButton" type="button" class="btn btn-outline-danger float-left" onClick="return confirm('Are you sure?')" aria-label="Remove Access">Remove Access</button>
-                        </form>
+                        {{-- </form> --}}
                     </div>
                     <div class="col">
                         <button id="cancelButton" name="cancelButton" type="button" class="btn btn-secondary float-right" style="margin:5px;" data-dismiss="modal" aria-label="Cancel">Cancel</button>                    

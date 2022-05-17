@@ -111,9 +111,14 @@
             $('#reason').prop('disabled', current == model_id);
             console.log('model_id = '+model_id);
             // HR Admin Org list datatable
+            if($('#accessselect').val() == 4) {
+                $('#accessselect').prop('disabled', true);
+            }
             if($('#accessselect').val() == 3) {
-                $('#admintable').show();
-                var table = $('.admintable').DataTable
+                // $('#admintable').show();
+                // let $url = "{{ route('sysadmin.accesspermissions.manageexistingaccessadmin', ':param') }}";
+                // $url = $url.replace(':param', model_id);
+                var table = $('#admintable').DataTable
                 (
                     {
                         processing: true,
@@ -122,10 +127,9 @@
                         stateSave: true,
                         deferRender: true,
                         ajax: {
-                            url: "{{ route('sysadmin.accesspermissions.manageexistingaccessadmin', '"+model_id+"') }}",
+                            type: 'GET',
+                            url: "/sysadmin/accesspermissions/manageexistingaccessadmin/"+model_id,
                             // url: "{{ route('sysadmin.accesspermissions.manageexistingaccessadmin', '"+model_id+"') }}",
-                            data: function(d1) {
-                            }
                         },                        
                         columns: [
                             {title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
