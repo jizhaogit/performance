@@ -5,7 +5,7 @@
           <div class="form-group col-md-2">
             <label for="edd_level0">Organization</label>
             <select id="edd_level0" name="edd_level0" class="form-control select2">
-                @if ( old('edd_level0') && session()->get('level0') )
+                @if ( old('edd_level0') && session()->get('elevel0') )
                     <option value="{{ session()->get('elevel0')->id }}">{{ session()->get('elevel0')->name }}</option>
                 @endif
             </select>

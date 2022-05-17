@@ -305,47 +305,6 @@
 				}
 			});
 
-			$('#ebtn_search').click(function(e) {
-				// $('#accessselect').on('change', function(e) {
-
-				target = $('#enav-tree'); 
-
-				// To do -- ajax called to load the tree
-					$.when( 
-						$.ajax({
-							url: '/sysadmin/accesspermissions/eorg-tree',
-							type: 'GET',
-							data: $("#enotify-form").serialize(),
-							dataType: 'html',
-
-							beforeSend: function() {
-								$("#etree-loading-spinner").show();                    
-							},
-
-							success: function (result) {
-								$('#enav-tree').html(''); 
-								$('#enav-tree').html(result);
-								$('#enav-tree').attr('loaded','loaded');
-							},
-
-							complete: function() {
-								$(".etree-loading-spinner").hide();
-							},
-
-							error: function () {
-								alert("error");
-								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-							}
-						})
-						
-					).then(function( data, textStatus, jqXHR ) {
-						//alert( jqXHR.status ); // Alerts 200
-						enodes = $('#eaccordion-level0 input:checkbox');
-						eredrawTreeCheckboxes();	
-					}); 
-				
-			});
-
 			function redrawTreeCheckboxes() {
 				// redraw the selection 
 				//console.log('redraw triggered');
@@ -504,6 +463,47 @@
 			}
 
 		});
+
+		$('#ebtn_search').click(function(e) {
+
+				target = $('#enav-tree'); 
+
+				// To do -- ajax called to load the tree
+					$.when( 
+						$.ajax({
+							url: '/sysadmin/accesspermissions/eorg-tree',
+							// url: $url,
+							type: 'GET',
+							data: $("#notify-form").serialize(),
+							dataType: 'html',
+
+							beforeSend: function() {
+								$("#etree-loading-spinner").show();                    
+							},
+
+							success: function (result) {
+								$('#enav-tree').html(''); 
+								$('#enav-tree').html(result);
+								$('#enav-tree').attr('loaded','loaded');
+							},
+
+							complete: function() {
+								$(".etree-loading-spinner").hide();
+							},
+
+							error: function () {
+								alert("error");
+								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							}
+						})
+						
+					).then(function( data, textStatus, jqXHR ) {
+						//alert( jqXHR.status ); // Alerts 200
+						enodes = $('#eaccordion-level0 input:checkbox');
+						eredrawTreeCheckboxes();	
+					}); 
+				
+			});
 
 		$(window).on('beforeunload', function(){
 			$('#pageLoader').show();

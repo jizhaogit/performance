@@ -251,58 +251,31 @@ class AccessPermissionsController extends Controller
 
     public function eloadOrganizationTree(Request $request) {
 
-        // $request->edd_level0 = 3;
+        $elevel0 = $request->edd_level0 ? OrganizationTree::where('id', $request->edd_level0)->first() : null;
+        $elevel1 = $request->edd_level1 ? OrganizationTree::where('id', $request->edd_level1)->first() : null;
+        $elevel2 = $request->edd_level2 ? OrganizationTree::where('id', $request->edd_level2)->first() : null;
+        $elevel3 = $request->edd_level3 ? OrganizationTree::where('id', $request->edd_level3)->first() : null;
+        $elevel4 = $request->edd_level4 ? OrganizationTree::where('id', $request->edd_level4)->first() : null;
 
-        // if($request->edd_level0+$request->edd_level1+$request->edd_level2+$request->edd_level3+$request->edd_level4) {
+            list($esql_level0, $esql_level1, $esql_level2, $esql_level3, $esql_level4) = 
+                $this->ebaseFilteredSQLs($request, $elevel0, $elevel1, $elevel2, $elevel3, $elevel4);
+            
+            $rows = $esql_level4->groupBy('organization_trees.id')->select('organization_trees.id')
+                ->union( $esql_level3->groupBy('organization_trees.id')->select('organization_trees.id') )
+                ->union( $esql_level2->groupBy('organization_trees.id')->select('organization_trees.id') )
+                ->union( $esql_level1->groupBy('organization_trees.id')->select('organization_trees.id') )
+                ->union( $esql_level0->groupBy('organization_trees.id')->select('organization_trees.id') )
+                ->pluck('organization_trees.id'); 
 
+            $eorgs = OrganizationTree::whereIn('id', $rows->toArray() )->get()->toTree();
+            
+            $eempIdsByOrgId = [];
+            $eempIdsByOrgId = $rows->groupBy('id')->all();
 
-            $elevel0 = $request->edd_level0 ? OrganizationTree::where('id', $request->edd_level0)->first() : null;
-            $elevel1 = $request->edd_level1 ? OrganizationTree::where('id', $request->edd_level1)->first() : null;
-            $elevel2 = $request->edd_level2 ? OrganizationTree::where('id', $request->edd_level2)->first() : null;
-            $elevel3 = $request->edd_level3 ? OrganizationTree::where('id', $request->edd_level3)->first() : null;
-            $elevel4 = $request->edd_level4 ? OrganizationTree::where('id', $request->edd_level4)->first() : null;
-
-            // if ($elevel0 || $elevel1 || $elevel2 || $elevel3 || $elevel4) {
-// log::info('In the If');
-                // $job_titles = $request->job_titles ? EmployeeDemo::whereIn('job_title', $request->job_titles)->select('job_title')
-                //             ->groupBy('job_title')->pluck('job_title') : null;
-
-                list($esql_level0, $esql_level1, $esql_level2, $esql_level3, $esql_level4) = 
-                    $this->ebaseFilteredSQLs($request, $elevel0, $elevel1, $elevel2, $elevel3, $elevel4);
-                
-                $rows = $esql_level4->groupBy('organization_trees.id')->select('organization_trees.id')
-                    ->union( $esql_level3->groupBy('organization_trees.id')->select('organization_trees.id') )
-                    ->union( $esql_level2->groupBy('organization_trees.id')->select('organization_trees.id') )
-                    ->union( $esql_level1->groupBy('organization_trees.id')->select('organization_trees.id') )
-                    ->union( $esql_level0->groupBy('organization_trees.id')->select('organization_trees.id') )
-                    ->pluck('organization_trees.id'); 
-                $eorgs = OrganizationTree::whereIn('id', $rows->toArray() )->get()->toTree();
-                
-                $eempIdsByOrgId = [];
-                $eempIdsByOrgId = $rows->groupBy('id')->all();
-
-            // } else {
-            //     // log::info('In the Else');
-            //     // 'No filter selected';
-            //     $eorgs = [];
-            //     $eempIdsByOrgId = [];
-            // }
-
-            if($request->ajax()){
-                // return view('sysadmin.accesspermissions.partials.another-tree2', compact('eorgs','ecountByOrg') );
-                return view('sysadmin.accesspermissions.partials.recipient-tree2', compact('eorgs','eempIdsByOrgId') );
-                // return view('sysadmin.accesspermissions.partials.recipient-tree2', compact('eorgs') );
-            } 
+        if($request->ajax()){
+            return view('sysadmin.accesspermissions.partials.recipient-tree2', compact('eorgs','eempIdsByOrgId') );
+        } 
     
-        // } else {
-
-        //     if($request->ajax()){
-        //         // return view('sysadmin.accesspermissions.partials.another-tree2', compact('eorgs','ecountByOrg') );
-        //         return 'No filter selected';
-        //     } 
-
-        // }
-
     }
 
   
