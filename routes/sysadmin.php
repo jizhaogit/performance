@@ -154,14 +154,14 @@ Route::group(['middleware' => ['auth']], function() {
     
 });
 
-
+ 
 //Access and Permissions
 Route::group(['middleware' => ['auth']], function() {    
     Route::get('/sysadmin/accesspermissions', [AccessPermissionsController::class, 'index'])->name('sysadmin.accesspermissions');
     Route::get('/sysadmin/accesspermissions/detail/{notification_id}', [AccessPermissionsController::class, 'show']);
     Route::get('/sysadmin/accesspermissions/notify', [AccessPermissionsController::class, 'notify'])->name('sysadmin.accesspermissions.notify');
     Route::post('/sysadmin/accesspermissions/notify', [AccessPermissionsController::class, 'notify'])->name('sysadmin.accesspermissions.search');
-    Route::post('/sysadmin/accesspermissions/notify-send', [AccessPermissionsController::class, 'send'])->name('sysadmin.accesspermissions.send');
+    Route::post('/sysadmin/accesspermissions/saveaccess', [AccessPermissionsController::class, 'saveAccess'])->name('sysadmin.accesspermissions.saveaccess');
     Route::get('/sysadmin/accesspermissions/users', [AccessPermissionsController::class, 'getUsers'])->name('sysadmin.accesspermissions.users.list');
     
     Route::get('/sysadmin/accesspermissions/org-tree', [AccessPermissionsController::class,'loadOrganizationTree']);
@@ -185,11 +185,11 @@ Route::group(['middleware' => ['auth']], function() {
     
     // Route::get('sysadmin/access/manageexistingaccessdelete', [ManageExistingAccessController::class, 'destroy'])->name('sysadmin.access.manageexistingaccess');
     Route::get('sysadmin/accesspermissions/manageexistingaccessdelete/{model_id}', [AccessPermissionsController::class, 'managedestroy']);
-    Route::delete('sysadmin/accesspermissions/manageexistingaccessdelete/{model_id}', [AccessPermissionsController::class, 'managedestroy']);
+    Route::delete('sysadmin/accesspermissions/manageexistingaccessdelete/{model_id}', [AccessPermissionsController::class, 'managedestroy'])->name('sysadmin.accesspermissions.manageexistingaccessdelete');
     
     Route::get('sysadmin/accesspermissions/get_access_entry/{role_id}/{model_id}', [AccessPermissionsController::class, 'get_access_entry']);
     Route::get('sysadmin/accesspermissions/manageexistingaccesslist', [AccessPermissionsController::class, 'getList'])->name('sysadmin.accesspermissions.manageexistingaccesslist');
-    Route::get('sysadmin/accesspermissions/manageexistingaccessadmin/{model_id}', [AccessPermissionsController::class, 'getAdminOrgs'])->name('sysadmin.accesspermissions.manageexistingaccessadmin');
+    Route::get('sysadmin/accesspermissions/manageexistingaccessadmin/{user_id}', [AccessPermissionsController::class, 'getAdminOrgs'])->name('sysadmin.accesspermissions.manageexistingaccessadmin');
     // Route::get('sysadmin/accesspermissions/manageexistingaccessadmin', [AccessPermissionsController::class, 'getAdminOrgs'])->name('sysadmin.accesspermissions.manageexistingaccessadmin');
     Route::get('sysadmin/accesspermissions/accessedit/{id}', [AccessPermissionsController::class, 'manageedit'])->name('sysadmin.accesspermissions.accessedit');
     Route::post('sysadmin/accesspermissions/accessupdate/{id}', [AccessPermissionsController::class, 'manageupdate']);
