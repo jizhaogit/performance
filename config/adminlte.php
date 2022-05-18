@@ -46,9 +46,9 @@ return [
     */
 
     'logo' => '',
-    'logo_img' => 'img/PDPLogo_50x50.png',
+    'logo_img' => 'img/PDPLogo_143x296.png',
     'logo_img_class' => 'brand-image elevation-3',
-    'logo_img_xl' => 'img/PDPLogo_210x33.png',
+    'logo_img_xl' => 'img/PDPLogo_1143x561.png',
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Performance',
 

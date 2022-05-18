@@ -5,7 +5,8 @@
 <div class="card">
 	<div class="card-body">
         <div class="h4">{{__('Manage Existing Access')}}</div>
-        {{-- @include('sysadmin.partials.filter') --}}
+        {{-- @include('sysadmin.accesspermissions.partials.filter') --}}
+        @include('sysadmin.partials.filter')
 		<p></p>
         <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
 	</div>    
@@ -41,9 +42,7 @@
 @endpush
 
 @push('js')
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script>   --}}
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
@@ -104,7 +103,7 @@
             $('#reason').val(reason);
             $('#accessselect').val(role_id);
             $('#model_id').val(model_id);
-            $('#accessDetailLabel').text('Edit Employee Access Level: '+email);
+            $('#accessDetailLabel').text('Edit Employee Access Level:  '+email);
             $('#saveButton').prop('disabled', current == model_id);
             $('removeButton').prop('disabled', current == model_id);
             $('#accessselect').prop('disabled', current == model_id);
@@ -115,7 +114,7 @@
                 $('#accessselect').prop('disabled', true);
             }
             if($('#accessselect').val() == 3) {
-                // $('#admintable').show();
+                $('#admintable').show();
                 // let $url = "{{ route('sysadmin.accesspermissions.manageexistingaccessadmin', ':param') }}";
                 // $url = $url.replace(':param', model_id);
                 var table = $('#admintable').DataTable
@@ -138,7 +137,7 @@
                             {title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
                             {title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
                             {title: 'User ID', ariaTitle: 'User ID', target: 0, type: 'num', data: 'user_id', name: 'user_id', searchable: false, visible: false},
-                        ]  
+                        ],  
                     }
                 );
             } else {
@@ -186,6 +185,15 @@
                     window.location.href = 'manageexistingaccess';
                 }
             });
+        });
+
+        $(window).on('beforeunload', function(){
+            $('#pageLoader').show();
+        });
+
+        $(window).resize(function(){
+            location.reload();
+            return;
         });
 
 

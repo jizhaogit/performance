@@ -24,7 +24,7 @@
 	<form id="notify-form" action="{{ route('sysadmin.accesspermissions.saveaccess') }}" method="post">
 		@csrf
 		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
-		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
 
 
 		<!----modal starts here--->
@@ -41,8 +41,8 @@
 						<p>Are you sure to send out this message ?</p>
 					</div>
 					<div class="modal-footer">
+						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Grant Access</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Grant</button>
 					</div>
 					
 				</div>

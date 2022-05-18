@@ -6,6 +6,7 @@ namespace App\Http\Controllers\SysAdmin;
 
 use App\Models\User;
 use App\Jobs\SendEmailJob;
+use App\Models\AdminOrg;
 use App\Models\EmployeeDemo;
 use Illuminate\Http\Request;
 use App\Models\NotificationLog;
@@ -99,8 +100,6 @@ class AccessPermissionsController extends Controller
             $request->dd_level3 = isset($old['dd_level3']) ? $old['dd_level3'] : null;
             $request->dd_level4 = isset($old['dd_level4']) ? $old['dd_level4'] : null;
 
-            // $request->job_titles = isset($old['job_titles']) ? $old['job_titles'] : null;
-            // $request->active_since = isset($old['active_since']) ? $old['active_since'] : null;
             $request->search_text = isset($old['search_text']) ? $old['search_text'] : null;
             
             $request->orgCheck = isset($old['orgCheck']) ? $old['orgCheck'] : null;
@@ -128,8 +127,6 @@ class AccessPermissionsController extends Controller
                 'dd_level2' => $request->dd_level2,
                 'dd_level3' => $request->dd_level3,
                 'dd_level4' => $request->dd_level4,
-                // 'job_titles' => $request->job_titles,
-                // 'active_since' => $request->active_since,
                 'criteria' => $request->criteria,
                 'search_text' => $request->search_text,
                 'orgCheck' => $request->orgCheck,
@@ -160,7 +157,6 @@ class AccessPermissionsController extends Controller
         $request->session()->flash('level2', $level2);
         $request->session()->flash('level3', $level3);
         $request->session()->flash('level4', $level4);
-        // $request->session()->flash('job_titles', $job_titles);
         $request->session()->flash('userCheck', $request->userCheck);  // Dynamic load 
         
         $elevel0 = $request->edd_level0 ? OrganizationTree::where('id', $request->edd_level0)->first() : null;
@@ -181,23 +177,21 @@ class AccessPermissionsController extends Controller
         $matched_emp_ids = $sql->select([ 'employee_demo.employee_id', 'employee_demo.employee_name', 'employee_demo.job_title', 'employee_demo.employee_email', 
                 'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division',
                 'employee_demo.level3_branch','employee_demo.level4', 'employee_demo.deptid', 'employee_demo.job_title'])
-                ->join('users', 'employee_demo.guid', '=', 'users.guid')
-                ->whereNotExists( function( $q) {
-                    $q->select(DB::raw(1))
-                    ->from('model_has_roles')
-                    // ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-                    ->whereRaw('users.id = model_has_roles.model_id');
-                }) 
+                // ->join('users', 'employee_demo.guid', '=', 'users.guid')
+                // ->whereNotExists( function( $q) {
+                //     $q->select(DB::raw(1))
+                //     ->from('model_has_roles')
+                //     ->whereIn('role_id', [3, 4])
+                //     ->whereRaw('users.id = model_has_roles.model_id');
+                // }) 
             
             ->orderBy('employee_id')
                 ->pluck('employee_demo.employee_id');        
         
-        // $alert_format_list = NotificationLog::ALERT_FORMAT;
         $criteriaList = $this->search_criteria_list();
         $roles = DB::table('roles')
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
-
 
         return view('sysadmin.accesspermissions.notify', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles') );
     
@@ -298,8 +292,8 @@ class AccessPermissionsController extends Controller
             $level2 = $request->dd_level2 ? OrganizationTree::where('id', $request->dd_level2)->first() : null;
             $level3 = $request->dd_level3 ? OrganizationTree::where('id', $request->dd_level3)->first() : null;
             $level4 = $request->dd_level4 ? OrganizationTree::where('id', $request->dd_level4)->first() : null;
-            $job_titles = $request->job_titles ? EmployeeDemo::whereIn('job_title', $request->job_titles)->select('job_title')
-                        ->groupBy('job_title')->pluck('job_title') : null;
+            // $job_titles = $request->job_titles ? EmployeeDemo::whereIn('job_title', $request->job_titles)->select('job_title')
+            //             ->groupBy('job_title')->pluck('job_title') : null;
     
             $demoWhere = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
 
@@ -343,7 +337,7 @@ class AccessPermissionsController extends Controller
 
         if($request->input('accessselect') == 3) {
             $organizationList = OrganizationTree::select('id', 'organization', 'level1_program', 'level2_division', 'level3_branch', 'level4')
-            ->whereIn('id', $request->eorgCheck)
+            ->whereIn('id', $selected_org_nodes)
             ->distinct()
             ->orderBy('id')
             ->get();
@@ -370,30 +364,32 @@ class AccessPermissionsController extends Controller
                     $result = DB::table('admin_orgs')
                     ->updateOrInsert(
                         ['user_id' => $newId->id
-                        , 'version' => '5'
+                        // , 'version' => '5'
+                        , 'version' => '1'
                         , 'organization' => $org1->organization
                         , 'level1_program' => $org1->level1_program
                         , 'level2_division' => $org1->level2_division
                         , 'level3_branch' => $org1->level3_branch
                         , 'level4' => $org1->level4],
-                        [],
+                        ['updated_at' => date('Y-m-d H:i:s')],
                     );
                     if(!$result){
                         break;
                     }
                 }
-                $backup_result = DB::table('admin_orgs')
-                ->where('user_id', $newId->id)
-                ->where('version', '1')
-                ->update(['version' => '9']);
-                $update_result = DB::table('admin_orgs')
-                ->where('user_id', $newId->id)
-                ->where('version', '5')
-                ->update(['version' => '1']);
-                $delete_result = DB::table('admin_orgs')
-                ->where('user_id', $newId->id)
-                ->where('version', '!=', '1')
-                ->delete();
+                // TO DO - Commented to allow HR Admin to have multi Ministry assignments
+                // $backup_result = DB::table('admin_orgs')
+                // ->where('user_id', $newId->id)
+                // ->where('version', '1')
+                // ->update(['version' => '9']);
+                // $update_result = DB::table('admin_orgs')
+                // ->where('user_id', $newId->id)
+                // ->where('version', '5')
+                // ->update(['version' => '1']);
+                // $delete_result = DB::table('admin_orgs')
+                // ->where('user_id', $newId->id)
+                // ->where('version', '!=', '1')
+                // ->delete();
             };  
         }
 
@@ -492,7 +488,7 @@ class AccessPermissionsController extends Controller
         return response()->json($eformatted_orgs);
     } 
 
-    public function getDvisions(Request $request) {
+    public function getDivisions(Request $request) {
 
         $elevel0 = $request->elevel0 ? OrganizationTree::where('id', $request->level0)->first() : null;
         $elevel1 = $request->elevel1 ? OrganizationTree::where('id', $request->level1)->first() : null;
@@ -520,7 +516,7 @@ class AccessPermissionsController extends Controller
         return response()->json($formatted_orgs);
     } 
 
-    public function geteDvisions(Request $request) {
+    public function geteDivisions(Request $request) {
 
         $elevel0 = $request->elevel0 ? OrganizationTree::where('id', $request->elevel0)->first() : null;
         $elevel1 = $request->elevel1 ? OrganizationTree::where('id', $request->elevel1)->first() : null;
@@ -1008,7 +1004,6 @@ class AccessPermissionsController extends Controller
     }
 
     public function getAdminOrgs(Request $request, $model_id) {
-        // dd($request);
         if ($request->ajax()) {
             $query = AdminOrg::where('user_id', '=', $model_id)
             ->where('version', '=', '1')
@@ -1075,6 +1070,9 @@ class AccessPermissionsController extends Controller
                 ->where('model_id', '=', $request->model_id)
                 ->whereIn('role_id', [3, 4])
                 ->update(['role_id' => $request->accessselect, 'reason' => $request->reason]);
+                $orgs = DB::table('admin_orgs')
+                ->where('user_id', '=', $request->input('model_id'))
+                ->delete();
             }
             if($request->accessselect == 3) {
                 $query = DB::table('model_has_roles')
@@ -1102,11 +1100,11 @@ class AccessPermissionsController extends Controller
         ->where('model_id', '=', $request->input('model_id'))
         ->wherein('role_id', [3, 4])
         ->delete();
-        if($query) {
+        // if($query) {
             $orgs = DB::table('admin_orgs')
             ->where('user_id', '=', $request->input('model_id'))
             ->delete();
-        }
+        // }
         return redirect()->back();
     }
 

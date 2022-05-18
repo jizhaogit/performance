@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HRadminController;
-use App\Http\Controllers\MyOrganizationController;
 use App\Http\Controllers\MyOrgController;
 use App\Http\Controllers\GenericTemplateController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\HRAdmin\MyOrganizationController;
 use App\Http\Controllers\HRAdmin\NotificationController;
 use App\Http\Controllers\HRAdmin\HRGoalController;
 use App\Http\Controllers\SharedEmployeesController;
@@ -59,7 +59,7 @@ Route::group(['middleware' => ['role:HR Admin']], function ()
         Route::get('/hradmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
         Route::get('/hradmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
         Route::get('/hradmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
-        Route::get('/hradmin/notifications/org-divisions', [NotificationController::class,'getDvisions']);
+        Route::get('/hradmin/notifications/org-divisions', [NotificationController::class,'getDivisions']);
         Route::get('/hradmin/notifications/org-branches', [NotificationController::class,'getBranches']);
         Route::get('/hradmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
         Route::get('/hradmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);

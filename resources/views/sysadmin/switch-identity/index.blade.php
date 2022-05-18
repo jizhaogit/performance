@@ -39,7 +39,7 @@
                         @foreach ($users as $user )
                         <tr > 
                             <td class="col-2">
-                                <a href="/sysadmin/switch-identity?id={{ $user["id"] }}">Select</a>
+                                <a href="/sysadmin/switch-identity?new_user_id={{ $user["id"] }}">Select</a>
                             </td>
                             <td class="col-5">
                                 {{ $user["name"] }}

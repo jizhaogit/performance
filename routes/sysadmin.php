@@ -23,6 +23,11 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
 Route::get('sysadmin/employees/currentemployees', [CurrentEmployeesController::class, 'index'])->name('sysadmin.employees.currentemployees');
 Route::get('sysadmin/employees/currentemployeeslist', [CurrentEmployeesController::class, 'getList'])->name('sysadmin.employees.currentemployeeslist');
 Route::post('sysadmin/employees/currentemployees', [CurrentEmployeesController::class, 'index'])->name('sysadmin.employees.currentemployees');
+Route::get('/sysadmin/employees/org-organizations', [CurrentEmployeesController::class,'getOrganizations']);
+Route::get('/sysadmin/employees/org-programs', [CurrentEmployeesController::class,'getPrograms']);
+Route::get('/sysadmin/employees/org-divisions', [CurrentEmployeesController::class,'getDivisions']);
+Route::get('/sysadmin/employees/org-branches', [CurrentEmployeesController::class,'getBranches']);
+Route::get('/sysadmin/employees/org-level4', [CurrentEmployeesController::class,'getLevel4']);
 
 Route::get('sysadmin/employees/pastemployees', [PastEmployeesController::class, 'index'])->name('sysadmin.employees.pastemployees');
 Route::get('sysadmin/employees/pastemployeeslist', [PastEmployeesController::class, 'getList'])->name('sysadmin.employees.pastemployeeslist');
@@ -99,7 +104,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/sysadmin/sharedemployees/org-tree', [SharedEmployeesController::class,'loadOrganizationTree']);
     Route::get('/sysadmin/sharedemployees/org-organizations', [SharedEmployeesController::class,'getOrganizations']);
     Route::get('/sysadmin/sharedemployees/org-programs', [SharedEmployeesController::class,'getPrograms']);
-    Route::get('/sysadmin/sharedemployees/org-divisions', [SharedEmployeesController::class,'getDvisions']);
+    Route::get('/sysadmin/sharedemployees/org-divisions', [SharedEmployeesController::class,'getDivisions']);
     Route::get('/sysadmin/sharedemployees/org-branches', [SharedEmployeesController::class,'getBranches']);
     Route::get('/sysadmin/sharedemployees/org-level4', [SharedEmployeesController::class,'getLevel4']);
     Route::get('/sysadmin/sharedemployees/job-titles', [SharedEmployeesController::class,'getJobTitles']);
@@ -121,7 +126,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/sysadmin/excusedemployees/org-tree', [ExcusedEmployeesController::class,'loadOrganizationTree']);
     Route::get('/sysadmin/excusedemployees/org-organizations', [ExcusedEmployeesController::class,'getOrganizations']);
     Route::get('/sysadmin/excusedemployees/org-programs', [ExcusedEmployeesController::class,'getPrograms']);
-    Route::get('/sysadmin/excusedemployees/org-divisions', [ExcusedEmployeesController::class,'getDvisions']);
+    Route::get('/sysadmin/excusedemployees/org-divisions', [ExcusedEmployeesController::class,'getDivisions']);
     Route::get('/sysadmin/excusedemployees/org-branches', [ExcusedEmployeesController::class,'getBranches']);
     Route::get('/sysadmin/excusedemployees/org-level4', [ExcusedEmployeesController::class,'getLevel4']);
     Route::get('/sysadmin/excusedemployees/job-titles', [ExcusedEmployeesController::class,'getJobTitles']);
@@ -145,7 +150,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/sysadmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
     Route::get('/sysadmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
     Route::get('/sysadmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
-    Route::get('/sysadmin/notifications/org-divisions', [NotificationController::class,'getDvisions']);
+    Route::get('/sysadmin/notifications/org-divisions', [NotificationController::class,'getDivisions']);
     Route::get('/sysadmin/notifications/org-branches', [NotificationController::class,'getBranches']);
     Route::get('/sysadmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
     Route::get('/sysadmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);
@@ -168,12 +173,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/sysadmin/accesspermissions/eorg-tree', [AccessPermissionsController::class,'eloadOrganizationTree']);
     Route::get('/sysadmin/accesspermissions/org-organizations', [AccessPermissionsController::class,'getOrganizations']);
     Route::get('/sysadmin/accesspermissions/org-programs', [AccessPermissionsController::class,'getPrograms']);
-    Route::get('/sysadmin/accesspermissions/org-divisions', [AccessPermissionsController::class,'getDvisions']);
+    Route::get('/sysadmin/accesspermissions/org-divisions', [AccessPermissionsController::class,'getDivisions']);
     Route::get('/sysadmin/accesspermissions/org-branches', [AccessPermissionsController::class,'getBranches']);
     Route::get('/sysadmin/accesspermissions/org-level4', [AccessPermissionsController::class,'getLevel4']);
     Route::get('/sysadmin/accesspermissions/eorg-organizations', [AccessPermissionsController::class,'geteOrganizations']);
     Route::get('/sysadmin/accesspermissions/eorg-programs', [AccessPermissionsController::class,'getePrograms']);
-    Route::get('/sysadmin/accesspermissions/eorg-divisions', [AccessPermissionsController::class,'geteDvisions']);
+    Route::get('/sysadmin/accesspermissions/eorg-divisions', [AccessPermissionsController::class,'geteDivisions']);
     Route::get('/sysadmin/accesspermissions/eorg-branches', [AccessPermissionsController::class,'geteBranches']);
     Route::get('/sysadmin/accesspermissions/eorg-level4', [AccessPermissionsController::class,'geteLevel4']);
     Route::get('/sysadmin/accesspermissions/job-titles', [AccessPermissionsController::class,'getJobTitles']);

@@ -36,6 +36,36 @@
   background-color: #1a5a96 !important;
 }
 
+// logo size
+.brand-link 
+{
+  height: 110px !important;
+}
+
+.brand-link .brand-image {
+  margin-left: 0.2rem   !important;
+  max-height: 90px      !important;
+}
+
+.brand-link .brand-image-xs
+{
+  max-height: 100px    !important;
+}
+
+// Sidebar color when hover and active
+.nav-sidebar .nav-link:hover {
+  color: #003366 !important;
+   font-weight: bold;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+   color: #003366 !important;
+   font-weight: bold;
+}
+
+
+
+
 
 // Tab for difference links 
 a.btn:not(.btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-light, .btn-dark, .btn-link ), 

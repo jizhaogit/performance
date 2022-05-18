@@ -1,73 +1,80 @@
+
 <div class="card p-3">
-    <div class="form-row">
-        <div class="form-group col-md-2">
+       
+        <div class="form-row">
+          <div class="form-group col-md-2">
             <label for="dd_level0">Organization</label>
             <select id="dd_level0" name="dd_level0" class="form-control select2">
                 @if ( old('dd_level0') && session()->get('level0') )
                     <option value="{{ session()->get('level0')->id }}">{{ session()->get('level0')->name }}</option>
                 @endif
             </select>
-        </div>
-        <div class="form-group col-md-2">
+          </div>
+          <div class="form-group col-md-2">
             <label for="dd_level1">Level 1</label>
             <select id="dd_level1" name="dd_level1" class="form-control select2">
                 @if ( old('dd_level1') && session()->get('level1') )
                     <option value="{{ session()->get('level1')->id }}">{{ session()->get('level1')->name }}</option>
                 @endif
             </select>
-        </div>
-        <div class="form-group col-md-2">
+          </div>
+          <div class="form-group col-md-2">
             <label for="dd_level2">Level 2</label>
             <select id="dd_level2" name="dd_level2" class="form-control select2">
                 @if ( old('dd_level2') && session()->get('level2') )
                     <option value="{{ session()->get('level2')->id }}">{{ session()->get('level2')->name }}</option>
                 @endif
             </select>
-        </div>
-        <div class="form-group col-md-2">
+          </div>
+          <div class="form-group col-md-2">
             <label for="dd_level3">Level 3</label>
             <select id="dd_level3" name="dd_level3" class="form-control select2">
                 @if ( old('dd_level3') && session()->get('level3') )
                     <option value="{{ session()->get('level3')->id }}">{{ session()->get('level3')->name }}</option>
                 @endif
             </select>
-        </div>
-        <div class="form-group col-md-2">
+          </div>
+          <div class="form-group col-md-2">
             <label for="dd_level4">Level 4</label>
             <select id="dd_level4" name="dd_level4" class="form-control select2">
                 @if ( old('dd_level4') && session()->get('level4') )
                     <option value="{{ session()->get('level4')->id }}">{{ session()->get('level4')->name }}</option>
                 @endif
             </select>
-        </div>
-        <div class="form-group col-md-2">
-        </div>
-        <div class="form-group col-md-2">
-            <label for="criteria">Search Criteria</label>
-            <select id="criteria" name="criteria" class="form-control">
-                @foreach( $criteriaList as $key => $value )
-                    <option value="{{ $key }}" {{  old('criteria') == $key ? 'selected' : '' }} >{{ $value }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="search_text">Search Text</label>
-            <input type="text" id="search_text" name="search_text" class="form-control" 
-                    value="{{ old('search_text') }}" placeholder="Search Text">
-        </div>
-        <div class="form-group col-md-2 p-3 float-left float-bottom" style="display: flex; flex-direction: column;">
-            <div class="form-group row"> </div>
+          </div>
+
+          <div class="form-group col-md-2">
+          </div>
+
+            <div class="form-group col-md-2">
+                <label for="criteria">Search Criteria</label>
+                <select id="criteria" name="criteria" class="form-control">
+                    @foreach( $criteriaList as $key => $value )
+                        <option value="{{ $key }}" {{  old('criteria') == $key ? 'selected' : '' }} >{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="search_text">Search Text</label>
+                <input type="text" id="search_text" name="search_text" class="form-control" 
+                        value="{{ old('search_text') }}" placeholder="Search Text">
+            </div>
+
+            <div class="form-group col-md-2 p-3 float-left float-bottom" style="display: flex; flex-direction: column;">
+                <div class="form-group row"> </div>
                 <div class="form-group row">
                     <span class="float-left float-bottom">  
-                        <button type="submit" class="btn btn-primary" name="btn_search" 
-                            value="btn_search" formaction="{{ route('sysadmin.accesspermissions.search') }}">Filter</button>
-                        <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
+                    <button type="submit" class="btn btn-primary" name="btn_search" 
+                        value="btn_search" formaction="{{ route('sysadmin.accesspermissions.search') }}">Filter</button>
+                    <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
                     </span>
                 </div>
-            </div>
-        </div>
-    </div>
+              </div>
+          </div>
+
 </div>
+
 
 @push('css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -240,13 +247,13 @@
         $('#dd_level4').val(null).trigger('change');
     });
 
+
     $('#btn_search_reset').click(function() {
         $('#dd_level0').val(null).trigger('change');
         $('#dd_level1').val(null).trigger('change');
         $('#dd_level2').val(null).trigger('change');
         $('#dd_level3').val(null).trigger('change');
         $('#dd_level4').val(null).trigger('change');
-        // $('#job_titles').val(null).trigger('change');
         $('#active_since').val(null);
         $('#search_text').val(null);
     });

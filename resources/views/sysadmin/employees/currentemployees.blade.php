@@ -1,10 +1,11 @@
 @extends('sysadmin.layout')
 @section('tab-content')
-        <div class="col-md-8"> @include('sysadmin.partials.tabs')</div>
+        <div class="col-md-8"> @include('sysadmin.employees.partials.tabs')</div>
 
 <div class="card">
 	<div class="card-body">
         <div class="h4">{{__('Current Employees')}}</div>
+		{{-- @include('sysadmin.employees.partials.filter') --}}
 		@include('sysadmin.partials.filter')
 		<p></p>
         <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
@@ -87,6 +88,16 @@
                 );
             });
         }
+
+        $(window).on('beforeunload', function(){
+				$('#pageLoader').show();
+			});
+
+        $(window).resize(function(){
+            location.reload();
+            return;
+        });
+
     </script>
 @endpush
 

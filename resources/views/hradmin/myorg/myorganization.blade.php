@@ -4,6 +4,7 @@
 <div class="card">
 	<div class="card-body">
         <div class="h4">{{__('All BC Public Service Employees')}}</div>
+		{{-- @include('hradmin.myorg.partials.filter') --}}
 		@include('hradmin.partials.filter')
 		<p></p>
         <table class="table table-bordered myorgtable" id="myorgtable" style="width: 100%; overflow-x: auto; "></table>
@@ -38,12 +39,15 @@
     
 @endpush
 @push('js')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>   --}}
+    {{-- <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script> --}}
+    {{-- <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script> --}}
+
     <script type="text/javascript">
+
         $(document).ready()
         {
+
             $(function ()
             {
                 var table = $('.myorgtable').DataTable
@@ -92,7 +96,18 @@
                     }
                 );
             });
+
+            $(window).on('beforeunload', function(){
+				$('#pageLoader').show();
+			});
+
+            $(window).resize(function(){
+                location.reload();
+                return;
+            });
+
         }
+                    
     </script>
 @endpush
 

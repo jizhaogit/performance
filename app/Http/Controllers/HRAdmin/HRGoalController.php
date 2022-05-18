@@ -518,7 +518,7 @@ class HRGoalController extends Controller
         return response()->json($formatted_orgs);
     } 
 
-    public function getDvisions(Request $request) {
+    public function getDivisions(Request $request) {
 
         $level0 = $request->level0 ? OrganizationTree::where('id', $request->level0)->first() : null;
         $level1 = $request->level1 ? OrganizationTree::where('id', $request->level1)->first() : null;
