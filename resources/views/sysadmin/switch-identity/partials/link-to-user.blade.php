@@ -1,0 +1,1 @@
+<a href="{{route('sysadmin.switch-identity', ['new_user_id' => $row['id'], 'landingPage' => ($landingPage ?? '')])}}">{{ $text ?? $row['name'] }}</a>

@@ -1,0 +1,1 @@
+<x-button icon="eye" size="xs" :href="route('sysadmin.switch-identity', $row['id'])"></x-button>

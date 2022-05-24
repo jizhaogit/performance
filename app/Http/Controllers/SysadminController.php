@@ -19,6 +19,7 @@ use App\Models\ExcusedReason;
 use App\Models\EmployeeDemo;
 use App\Models\OrganizationTree;
 use Carbon\Carbon;
+use DataTables;
 // use GuzzleHttp\Psr7\Request;
 
 
@@ -840,7 +841,7 @@ class SysadminController extends Controller
         ];
     }
 
-    public function switchIdentity(Request $request) {
+    public function switchIdentityAction(Request $request) {
         //$query = User::orderby('name','asc')->select('id','name','email');
          
         if ($request->has('new_user_id') && $request->new_user_id) {
@@ -849,24 +850,25 @@ class SysadminController extends Controller
             $newuserId = $request->new_user_id;
             Auth::loginUsingId($newuserId);
             return redirect()->to('/');
-        }    
-   
-        $username = '';
-        $users = array();
-
-        if ($request->has('username') && $request->username) {
-            $username = $request->username;
-            $query = User::where('name', "LIKE", "%$request->username%");
-            $users = $query->get()->toArray();
-        }         
-        $count = count($users);
-
-        //return view('sysadmin.switch-identity.index', $users);
-        return view('sysadmin.switch-identity.index', compact('users', 'username', 'count'));
-        
-        //return view('sysadmin.switch-identity.index');
-    }    
-
+        }  
+    } 
+    
+    public function switchIdentity(Request $request) {
+            $search_user = $request->search_user;        
+            if ($request->ajax()) {   
+                $username = $request->name; 
+                if ($username == '') {
+                    $data = User::latest()->take(0)->get();
+                } else {
+                    $data = User::where('name', 'like', '%' . $username . '%')->get();
+                }
+                return Datatables::of($data)
+                        ->addIndexColumn()
+                        ->make(true);                    
+            }
+        return view('sysadmin.switch-identity.index',compact('search_user'));        
+    } 
+    
     public function getOrganizations(Request $request) 
     {
         $orgs = OrganizationTree::orderby('name','asc')->select('id','name')

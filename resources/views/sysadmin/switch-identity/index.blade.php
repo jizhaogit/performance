@@ -1,59 +1,65 @@
 @extends('sysadmin.layout', ['title' => 'Switch Identity'])
 @section('tab-content')
-    <div class="text-center mt-3">
-        <h1>Switch Identity</h1>
-        <p class="px-5 mt-2">
-
-        </p>
-    </div>
-@endsection
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <section>
-                <form name="search-form" action="{{ route('sysadmin.switch-identity') }}" method="GET">
-                     <input type="text" name="username" id="username" value="{{ $username }}">    
-                     <button type="submit" class="btn btn-primary pull-left">Search</button>                
-                </form>    
-            </section>
-        </div>
-    </div>
-</div>
-@if($count>0)
-<p></p>
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h2>Pick a user:</h2>
-            <section>
-                <table class="table" id="binds_table">
-                    <thead>
+<div>
+    <p>
+    <form  action="switch-identity" method="GET">
+        <input name="search_user" placeholder="Search User" id="search_user" value="{{$search_user}}">
+        <button class="btn btn-primary btn-sm" type="submit">Search</button>
+    </form>
+    </p>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered data-table">
+                <thead>
                     <tr>
-                        <th class="col-2">Action</th>
-                        <th class="col-5">User</th>
-                        <th class="col-5">Email</th>
+                        <th>Action</th>
+                        <th>Name</th>
+                        <th>Email</th>
                     </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($users as $user )
-                        <tr > 
-                            <td class="col-2">
-                                <a href="/sysadmin/switch-identity?new_user_id={{ $user["id"] }}">Select</a>
-                            </td>
-                            <td class="col-5">
-                                {{ $user["name"] }}
-                            </td>
-                            <td class="col-5">
-                                {{ $user["email"] }}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </section>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-@endif
 @endsection
+@push('js')  
+    <script>
+        $(function () { 
+        var user = $('#search_user').val();
+        var table = $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            ajax: {
+                url: "{{ route('sysadmin.switch-identity') }}",
+                data: {
+                    "name": user
+                }
+            },
+            columns: [
+                
+                {
+                "data":"id",
+                "render": function(data, type, row, meta){
+                    if(type === 'display'){
+                        data = '<a href="/sysadmin/switch-identity-action?new_user_id=' + data + '" class="edit btn btn-primary btn-sm">Switch</a>';
+                        }
+                    return data;
+                    }
+                },
+                
+                
+                {data: 'name', name: 'name'},
+                {data: 'email', name: 'email'},
+            ]
+        });
+      });
+    </script>    
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover(); 
+        });
+    </script>
+@endpush
