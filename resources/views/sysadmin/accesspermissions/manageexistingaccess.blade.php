@@ -100,6 +100,7 @@
             var email = button.data('email');
             var model_id = button.data('modelid');
             var current = {{ auth()->user()->id }};
+            // $('#admintable') = null;
             $('#reason').val(reason);
             $('#accessselect').val(role_id);
             $('#model_id').val(model_id);
@@ -123,8 +124,8 @@
                         processing: true,
                         serverSide: true,
                         scrollX: true,
-                        stateSave: true,
-                        deferRender: true,
+                        stateSave: false,
+                        deferRender: false,
                         ajax: {
                             type: 'GET',
                             url: "/sysadmin/accesspermissions/manageexistingaccessadmin/"+model_id,
