@@ -18,6 +18,10 @@
                 <div class="col-6">
                     <x-input label="Goal Title" name="title"  tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
                     <!-- <small class="text-danger error-title"></small> -->
+                </div>                
+                <div class="col-sm-6">
+                        <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]"  class="tags" tooltipField="description" displayField="name" multiple/>
+                        <small  class="text-danger error-tag_ids"></small>
                 </div>
                 <div class="col-12">
                     <label style="font-weight: normal;">

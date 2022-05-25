@@ -34,7 +34,8 @@ class AddGoalToLibraryRequest extends FormRequest
             'itemsToShare.*' => 'exists:users,id',
             'is_mandatory' => 'required|boolean',
             'start_date' => 'nullable',
-            'target_date' => 'nullable'
+            'target_date' => 'nullable',
+            'tag_ids.*' => 'exists:tags,id'
         ];
     }
 

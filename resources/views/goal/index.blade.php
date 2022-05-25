@@ -72,6 +72,10 @@
                     <x-input label="Goal Title" id="goal_title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
                     <small class="text-danger error-title"></small>
                     </div>
+                    <div class="col-sm-6">
+                        <x-xdropdown :list="$tags" label="Tags" name="tag_ids[]"  class="tags" tooltipField="description" displayField="name" multiple/>
+                        <small  class="text-danger error-tag_ids"></small>
+                    </div>
                        <div class="col-12">
                         <label style="font-weight: normal;">
                             <b>Goal Description</b>
@@ -92,10 +96,7 @@
                     <x-input label="End Date " class="error-target" type="date" name="target_date"  />
                      <small  class="text-danger error-target_date"></small>
                 </div>
-                <div class="col-sm-6">
-                    <x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
-                    <small  class="text-danger error-tag_ids"></small>
-                </div>
+                
                 <!-- 
                 <div class="col-12">
                     <div class="card mt-3 p-3" icon="fa-question">

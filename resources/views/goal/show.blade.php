@@ -1,7 +1,7 @@
 <x-side-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $goal['title'] }}
+		{{ $goal['title'] }}
             @if(!$disableEdit && $goal->user_id === Auth::Id())
             <x-button icon="edit" :href="route('goal.edit', $goal->id)">Edit</x-button>
             @endif

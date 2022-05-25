@@ -20,7 +20,7 @@ use App\Scopes\NonLibraryScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Tag;
 
 class MyTeamController extends Controller
 {
@@ -252,12 +252,20 @@ class MyTeamController extends Controller
         $input['user_id'] = Auth::id();
         $input['is_library'] = true;
         $share_with = $input['itemsToShare'];
-
         unset($input['itemsToShare']);
+        
+        $tags = $input['tag_ids'];
+        unset($input['tag_ids']);  
+        
         DB::beginTransaction();
         $goal = Goal::create($input);
-        $goal = $goal->sharedWith()->sync($share_with);
+        $goal->sharedWith()->sync($share_with);
         DB::commit();
+        
+        $id = $goal->id;
+        $add_tag_goal = Goal::withoutGlobalScope(NonLibraryScope::class)->findOrFail($id);
+        $add_tag_goal->tags()->sync($tags);
+        
         return response()->json(['success' => true, 'message' => 'Goal added to library successfully']);
         // return redirect()->back();
     }
@@ -281,10 +289,12 @@ class MyTeamController extends Controller
         $eReasons = ExcusedReason::all();
         $conversationTopics = ConversationTopic::all();
         $participants = Participant::all();
+        $tags = Tag::all()->toArray();
         $goals = Goal::where('user_id', Auth::id())
             ->where('status', 'active')
             ->with('user')
             ->with('sharedWith')
+            ->with('tags')    
             ->with('goalType')->get();
         $employees = $this->myEmployeesAjax();
         $type = 'upcoming';
@@ -297,7 +307,7 @@ class MyTeamController extends Controller
             ->with('goalType')
             ->paginate(8);
         $goalDeleteConfirmationText = "You are about to delete a suggested goal, meaning it will no longer be visible to your direct reports. Are you sure you want to continue?";
-        $viewData = compact('goals', 'goaltypes', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText');
+        $viewData = compact('goals', 'goaltypes', 'tags', 'conversationTopics', 'participants', 'eReasons', 'employees', 'type', 'suggestedGoals', 'disableEdit', 'allowEditModal', 'goalDeleteConfirmationText');
         if (!$returnView) {
             return $viewData;
         }

@@ -34,7 +34,7 @@ class GoalController extends Controller
         $goaltypes = GoalType::all()->toArray();
         $tags = Tag::all()->toArray();
         $user = User::find($authId);
-
+        
         $myTeamController = new MyTeamController(); 
         $employees = $myTeamController->myEmployeesAjax();
 
@@ -156,10 +156,11 @@ class GoalController extends Controller
         ->where('user_id', Auth::id())
         ->where('id', $id)
         ->with('goalType')
+        ->with('tags')        
         ->firstOrFail();
 
         $goaltypes = GoalType::all(['id', 'name']);
-        $tags = Tag::all(["id","name"])->toArray();
+        $tags = Tag::all(["id","name", "description"])->toArray();
 
         return view('goal.edit', compact("goal", "goaltypes", "tags"));
         // return redirect()->route('goal.edit', $id);
@@ -221,10 +222,16 @@ class GoalController extends Controller
     }
 
     public function goalBank(Request $request) {
+        $tags = Tag::all()->toArray();
+        
+        $tags_input = $request->tag_ids;        
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
         ->where('is_library', true)
         ->with('goalType')
-        ->with('user');
+        ->with('user')
+        ->join('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        ->join('tags', 'tags.id', '=', 'goal_tags.tag_id');    
+        
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
             if ($request->is_mandatory == "1") {
                 $query = $query->where('is_mandatory', $request->is_mandatory);
@@ -242,9 +249,13 @@ class GoalController extends Controller
                 return $query->where('id', $request->goal_type);
             });
         }
+        
+        if ($request->has('tag_id') && $request->tag_id) {
+            $query = $query->where('goal_tags.tag_id', "=", "$request->tag_id");
+        }
 
         if ($request->has('title') && $request->title) {
-            $query = $query->where('title', "LIKE", "%$request->title%");
+            $query = $query->where('goal_tags.goal_id', "LIKE", "%$request->title%");
         }
 
         if ($request->has('date_added') && $request->date_added && Str::lower($request->date_added) !== 'any') {
@@ -266,18 +277,17 @@ class GoalController extends Controller
         $query->whereHas('sharedWith', function($query) {
             $query->where('user_id', Auth::id());
         });
-
+        $query->groupBy('goals.id');
         $bankGoals = $query->get();
-        $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes);
-
-
+        
+        $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
         $myTeamController = new MyTeamController();
         $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
 
-        return view('goal.bank', array_merge(compact('bankGoals', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }
 
-    private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes) {
+    private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {
         $mandatoryOrSuggested = [
             [
                 "id" => '',
@@ -310,6 +320,12 @@ class GoalController extends Controller
 
         $goalTypes = GoalType::all()->toArray();
         array_unshift($goalTypes, [
+            "id" => "0",
+            "name" => "Any"
+        ]);
+        
+        $tagsList = Tag::all()->toArray();
+        array_unshift($tagsList, [
             "id" => "0",
             "name" => "Any"
         ]);
