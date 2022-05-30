@@ -210,6 +210,17 @@ class SyncUserProfile extends Command
                     $query->select('guid')->from('employee_demo')->whereNotNull('date_deleted');
             })->update(['acctlock'=>true, 'last_sync_at' => $new_sync_at]);
 
+            
+        // Step 4 : Lock all users except pivot run users
+        $this->info( now() );        
+        $this->info('Step 4 - Lock Out Users except Pivot run based on organization');
+
+        $users = User::whereNotNull('guid')
+            ->whereNotIn('guid',function($query) { 
+                $query->select('guid')->from('employee_demo')
+                    ->whereIn('organization', ['BC Public Service Agency']);
+        })->update(['acctlock'=>true, 'last_sync_at' => $new_sync_at]);
+
         echo now();
     }
 

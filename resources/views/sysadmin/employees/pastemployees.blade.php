@@ -1,14 +1,14 @@
 @extends('sysadmin.layout')
-@section('tab-content')
+@section('page-content')
 <div class="col-md-8"> @include('sysadmin.employees.partials.tabs')</div>
 
 <div class="card">
 	<div class="card-body">
         <div class="h4">{{__('Past Employees')}}</div>
-		{{-- @include('sysadmin.employees.partials.filter2') --}}
-		@include('sysadmin.partials.filter')
-		<p></p>
-        <table class="table table-bordered pasttable" id="pasttable" style="width: 100%; overflow-x: auto; "></table>
+		@include('sysadmin.employees.partials.filter')
+        <div class="p-3"> 
+            <table class="table table-bordered pasttable" id="pasttable" style="width: 100%; overflow-x: auto; "></table>
+        </div>
 	</div>    
 </div>   
 @endsection
@@ -84,6 +84,11 @@
                             {title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'employee_demo.level3_branch', searchable: true},
                             {title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'employee_demo.level4', searchable: true},
                             {title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', name: 'employee_demo.deptid', searchable: true},
+                            {title: 'Active Goals', ariaTitle: 'Active Goals', target: 0, type: 'string', data: 'activeGoals', name: 'activeGoals', searchable: false},
+                            {title: 'Next Conversation', ariaTitle: 'Next Conversation', target: 0, type: 'date', data: 'nextConversationDue', name: 'nextConversationDue', searchable: false},
+                            {title: 'Excused', ariaTitle: 'Excused', target: 0, type: 'string', data: 'excused', name: 'excused', searchable: false},
+                            {title: 'Shared', ariaTitle: 'Shared', target: 0, type: 'string', data: 'shared', name: 'shared', searchable: false},
+                            {title: 'Direct Reports', ariaTitle: 'Direct Reports', target: 0, type: 'string', data: 'reportees', name: 'reportees', searchable: false},
                             {title: 'User ID', ariaTitle: 'User ID', target: 0, type: 'num', data: 'id', name: 'users.id', searchable: true, visible: false},
                         ]
                     }
@@ -96,7 +101,8 @@
 			});
 
         $(window).resize(function(){
-            location.reload();
+            // location.reload();
+            table.columns.adjust().draw();
             return;
         });
 

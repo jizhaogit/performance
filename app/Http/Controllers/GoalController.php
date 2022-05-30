@@ -14,6 +14,7 @@ use App\Scopes\NonLibraryScope;
 use App\DataTables\GoalsDataTable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\DashboardNotification;
 use App\Http\Requests\Goals\CreateGoalRequest;
 use App\Http\Requests\Goals\EditSuggestedGoalRequest;
@@ -223,14 +224,30 @@ class GoalController extends Controller
 
     public function goalBank(Request $request) {
         $tags = Tag::all()->toArray();
-        
-        $tags_input = $request->tag_ids;        
+        $tags_input = $request->tag_ids;     
+
+        $adminGoals = Goal::withoutGlobalScopes()
+        ->join('goal_bank_orgs', 'goals.id', '=', 'goal_bank_orgs.goal_id')
+        ->join('admin_orgs', function($join) use ($request) {
+            $join->on('admin_orgs.organization', '=', 'goal_bank_orgs.organization')
+            ->on('admin_orgs.level1_program', '=', 'goal_bank_orgs.level1_program')
+            ->on('admin_orgs.level2_division', '=', 'goal_bank_orgs.level2_division')
+            ->on('admin_orgs.level3_branch', '=', 'goal_bank_orgs.level3_branch')
+            ->on('admin_orgs.level4', '=', 'goal_bank_orgs.level4');
+        })
+        ->where('admin_orgs.user_id', '=', Auth::id())
+        ->where('admin_orgs.version', '=', 1)
+        ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id')    
+        ->select('goals.*');
+        // ->paginate(10);
+
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
         ->where('is_library', true)
         ->with('goalType')
         ->with('user')
-        ->join('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
-        ->join('tags', 'tags.id', '=', 'goal_tags.tag_id');    
+        ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
+        ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id');    
         
         if ($request->has('is_mandatory') && $request->is_mandatory !== null) {
             if ($request->is_mandatory == "1") {
@@ -246,7 +263,7 @@ class GoalController extends Controller
 
         if ($request->has('goal_type') && $request->goal_type) {
             $query = $query->whereHas('goalType', function($query) use ($request) {
-                return $query->where('id', $request->goal_type);
+                return $query->where('goal_type_id', $request->goal_type);
             });
         }
         
@@ -277,12 +294,24 @@ class GoalController extends Controller
         $query->whereHas('sharedWith', function($query) {
             $query->where('user_id', Auth::id());
         });
-        $query->groupBy('goals.id');
-        $bankGoals = $query->get();
+        // $query->groupBy('goals.id');
+        // $bankGoals = $query->get();
         
+        // $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
+        $query = $query->select('goals.*');
+        $query = $query->union($adminGoals);
+        // $query = $query->groupBy('goals.id');
+        $bankGoals = $query->paginate(10);
         $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
+
+
         $myTeamController = new MyTeamController();
         $suggestedGoalsData = $myTeamController->showSugggestedGoals('my-team.goals.bank', false);
+
+        // $compacted = compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy');
+        // dd($compacted);
+        // $merged = array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData);
+        // dd($merged);
 
         return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }

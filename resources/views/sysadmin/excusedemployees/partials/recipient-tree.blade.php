@@ -176,11 +176,11 @@
                                                 </h6>
                                             </div>
 
-                                            {{-- DVISION -- Employee Listing - Start --}}                                                                                         
+                                            {{-- DIVISION -- Employee Listing - Start --}}                                                                                         
                                             <div id="collapse-{{ $division->id }}" class="collapse" data-parent="#accordion-2" aria-labelledby="heading-{{ $division->id }}">
                                                 <div class="card-header employee-list" id="employees-{{ $division->id }}" value="{{ $division->id }}"></div>
                                             </div>
-                                            {{-- DVISION -- Employee Listing - End --}}                                                                                         
+                                            {{-- DIVISION -- Employee Listing - End --}}                                                                                         
 
                                             @endif
                                         </div>

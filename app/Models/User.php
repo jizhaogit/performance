@@ -196,4 +196,20 @@ class User extends Authenticatable
         return $this->users()->pluck('id');
     }
 
+    public function getAllReporteesAttribute()
+    {
+        return collect($this->flat_reportees($this));
+    }
+
+    function flat_reportees($model) {
+        $result = [];
+        foreach ($model->reportees as $child) {
+          $result[] = $child;
+          if ($child->reportees) {
+            $result = array_merge($result, $this->flat_reportees($child));
+          }
+        }
+        return $result;
+    }
+
 }

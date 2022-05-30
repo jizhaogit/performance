@@ -114,8 +114,27 @@ class PastEmployeesController extends Controller
                 'employee_demo.deptid',
                 'users.id',
             );
-            // ->get();
             return Datatables::of($query)->addIndexColumn()
+            ->addColumn('activeGoals', function($row) {
+                $countActiveGoals = $row->activeGoals()->count() . ' Goals';
+                return $countActiveGoals;
+            })
+            ->addColumn('nextConversationDue', function ($row) {
+                $nextConversation = Conversation::nextConversationDue(User::find($row["id"]));
+                return $nextConversation;
+            })
+            ->addColumn('excused', function ($row) {
+                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
+                return $yesOrNo;
+            })
+            ->addColumn('shared', function ($row) {
+                $yesOrNo = $row->is_shared ? "Yes" : "No";
+                return $yesOrNo;
+            })
+            ->addColumn('reportees', function($row) {
+                $countReportees = $row->reportees()->count() ?? '0';
+                return $countReportees;
+            })
             ->make(true);
         }
     }

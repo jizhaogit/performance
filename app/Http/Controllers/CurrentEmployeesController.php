@@ -115,9 +115,27 @@ class CurrentEmployeesController extends Controller
                 'employee_demo.deptid',
                 'users.id'
             );
-            // ->get();
-            return Datatables::of($query)
-            ->addIndexColumn()
+            return Datatables::of($query)->addIndexColumn()
+            ->addColumn('activeGoals', function($row) {
+                $countActiveGoals = $row->activeGoals()->count() . ' Goals';
+                return $countActiveGoals;
+            })
+            ->addColumn('nextConversationDue', function ($row) {
+                $nextConversation = Conversation::nextConversationDue(User::find($row["id"]));
+                return $nextConversation;
+            })
+            ->addColumn('excused', function ($row) {
+                $yesOrNo = ($row->excused_start_date !== null) ? 'Yes' : 'No';
+                return $yesOrNo;
+            })
+            ->addColumn('shared', function ($row) {
+                $yesOrNo = $row->is_shared ? "Yes" : "No";
+                return $yesOrNo;
+            })
+            ->addColumn('reportees', function($row) {
+                $countReportees = $row->reportees()->count() ?? '0';
+                return $countReportees;
+            })
             ->make(true);
         }
     }
@@ -240,10 +258,10 @@ class CurrentEmployeesController extends Controller
         return response()->json($formatted_orgs);
     } 
 
-    public function getDisvisions(Request $request) {
+    public function getDivisions(Request $request) {
 
-        $elevel0 = $request->elevel0 ? OrganizationTree::where('id', $request->level0)->first() : null;
-        $elevel1 = $request->elevel1 ? OrganizationTree::where('id', $request->level1)->first() : null;
+        $level0 = $request->level0 ? OrganizationTree::where('id', $request->level0)->first() : null;
+        $level1 = $request->level1 ? OrganizationTree::where('id', $request->level1)->first() : null;
 
         $orgs = OrganizationTree::orderby('name','asc')->select(DB::raw('min(id) as id'),'name')
             ->where('level',2)

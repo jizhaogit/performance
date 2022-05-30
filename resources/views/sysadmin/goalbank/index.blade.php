@@ -1,27 +1,68 @@
 <x-side-layout title="{{ __('Dashboard') }}">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            Access and Permissions
+            Goal Bank
         </h2> 
-		@include('sysadmin.accesspermissions.partials.tabs')
+		@include('sysadmin.goalbank.partials.tabs')
     </x-slot>
 
 	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
 	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
 
-	<br>
-	<h6 class="text-bold">Step 1. Select employees to assign</h6>
-	<br>
-
-	<form id="notify-form" action="{{ route('sysadmin.accesspermissions.saveaccess') }}" method="post">
+	<form id="notify-form" action="{{ route('sysadmin.goalbank.addnewgoal') }}" method="post">
 		@csrf
-		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
-		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
+		<br>
+		<h6 class="text-bold">Step 1. Enter Goal Details</h6>
+		<br>
 
+		<div class="row">
+			<div class="col m-2">
+				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
+			</div>
+			<div class="col m-2">
+				<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
+					{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
+						<small class="text-danger error-title"></small>
+			</div>
+			<div class="col m-2">
+				<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col m-2">
+				<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
+					{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
+						<small class="text-danger error-what"></small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col m-2">
+				<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
+					{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
+						<small class="text-danger error-measure_of_success"></small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<x-input label="Start Date " class="error-start" type="date" name="start_date"  />
+				<small  class="text-danger error-start_date"></small>
+			</div>
+			<div class="col-sm-6">
+				<x-input label="End Date " class="error-target" type="date" name="target_date"  />
+				<small  class="text-danger error-target_date"></small>
+			</div>
+			<div class="col-sm-6">
+				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
+				<small  class="text-danger error-tag_ids"></small>
+			</div>
+		</div>
+
+
+		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
 
 		<!----modal starts here--->
-		<div id="saveAccessModal" class="modal" role='dialog'>
+		<div id="saveGoalModal" class="modal" role='dialog'>
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -34,7 +75,7 @@
 						<p>Are you sure to send out this message ?</p>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Grant Access</button>
+						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Add New Goal</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 					</div>
 					
@@ -43,51 +84,15 @@
 		</div>
 		<!--Modal ends here--->	
 	
-		@include('sysadmin.accesspermissions.partials.filter')
-
-        <div class="p-3">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
-                    <a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
-                    @include('sysadmin.accesspermissions.partials.recipient-list')
-                </div>
-                <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
-                    <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-		<br>
-		<h6 class="text-bold">Step 2. Select access level and reason for assigning access</h6> 
-		<br>
-		<div class="row  p-3">
-			<div class="col col-4">
-				<label for='accessselect' title='Access Level Tooltip'>Access Level
-					<select name="accessselect" class="form-control" id="accessselect">
-						@foreach($roles as $rid => $desc)
-							<option value = {{ $rid }} > {{ $desc }} </option>
-						@endforeach
-					</select>
-				</label>
-			</div>
-			<div class="col col-8">
-				<x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
-			</div>
-		</div>
+		{{-- @include('sysadmin.goalbank.partials.filter') --}}
 
 		<br>
-		<h6 class="text-bold">Step 3. Select ministries to assign to (for HR Administrator only)</h6>
+		<h6 class="text-bold">Step 2. Select audience</h6>
 		<br>
 
 		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
-		@include('sysadmin.accesspermissions.partials.filter2')
+		@include('sysadmin.goalbank.partials.filter2')
 
 		<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
 			<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
@@ -96,10 +101,10 @@
 		</div>
 
 		<br>
-		<h6 class="text-bold">Step 4. Assign selected employees</h6>
+		<h6 class="text-bold">Step 3. Finish</h6>
 		<br>
 		<div class="col-md-3 mb-2">
-			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveAccessModal()" name="btn_send" value="btn_send">Assign Employees</button>
+			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Save Changes</button>
 			<button class="btn btn-secondary mt-2">Cancel</button>
 		</div>
 
@@ -109,6 +114,10 @@
 	<h6 class="m-20">&nbsp;</h6>
 	<h6 class="m-20">&nbsp;</h6>
 
+
+    @push('css')
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">
+    @endpush
 
 	<x-slot name="css">
 		<style>
@@ -149,6 +158,8 @@
 	</x-slot>
 
 	<x-slot name="js">
+		<script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
+		<script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 
 		<script>
 			let g_matched_employees = {!!json_encode($matched_emp_ids)!!};
@@ -156,18 +167,22 @@
 			let g_selected_orgnodes = {!!json_encode($old_selected_org_nodes)!!};
 			let g_employees_by_org = [];
 
-			function confirmSaveAccessModal(){
-				count = g_selected_employees.length;
+			function confirmSaveChangesModal(){
+				count = g_selected_orgnodes.length;
 				if (count == 0) {
-					$('#saveAccessModal .modal-body p').html('Are you sure to grant administrator access ?');
+					$('#saveGoalModal .modal-body p').html('Are you sure to create goal without an audience?');
 				} else {
-					$('#saveAccessModal .modal-body p').html('Are you sure to grant administrator access to ' + count + ' selected users?');
+					$('#saveGoalModal .modal-body p').html('Are you sure to create goal and assign to selected audience?');
 				}
-				$('#saveAccessModal').modal();
+				$('#saveGoalModal').modal();
 			}
 
 			$(document).ready(function(){
 
+				$(".tags").multiselect({
+                	enableFiltering: true,
+                	enableCaseInsensitiveFiltering: true
+            	});
 				$('#pageLoader').hide();
 
 				$('#notify-form').keydown(function (e) {
@@ -196,6 +211,12 @@
 				});
 
 
+				CKEDITOR.replace('what', {
+					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
+
+				CKEDITOR.replace('measure_of_success', {
+					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
+
 				// Tab  -- TREE activate
 				$("#nav-tree-tab").on("click", function(e) {
 					target = $('#nav-tree'); 
@@ -205,7 +226,7 @@
                         if($.trim($(target).attr('loaded'))=='') {
                             $.when( 
                                 $.ajax({
-                                    url: '/sysadmin/accesspermissions/org-tree',
+                                    url: '/sysadmin/goalbank/org-tree',
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
@@ -394,7 +415,7 @@
 				// To do -- ajax called to load the tree
 				$.when( 
 					$.ajax({
-						url: '/sysadmin/accesspermissions/eorg-tree',
+						url: '/sysadmin/goalbank/eorg-tree',
 						// url: $url,
 						type: 'GET',
 						data: $("#notify-form").serialize(),

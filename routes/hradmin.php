@@ -1,14 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HRadminController;
-use App\Http\Controllers\MyOrgController;
-use App\Http\Controllers\GenericTemplateController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\HRAdmin\MyOrganizationController;
-use App\Http\Controllers\HRAdmin\NotificationController;
+use App\Http\Controllers\MyOrgController;
+use App\Http\Controllers\HRadminController;
 use App\Http\Controllers\HRAdmin\HRGoalController;
+use App\Http\Controllers\GenericTemplateController;
 use App\Http\Controllers\SharedEmployeesController;
+use App\Http\Controllers\HRAdmin\NotificationController;
+use App\Http\Controllers\HRAdmin\MyOrganizationController;
+use App\Http\Controllers\HRAdmin\StatisticsReportController;
 
 
 Route::group(['middleware' => ['role:HR Admin']], function () 
@@ -46,33 +47,33 @@ Route::group(['middleware' => ['role:HR Admin']], function ()
     Route::post('hradmin/goals/goalupdate/{id}', [HRadminController::class, 'goalupdate'])->name('hradmin.goals.goalupdate');
 
 
-    Route::group(['middleware' => ['auth']], function() {    
-        Route::get('/hradmin/notifications', [NotificationController::class, 'index'])->name('hradmin.notifications');
-        Route::get('/hradmin/notifications/detail/{notification_id}', [NotificationController::class, 'show']);
-        Route::get('/hradmin/notifications/notify', [NotificationController::class, 'notify'])->name('hradmin.notifications.notify');
-        Route::post('/hradmin/notifications/notify', [NotificationController::class, 'notify'])->name('hradmin.notifications.search');
-        Route::post('/hradmin/notifications/notify-send', [NotificationController::class, 'send'])->name('hradmin.notifications.send');
-        Route::get('/hradmin/notifications/users', [NotificationController::class, 'getUsers'])->name('hradmin.notifications.users.list');
-        Route::resource('/hradmin/notifications/generic-template', GenericTemplateController::class)->except(['destroy']);
-        Route::get('graph-users', [GenericTemplateController::class,'getUsers']);
-        
-        Route::get('/hradmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
-        Route::get('/hradmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
-        Route::get('/hradmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
-        Route::get('/hradmin/notifications/org-divisions', [NotificationController::class,'getDivisions']);
-        Route::get('/hradmin/notifications/org-branches', [NotificationController::class,'getBranches']);
-        Route::get('/hradmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
-        Route::get('/hradmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);
-        Route::get('/hradmin/notifications/employees/{id}', [NotificationController::class,'getEmployees']);
-        Route::get('/hradmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('hradmin.notifications.employee.list');
-        
-    });
 
+    Route::get('/hradmin/notifications', [NotificationController::class, 'index'])->name('hradmin.notifications');
+    Route::get('/hradmin/notifications/detail/{notification_id}', [NotificationController::class, 'show']);
+    Route::get('/hradmin/notifications/notify', [NotificationController::class, 'notify'])->name('hradmin.notifications.notify');
+    Route::post('/hradmin/notifications/notify', [NotificationController::class, 'notify'])->name('hradmin.notifications.search');
+    Route::post('/hradmin/notifications/notify-send', [NotificationController::class, 'send'])->name('hradmin.notifications.send');
+    Route::get('/hradmin/notifications/users', [NotificationController::class, 'getUsers'])->name('hradmin.notifications.users.list');
+    Route::resource('/hradmin/notifications/generic-template', GenericTemplateController::class)->except(['destroy']);
+    Route::get('graph-users', [GenericTemplateController::class,'getUsers']);
+    
+    Route::get('/hradmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
+    Route::get('/hradmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
+    Route::get('/hradmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
+    Route::get('/hradmin/notifications/org-divisions', [NotificationController::class,'getDivisions']);
+    Route::get('/hradmin/notifications/org-branches', [NotificationController::class,'getBranches']);
+    Route::get('/hradmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
+    Route::get('/hradmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);
+    Route::get('/hradmin/notifications/employees/{id}', [NotificationController::class,'getEmployees']);
+    Route::get('/hradmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('hradmin.notifications.employee.list');
 
-    Route::get('hradmin/statistics/goalsummary', [HRadminController::class, 'goalsummary'])->name('hradmin.statistics.goalsummary');
-    Route::get('hradmin/statistics/conversationsummary', [HRadminController::class, 'conversationsummary'])->name('hradmin.statistics.conversationsummary');
-    Route::get('hradmin/statistics/sharedsummary', [HRadminController::class, 'sharedsummary'])->name('hradmin.statistics.sharedsummary');
-    Route::get('hradmin/statistics/excusedsummary', [HRadminController::class, 'excusedsummary'])->name('hradmin.statistics.excusedsummary');
+    
+    Route::get('hradmin/statistics/goalsummary', [StatisticsReportController::class, 'goalsummary'])->name('hradmin.statistics.goalsummary');
+    Route::get('hradmin/statistics/goalsummary-export', [StatisticsReportController::class, 'goalSummaryExport'])->name('hradmin.statistics.goalsummary.export');
+    Route::get('hradmin/statistics/conversationsummary', [StatisticsReportController::class, 'conversationsummary'])->name('hradmin.statistics.conversationsummary');
+    Route::get('hradmin/statistics/conversationsummary-export', [StatisticsReportController::class, 'conversationSummaryExport'])->name('hradmin.statistics.conversationsummary.export');
+    Route::get('hradmin/statistics/sharedsummary', [StatisticsReportController::class, 'sharedsummary'])->name('hradmin.statistics.sharedsummary');
+    Route::get('hradmin/statistics/excusedsummary', [StatisticsReportController::class, 'excusedsummary'])->name('hradmin.statistics.excusedsummary');
 
 
     Route::get('hradmin/level0', 'App\Http\Controllers\HRadminController@getOrgLevel0')->name('hradmin.level0');

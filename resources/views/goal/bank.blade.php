@@ -77,7 +77,7 @@
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->goalType->name }}</a>
                                         </td>
                                         <td style="width:15%">
-                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at->format('M d, Y') }}</a>
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at == null ?: $goal->created_at->format('M d, Y') }}</a>
                                         </td>
                                         <td style="width:15%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
@@ -93,6 +93,7 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
+                                {{ $bankGoals->links() }}
                             </table>
                         </div>
                     </div>

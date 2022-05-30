@@ -1,7 +1,11 @@
 <x-side-layout>
-    <x-slot name="header">
-        <h3>{{ $title ?? 'System Administration'}}</h3>
-        {{-- <div class="col-md-8"> @include('sysadmin.partials.tabs')</div> --}}
-    </x-slot>
-    @yield('tab-content')
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>{{ $title ?? 'System Administration: Employee List'}}</h3>
+        </div>
+    </div>
+    @yield('page-content')
 </x-side-layout>
+
+
+
