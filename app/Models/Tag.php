@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
+    protected $fillable = [
+    'name',
+    'description'
+    ];
+    
     public function goals() {
         return $this->belongsToMany(Goal::class, 'goal_tags')->withTimestamps();
     }

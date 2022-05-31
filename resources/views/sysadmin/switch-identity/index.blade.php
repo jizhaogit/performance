@@ -1,5 +1,5 @@
 @extends('sysadmin.layout', ['title' => 'Switch Identity'])
-@section('tab-content')
+@section('page-content')
 <div>
     <p>
     <form  action="switch-identity" method="GET">
