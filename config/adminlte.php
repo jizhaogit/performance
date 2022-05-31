@@ -357,7 +357,7 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'sysadmin/goalbank/index',
+                    'url'  => 'sysadmin/goalbank/createindex',
                     'active' => ['sysadmin/goalbank/*']
                 ],
                 [

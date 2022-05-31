@@ -40,9 +40,7 @@ class ExportDatabaseToBI extends Command
         ['name' => 'stored_dates',                  'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'tags',                          'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'users',                         'delta' => 'updated_at',    'hidden' => ['password', 'remember_token'] ],
-        ['name' => 'user_access',                   'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'user_reporting_tos',            'delta' => 'updated_at',    'hidden' => null ],
-
     ];
  
     protected $success;

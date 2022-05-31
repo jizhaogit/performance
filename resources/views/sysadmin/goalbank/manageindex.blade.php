@@ -1,46 +1,45 @@
 <x-side-layout title="{{ __('Dashboard') }}">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            Goal Bank
-        </h2> 
-		@include('sysadmin.goalbank.partials.tabs')
-    </x-slot>
-
-
-
-<div class="card">
-	<div class="card-body">
-        <div class="h4">{{__('Manage Goals in Goal Bank')}}</div>
-        @include('sysadmin.goalbank.partials.filter')
-		{{-- <p></p> --}}
-        <div class="p-3">  
-            <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>Goal Bank</h3>
+            @include('sysadmin.goalbank.partials.tabs')
         </div>
-	</div>    
-</div>   
+    </div>
 
-		<!----modal starts here--->
-		<div id="deleteGoalModal" class="modal" role='dialog'>
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Confirmation</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						    <span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<p>Are you sure to send out this message ?</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-primary mt-2" type="submit" name="btn_delete" value="btn_delete">Delete Goal</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-		<!--Modal ends here--->	
+
+    <div class="card">
+        <div class="card-body">
+            <div class="h5">{{__('Manage Goals in Goal Bank')}}</div>
+            @include('sysadmin.goalbank.partials.filter')
+            {{-- <p></p> --}}
+            <div class="p-3">  
+                <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
+            </div>
+        </div>    
+    </div>   
+
+    <!----modal starts here--->
+    <div id="deleteGoalModal" class="modal" role='dialog'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to send out this message ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary mt-2" type="submit" name="btn_delete" value="btn_delete">Delete Goal</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!--Modal ends here--->	
 	
 
 

@@ -1,10 +1,10 @@
 <x-side-layout title="{{ __('Dashboard') }}">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            Access and Permissions
-        </h2> 
-		@include('sysadmin.accesspermissions.partials.tabs')
-    </x-slot>
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>Access and Permissions</h3>
+            @include('sysadmin.accesspermissions.partials.tabs')
+        </div>
+    </div>
 
 	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
 	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
@@ -236,7 +236,9 @@
                         } else {
                             redrawTreeCheckboxes();
                         }
-                    }
+                    } else {
+						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply filter before clicking on Tree.');
+					}
 				});
 
 				function redrawTreeCheckboxes() {

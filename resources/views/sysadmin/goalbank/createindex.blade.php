@@ -6,135 +6,141 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="h5">{{__('Add a New Goal in Goal Bank')}}</div>
-			<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
-			<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
+	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
+	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
-			<form id="notify-form" action="{{ route('sysadmin.goalbank.addnewgoal') }}" method="post">
-				@csrf
-				<br>
-				<h6 class="text-bold">Step 1. Enter Goal Details</h6>
-				<br>
+	<form id="notify-form" action="{{ route('sysadmin.goalbank.savenewgoal') }}" method="post">
+		@csrf
 
-				<div class="row">
-					<div class="col m-2">
-						<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
+		<br>
+		<h6 class="text-bold">Step 1. Enter Goal Details</h6>
+		<br>
+
+		<div class="row">
+			<div class="col m-2">
+				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
+			</div>
+			<div class="col m-2">
+				<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
+					{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
+						<small class="text-danger error-title"></small>
+			</div>
+			<div class="col m-2">
+				<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col m-2">
+				<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
+					{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
+						<small class="text-danger error-what"></small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col m-2">
+				<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
+					{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
+						<small class="text-danger error-measure_of_success"></small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<x-input label="Start Date " class="error-start" type="date" name="start_date"  />
+				<small  class="text-danger error-start_date"></small>
+			</div>
+			<div class="col-sm-6">
+				<x-input label="End Date " class="error-target" type="date" name="target_date"  />
+				<small  class="text-danger error-target_date"></small>
+			</div>
+			<div class="col-sm-6">
+				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
+				<small  class="text-danger error-tag_ids"></small>
+			</div>
+		</div>
+
+		<!----modal starts here--->
+		<div id="saveGoalModal" class="modal" role='dialog'>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Confirmation</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
-					<div class="col m-2">
-						<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
-							{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
-								<small class="text-danger error-title"></small>
+					<div class="modal-body">
+						<p>Default ?</p>
 					</div>
-					<div class="col m-2">
-						<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+					<div class="modal-footer">
+						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Add New Goal</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<!--Modal ends here--->	
+
+		<br>
+		<h6 class="text-bold">Step 2. Select audience</h6>
+		<br>
+
+		<div class="card" style="width: 100%">
+			<div class="card-body">
+				<h6 class="text-bold">Target Audience</h6>
+				<div class="row form-group pl-4 pb-n4">
+					<div class="col-2">
+						<label>
+							<input type="radio" id="opt_audience1" name="opt_audience" value="byEmp" checked> Individual(s)
+						</label>
+					</div>
+					<div class="col-2">
+						<label>
+							<input type="radio" id="opt_audience2" name="opt_audience" value="byOrg"> Business Unit(s)
+						</label>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col m-2">
-						<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
-							{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
-								<small class="text-danger error-what"></small>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col m-2">
-						<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
-							{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
-								<small class="text-danger error-measure_of_success"></small>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<x-input label="Start Date " class="error-start" type="date" name="start_date"  />
-						<small  class="text-danger error-start_date"></small>
-					</div>
-					<div class="col-sm-6">
-						<x-input label="End Date " class="error-target" type="date" name="target_date"  />
-						<small  class="text-danger error-target_date"></small>
-					</div>
-					<div class="col-sm-6">
-						<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
-						<small  class="text-danger error-tag_ids"></small>
-					</div>
-				</div>
+			</div>
+		</div>
+		
 
 
-				<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
 
-				<!----modal starts here--->
-				<div id="saveGoalModal" class="modal" role='dialog'>
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title">Confirmation</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<p>Are you sure to send out this message ?</p>
-							</div>
-							<div class="modal-footer">
-								<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Add New Goal</button>
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-							</div>
-							
-						</div>
-					</div>
-				</div>
-				<!--Modal ends here--->	
-			
-				{{-- @include('sysadmin.goalbank.partials.filter') --}}
 
-				<br>
-				<h6 class="text-bold">Step 2. Select audience</h6>
-				<br>
+		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
+		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
 
-				<div class="form-group card p-3">
-					<div class="row pl-3">
-						<b>Target Audience</b>
-					</div>
-					<div class="row pl-5 pt-3">
-						<div class="radio col-xs-3">
-							<label> 
-								<input type="radio" placeholder=".col-xs-3" name="optionsRadios" id="optionsRadios1" value="option1" checked aria-labelledby="Individual(s)" >
-								Individual(s)
-							</label>
-						</div>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<div class="radio col-xs-3">
-							<label> 
-								<input type="radio" placeholder=".col-xs-3" name="optionsRadios" id="optionsRadios2" value="option2" aria-labelledby="Business Unit(s)" >
-								Business Unit(s) 
-							</label>
-						</div>
-					</div>
-				</div>
 
-				<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+		@include('sysadmin.goalbank.partials.filter')
 
-				@include('sysadmin.goalbank.partials.filter2')
+        <div class="p-3">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
+                    <a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+                    @include('sysadmin.goalbank.partials.recipient-list')
+                </div>
+                <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
+                    <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-				<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
-					<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
-						<span class="sr-only">Loading...</span>
-					</div>
-				</div>
+		<br>
+		<h6 class="text-bold">Step 3. Finish</h6>
+		<br>
+		<div class="col-md-3 mb-2">
+			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Add Goal</button>
+			<button class="btn btn-secondary mt-2">Cancel</button>
+		</div>
 
-				<br>
-				<h6 class="text-bold">Step 3. Finish</h6>
-				<br>
-				<div class="col-md-3 mb-2">
-					<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Save Changes</button>
-					<button class="btn btn-secondary mt-2">Cancel</button>
-				</div>
-
-			</form>
-
-		</div>    
-	</div>   
+	</form>
 
 	<h6 class="m-20">&nbsp;</h6>
 	<h6 class="m-20">&nbsp;</h6>
@@ -183,7 +189,9 @@
 		</style>
 	</x-slot>
 
+
 	<x-slot name="js">
+
 		<script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
 		<script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 
@@ -194,7 +202,18 @@
 			let g_employees_by_org = [];
 
 			function confirmSaveChangesModal(){
-				count = g_selected_orgnodes.length;
+				// console.log($('#opt_audience').val());			
+				// console.log($(".tags"));			
+				// console.log('input:radio[name="opt_audience');			
+				// console.log($('#'+formType+'sign_off_form').find('input:radio[name="check_two'+(isSupervisor? '_' : '') +'"]:checked').val());			
+				// console.log($('#opt_audience').val());			
+				// 	if($('.opt_audience').val() == 'byEmp'){
+				// 	let count = g_selected_employees.length;
+				// }
+				// if($('.opt_audience').val() == 'byOrg'){
+					let count = g_selected_employees.length;
+				// }
+
 				if (count == 0) {
 					$('#saveGoalModal .modal-body p').html('Are you sure to create goal without an audience?');
 				} else {
@@ -205,10 +224,20 @@
 
 			$(document).ready(function(){
 
+				$("#opt_audience1").on("click", function(){
+					console.log("Radio button clicked: Individual(s)"+document.getElementById("opt_audience1").checked);			
+				});
+
+				$("#opt_audience2").on("click", function(){
+					console.log("Radio button clicked: Business Unit(s)"+$("#opt_audience").val());			
+				});
+
+
 				$(".tags").multiselect({
                 	enableFiltering: true,
                 	enableCaseInsensitiveFiltering: true
             	});
+
 				$('#pageLoader').hide();
 
 				$('#notify-form').keydown(function (e) {
@@ -229,13 +258,11 @@
 					return true; // return false to cancel form action
 				});
 
-
 				// Tab  -- LIST Page  activate
 				$("#nav-list-tab").on("click", function(e) {
 					table  = $('#employee-list-table').DataTable();
 					table.rows().invalidate().draw();
 				});
-
 
 				CKEDITOR.replace('what', {
 					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
@@ -283,7 +310,10 @@
                         } else {
                             redrawTreeCheckboxes();
                         }
-                    }
+                    } else {
+						// alert("error");
+                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply filter before clicking on Tree.');
+					}
 				});
 
 				function redrawTreeCheckboxes() {
@@ -485,20 +515,20 @@
 
 			// Model -- Confirmation Box
 
-			// var modalConfirm = function(callback) {
-			// 	$("#btn-confirm").on("click", function(){
-			// 		$("#mi-modal").modal('show');
-			// 	});
-			// 	$("#modal-btn-si").on("click", function(){
-			// 		callback(true);
-			// 		$("#mi-modal").modal('hide');
-			// 	});
+			var modalConfirm = function(callback) {
+				$("#btn-confirm").on("click", function(){
+					$("#mi-modal").modal('show');
+				});
+				$("#modal-btn-si").on("click", function(){
+					callback(true);
+					$("#mi-modal").modal('hide');
+				});
 				
-			// 	$("#modal-btn-no").on("click", function(){
-			// 		callback(false);
-			// 		$("#mi-modal").modal('hide');
-			// 	});
-			// };
+				$("#modal-btn-no").on("click", function(){
+					callback(false);
+					$("#mi-modal").modal('hide');
+				});
+			};
 
 		</script>
 	</x-slot>

@@ -176,9 +176,7 @@
                                                 </h6>
                                             </div>
 
-                                            {{-- DIVISION -- Employee Listing - Start --}}      
-
-
+                                            {{-- DIVISION -- Employee Listing - Start --}}                                                                                         
                                             <div id="collapse-{{ $division->id }}" class="collapse" data-parent="#accordion-2" aria-labelledby="heading-{{ $division->id }}">
                                                 <div class="card-header employee-list" id="employees-{{ $division->id }}" value="{{ $division->id }}"></div>
                                             </div>
@@ -207,7 +205,7 @@
                                 </h6>
                             </div>
 
-                            {{-- PROGRAM -- Employee Listing - Start --}}    
+                            {{-- PROGRAM -- Employee Listing - Start --}}                                                                                         
                             <div id="collapse-{{ $program->id }}" class="collapse" data-parent="#accordion-1" aria-labelledby="heading-{{ $program->id }}">
                                 <div class="card-header employee-list" id="employees-{{ $program->id }}" value="{{ $program->id }}"></div>
                             </div>
@@ -406,7 +404,7 @@ $(document).ready(function() {
 
                     nodes = $(target).find('input:checkbox');
                     $.each( nodes, function( index, chkbox ) {
-                        // console.log( chkbox.value )
+                        console.log( chkbox.value )
 						if (g_selected_employees.includes(chkbox.value)) {
 							$(chkbox).prop('checked', true);
                         } 

@@ -63,7 +63,7 @@
 
 		<div class="card">
 			<div class="card-body">
-				<label label="Current Audience" name="current_audience" > Current Audience </label>
+				<label label="Current Audience" name="current_audience" > Current Organizational Audience </label>
 				@include('sysadmin.goalbank.partials.filter')
 				<div class="p-3">  
 					<table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
@@ -99,7 +99,7 @@
 	
 
 		<br>
-		<h6 class="text-bold">Step 2. Select additional audience</h6>
+		<h6 class="text-bold">Step 2. Select additional organizational audience</h6>
 		<br>
 
 		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">

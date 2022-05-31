@@ -92,26 +92,42 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
 
     //Goal Bank
     Route::group(['middleware' => ['auth']], function() {    
-        Route::get('/sysadmin/goalbank', [GoalBankController::class, 'index'])->name('sysadmin.goalbank');
-        Route::get('/sysadmin/goalbank/index', [GoalBankController::class, 'index'])->name('sysadmin.goalbank.index');
-        Route::post('/sysadmin/goalbank/index', [GoalBankController::class, 'index'])->name('sysadmin.goalbank.indexpost');
+        Route::get('/sysadmin/goalbank', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank');
+        Route::get('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.createindex');
+        Route::post('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.search');
+        // Route::post('/sysadmin/goalbank/createindex', [GoalBankController::class, 'createindex'])->name('sysadmin.goalbank.createindexpost');
         Route::get('/sysadmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('sysadmin.goalbank.editpage');
         Route::post('/sysadmin/goalbank/editpage/{id}', [GoalBankController::class, 'editpage'])->name('sysadmin.goalbank.editpagepost');
+        Route::get('/sysadmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('sysadmin.goalbank.editone');
+        Route::post('/sysadmin/goalbank/editone/{id}', [GoalBankController::class, 'editone'])->name('sysadmin.goalbank.editonepost');
         Route::get('/sysadmin/goalbank/deletegoal/{id}', [GoalBankController::class, 'deletegoal'])->name('sysadmin.goalbank.deletegoalget');
         Route::delete('/sysadmin/goalbank/deletegoal/{id}', [GoalBankController::class, 'deletegoal'])->name('sysadmin.goalbank.deletegoal');
         Route::get('/sysadmin/goalbank/updategoal', [GoalBankController::class, 'updategoal'])->name('sysadmin.goalbank.updategoalget');
         Route::post('/sysadmin/goalbank/updategoal', [GoalBankController::class, 'updategoal'])->name('sysadmin.goalbank.updategoal');
+        Route::get('/sysadmin/goalbank/updategoalone', [GoalBankController::class, 'updategoalone'])->name('sysadmin.goalbank.updategoaloneget');
+        Route::post('/sysadmin/goalbank/updategoalone', [GoalBankController::class, 'updategoalone'])->name('sysadmin.goalbank.updategoalone');
         Route::get('/sysadmin/goalbank/addnewgoal', [GoalBankController::class, 'addnewgoal'])->name('sysadmin.goalbank.addnewgoalget');
         Route::post('/sysadmin/goalbank/addnewgoal', [GoalBankController::class, 'addnewgoal'])->name('sysadmin.goalbank.addnewgoal');
+        Route::get('/sysadmin/goalbank/savenewgoal', [GoalBankController::class, 'savenewgoal'])->name('sysadmin.goalbank.savenewgoalget');
+        Route::post('/sysadmin/goalbank/savenewgoal', [GoalBankController::class, 'savenewgoal'])->name('sysadmin.goalbank.savenewgoal');
+        Route::get('/sysadmin/goalbank/org-tree', [GoalBankController::class,'loadOrganizationTree']);
+        Route::get('/sysadmin/goalbank/org-organizations', [GoalBankController::class,'getOrganizations']);
+        Route::get('/sysadmin/goalbank/org-programs', [GoalBankController::class,'getPrograms']);
+        Route::get('/sysadmin/goalbank/org-divisions', [GoalBankController::class,'getDivisions']);
+        Route::get('/sysadmin/goalbank/org-branches', [GoalBankController::class,'getBranches']);
+        Route::get('/sysadmin/goalbank/org-level4', [GoalBankController::class,'getLevel4']);
         Route::get('/sysadmin/goalbank/eorg-tree', [GoalBankController::class,'eloadOrganizationTree']);
         Route::get('/sysadmin/goalbank/eorg-organizations', [GoalBankController::class,'geteOrganizations']);
         Route::get('/sysadmin/goalbank/eorg-programs', [GoalBankController::class,'getePrograms']);
         Route::get('/sysadmin/goalbank/eorg-divisions', [GoalBankController::class,'geteDivisions']);
         Route::get('/sysadmin/goalbank/eorg-branches', [GoalBankController::class,'geteBranches']);
         Route::get('/sysadmin/goalbank/eorg-level4', [GoalBankController::class,'geteLevel4']);
-        Route::get('sysadmin/goalbank/manageexistinggoal', [GoalBankController::class, 'manageindex'])->name('sysadmin.goalbank.manageindex');
-        Route::get('sysadmin/goalbank/managegetlist', [GoalBankController::class, 'managegetList'])->name('sysadmin.goalbank.managegetlist');
-        Route::get('sysadmin/goalbank/getgoalorgs/{goal_id}', [GoalBankController::class, 'getgoalorgs'])->name('sysadmin.goalbank.getgoalorgs');
+        Route::get('/sysadmin/goalbank/manageexistinggoal', [GoalBankController::class, 'manageindex'])->name('sysadmin.goalbank.manageindex');
+        Route::get('/sysadmin/goalbank/managegetlist', [GoalBankController::class, 'managegetList'])->name('sysadmin.goalbank.managegetlist');
+        Route::get('/sysadmin/goalbank/getgoalorgs/{goal_id}', [GoalBankController::class, 'getgoalorgs'])->name('sysadmin.goalbank.getgoalorgs');
+        Route::get('/sysadmin/goalbank/getgoalinds/{goal_id}', [GoalBankController::class, 'getgoalinds'])->name('sysadmin.goalbank.getgoalinds');
+        Route::get('/sysadmin/goalbank/employees/{id}', [GoalBankController::class,'getEmployees']);
+        Route::get('/sysadmin/goalbank/employee-list', [GoalBankController::class, 'getDatatableEmployees'])->name('sysadmin.goalbank.employee.list');
     });
 
 
