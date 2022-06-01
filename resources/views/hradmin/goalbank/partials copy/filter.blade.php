@@ -1,6 +1,6 @@
 <div class="card p-3">
     <div class="form-row">
-        <div class="form-group col-md-2" id="lvlgroup0">
+        <div class="form-group col-md-2">
             <label for="dd_level0">Organization</label>
             <select id="dd_level0" name="dd_level0" class="form-control select2">
                 @if ( old('dd_level0') && session()->get('level0') )
@@ -8,7 +8,7 @@
                 @endif
             </select>
         </div>
-        <div class="form-group col-md-2" id="lvlgroup1">
+        <div class="form-group col-md-2">
             <label for="dd_level1">Level 1</label>
             <select id="dd_level1" name="dd_level1" class="form-control select2">
                 @if ( old('dd_level1') && session()->get('level1') )
@@ -16,7 +16,7 @@
                 @endif
             </select>
         </div>
-        <div class="form-group col-md-2" id="lvlgroup2">
+        <div class="form-group col-md-2">
             <label for="dd_level2">Level 2</label>
             <select id="dd_level2" name="dd_level2" class="form-control select2">
                 @if ( old('dd_level2') && session()->get('level2') )
@@ -24,7 +24,7 @@
                 @endif
             </select>
         </div>
-        <div class="form-group col-md-2" id="lvlgroup3">
+        <div class="form-group col-md-2">
             <label for="dd_level3">Level 3</label>
             <select id="dd_level3" name="dd_level3" class="form-control select2">
                 @if ( old('dd_level3') && session()->get('level3') )
@@ -32,7 +32,7 @@
                 @endif
             </select>
         </div>
-        <div class="form-group col-md-2" id="lvlgroup4">
+        <div class="form-group col-md-2">
             <label for="dd_level4">Level 4</label>
             <select id="dd_level4" name="dd_level4" class="form-control select2">
                 @if ( old('dd_level4') && session()->get('level4') )
@@ -40,9 +40,9 @@
                 @endif
             </select>
         </div>
-        <div class="form-group col-md-2" id="blank5th">
+        <div class="form-group col-md-2">
         </div>
-        <div class="form-group col-md-2" id="criteria_group">
+        <div class="form-group col-md-2">
             <label for="criteria">Search Criteria</label>
             <select id="criteria" name="criteria" class="form-control">
                 @foreach( $criteriaList as $key => $value )
@@ -50,7 +50,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group col-md-2" id="search_text_group">
+        <div class="form-group col-md-2">
             <label for="search_text">Search Text</label>
             <input type="text" id="search_text" name="search_text" class="form-control" 
                     value="{{ old('search_text') }}" placeholder="Search Text">
@@ -59,9 +59,8 @@
             <div class="form-group row"> </div>
                 <div class="form-group row">
                     <span class="float-left float-bottom">  
-                        {{-- <button type="submit" class="btn btn-primary" name="btn_search" 
-                            value="btn_search" formaction="{{ route('sysadmin.goalbank.search') }}">Filter</button> --}}
-                        <button type="button" class="btn btn-primary" id="btn_search" name="btn_search" value="btn_search" >Filter</button>
+                        <button type="submit" class="btn btn-primary" name="btn_search" 
+                            value="btn_search" formaction="{{ route('hradmin.goalbank.search') }}">Filter</button>
                         <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
                     </span>
                 </div>
@@ -99,7 +98,7 @@
             placeholder: 'Select Organization',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/goalbank/org-organizations'
+                url: '/hradmin/goalbank/org-organizations'
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -121,7 +120,7 @@
             placeholder: 'Select Level 1',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/goalbank/org-programs' 
+                url: '/hradmin/goalbank/org-programs' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -144,7 +143,7 @@
             placeholder: 'Select Level 2',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/goalbank/org-divisions' 
+                url: '/hradmin/goalbank/org-divisions' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -168,7 +167,7 @@
             placeholder: 'Select Level 3',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/goalbank/org-branches' 
+                url: '/hradmin/goalbank/org-branches' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -193,7 +192,7 @@
             placeholder: 'Select level 4',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/goalbank/org-level4' 
+                url: '/hradmin/goalbank/org-level4' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -241,6 +240,14 @@
             $('#dd_level4').val(null).trigger('change');
         });
 
+        $('#btn_search_reset').click(function() {
+            $('#dd_level0').val(null).trigger('change');
+            $('#dd_level1').val(null).trigger('change');
+            $('#dd_level2').val(null).trigger('change');
+            $('#dd_level3').val(null).trigger('change');
+            $('#dd_level4').val(null).trigger('change');
+            $('#search_text').val(null);
+        });
 
 
 

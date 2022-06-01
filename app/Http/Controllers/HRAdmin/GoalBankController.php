@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\SysAdmin;
+namespace App\Http\Controllers\HRAdmin;
 
 
 
@@ -34,7 +34,7 @@ class GoalBankController extends Controller
     //     $notificationLog = NotificationLog::where('id', $request->notification_id)->first();
 
     //     if($request->ajax()){
-    //         return view('sysadmin.goalbank.partials.show', compact('notificationLog') ); 
+    //         return view('hradmin.goalbank.partials.show', compact('notificationLog') ); 
     //     } 
     // }
 
@@ -143,7 +143,7 @@ class GoalBankController extends Controller
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
 
-        return view('sysadmin.goalbank.createindex', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags') );
+        return view('hradmin.goalbank.createindex', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags') );
     
     }
 
@@ -251,7 +251,7 @@ class GoalBankController extends Controller
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
 
-        return view('sysadmin.goalbank.index', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags') );
+        return view('hradmin.goalbank.index', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags') );
     
     }
 
@@ -290,7 +290,7 @@ class GoalBankController extends Controller
             return Datatables::of($query)
             ->addIndexColumn()
             ->addcolumn('action', function($row) {
-                $btn = '<a href="/sysadmin/goalbank/deleteorg/' . $row->id . '" class="btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete Org" id="delete_org" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
+                $btn = '<a href="/hradmin/goalbank/deleteorg/' . $row->id . '" class="btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete Org" id="delete_org" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['goal_type_name', 'created_by', 'action'])
@@ -422,7 +422,7 @@ class GoalBankController extends Controller
 
         $goaldetail = Goal::withoutGlobalScopes()->find($request->id);
 
-        return view('sysadmin.goalbank.editgoal', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
+        return view('hradmin.goalbank.editgoal', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
     
     }
 
@@ -541,7 +541,7 @@ class GoalBankController extends Controller
 
         $goaldetail = Goal::withoutGlobalScopes()->find($request->id);
 
-        return view('sysadmin.goalbank.editone', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
+        return view('hradmin.goalbank.editone', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags', 'goaldetail', 'request', 'goal_id') );
     
     }
 
@@ -593,7 +593,7 @@ class GoalBankController extends Controller
 
         }
 
-        return redirect()->route('sysadmin.goalbank.createindex')
+        return redirect()->route('hradmin.goalbank.createindex')
             ->with('success', 'Create new goal bank successful.');
     }
 
@@ -643,7 +643,7 @@ class GoalBankController extends Controller
         $empIdsByOrgId = $rows->groupBy('id')->all();
 
         if($request->ajax()){
-            return view('sysadmin.goalbank.partials.recipient-tree', compact('orgs','countByOrg','empIdsByOrgId') );
+            return view('hradmin.goalbank.partials.recipient-tree', compact('orgs','countByOrg','empIdsByOrgId') );
         } 
 
     }
@@ -673,7 +673,7 @@ class GoalBankController extends Controller
             $eempIdsByOrgId = $rows->groupBy('id')->all();
 
         if($request->ajax()){
-            return view('sysadmin.goalbank.partials.recipient-tree2', compact('eorgs','eempIdsByOrgId') );
+            return view('hradmin.goalbank.partials.recipient-tree2', compact('eorgs','eempIdsByOrgId') );
         } 
     
     }
@@ -763,7 +763,7 @@ class GoalBankController extends Controller
                 }
             }
 
-        return redirect()->route('sysadmin.goalbank.index')
+        return redirect()->route('hradmin.goalbank.index')
             ->with('success', 'Add new goal successful.');
     }
 
@@ -808,7 +808,7 @@ class GoalBankController extends Controller
                 }
             }
 
-        return redirect()->route('sysadmin.goalbank.manageindex')
+        return redirect()->route('hradmin.goalbank.manageindex')
             ->with('success', 'Goal update successful.');
 
     }
@@ -854,7 +854,7 @@ class GoalBankController extends Controller
             );
         }
 
-        return redirect()->route('sysadmin.goalbank.manageindex')
+        return redirect()->route('hradmin.goalbank.manageindex')
             ->with('success', 'Goal update successful.');
 
     }
@@ -1159,7 +1159,7 @@ class GoalBankController extends Controller
         $parent_id = $id;
         
         // if($request->ajax()){
-            return view('sysadmin.goalbank.partials.employee', compact('parent_id', 'employees') ); 
+            return view('hradmin.goalbank.partials.employee', compact('parent_id', 'employees') ); 
         // } 
     }
 
@@ -1382,7 +1382,7 @@ class GoalBankController extends Controller
         ->whereIntegerInRaw('id', [3, 4])
         ->pluck('longname', 'id');
 
-        return view('sysadmin.goalbank.manageindex', compact ('request', 'criteriaList', 'roles'));
+        return view('hradmin.goalbank.manageindex', compact ('request', 'criteriaList', 'roles'));
     }
 
     public function managegetList(Request $request) {
@@ -1475,9 +1475,9 @@ class GoalBankController extends Controller
                 return $row->sharedWith()->count();
             })
             ->addcolumn('action', function($row) {
-                $btn = '<a href="' . route('sysadmin.goalbank.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Goal for Organization" value="'. $row->id .'"><i class="fas fa-users"></i>&nbsp;Edit</a>';
-                $btn = $btn . '&nbsp;<a href="' . route('sysadmin.goalbank.editone', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Goal For Individuals" value="'. $row->id .'"><i class="fas fa-user-edit"></i>&nbsp;Edit</a>';
-                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/sysadmin/goalbank/deletegoal/' . $row->id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
+                $btn = '<a href="' . route('hradmin.goalbank.editpage', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Goal for Organization" value="'. $row->id .'"><i class="fas fa-users"></i>&nbsp;Edit</a>';
+                $btn = $btn . '&nbsp;<a href="' . route('hradmin.goalbank.editone', $row->id) . '" class="view-modal btn btn-xs btn-primary" aria-label="Edit Goal For Individuals" value="'. $row->id .'"><i class="fas fa-user-edit"></i>&nbsp;Edit</a>';
+                $btn = $btn . '&nbsp;&nbsp;&nbsp;<a href="/hradmin/goalbank/deletegoal/' . $row->id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_goal" value="'. $row->id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['goal_type_name', 'created_by', 'action'])
@@ -1513,7 +1513,7 @@ class GoalBankController extends Controller
             return Datatables::of($query)
             ->addIndexColumn()
             ->addcolumn('action', function($row) {
-                $btn = '<a href="/sysadmin/goalbank/deleteindividual/' . $row->share_id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_user" value="'. $row->share_id .'"><i class="fa fa-trash"></i></a>';
+                $btn = '<a href="/hradmin/goalbank/deleteindividual/' . $row->share_id . '" class="view-modal btn btn-xs btn-danger" onclick="return confirm(`Are you sure?`)" aria-label="Delete" id="delete_user" value="'. $row->share_id .'"><i class="fa fa-trash"></i></a>';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1565,7 +1565,7 @@ class GoalBankController extends Controller
         // ->where('model_id', '=', $id)
         // ->where('model_has_roles.model_type', 'App\Models\User')
         // ->get();
-        return view('sysadmin.goalbank.partials.access-edit-modal', compact('roles', 'access', 'email'));
+        return view('hradmin.goalbank.partials.access-edit-modal', compact('roles', 'access', 'email'));
     }
 
     /**

@@ -1,4 +1,3 @@
-
 <div class="card p-3">
        
         <div class="form-row">
@@ -42,9 +41,9 @@
                     @endif
                 </select>
             </div>
-            <div class="form-group col-md-2" id="eblank5th">
+            <div class="form-group col-md-2">
             </div>
-            <div class="form-group col-md-2" id="ecriteria_group">
+            <div class="form-group col-md-2">
                 <label for="ecriteria">Search Criteria</label>
                 <select id="ecriteria" name="ecriteria" class="form-control">
                     @foreach( $ecriteriaList as $key => $value )
@@ -52,16 +51,16 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group col-md-2" id="esearch_text_group">
+            <div class="form-group col-md-2">
                 <label for="esearch_text">Search Text</label>
                 <input type="text" id="esearch_text" name="esearch_text" class="form-control" 
                         value="{{ old('esearch_text') }}" placeholder="Search Text">
             </div>
-                <div class="form-group col-md-2 p-3" style="text-align:left; vertical-align:bottom;">
+            <div class="form-group col-md-2 p-3" style="text-align:left; vertical-align:bottom;">
                 <div class="form-group row"> </div>
                 <div class="form-group row">
                     <span class="float-left float-bottom align-self-end" style="float: left; vertical-align: bottom;">  
-                        <button type="button" class="align-self-end btn btn-primary" id="ebtn_search" name="ebtn_search">Filter</button>
+                        <button type="submit" class="align-self-end btn btn-primary" formaction="{{ route('hradmin.employeeshares.addindex') }}" name="ebtn_search">Filter</button>
                         <button type="button" class="align-self-end btn btn-secondary" id="ebtn_search_reset" name="ebtn_reset" value="ebtn_reset">Reset</button>
                     </span>
                 </div>
@@ -100,7 +99,7 @@
         placeholder: 'Select Organization',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-organizations'
+            url: '/hradmin/employeeshares/eorg-organizations'
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -122,7 +121,7 @@
         placeholder: 'Select Level 1',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-programs' 
+            url: '/hradmin/employeeshares/eorg-programs' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -145,7 +144,7 @@
         placeholder: 'Select Level 2',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-divisions' 
+            url: '/hradmin/employeeshares/eorg-divisions' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -169,7 +168,7 @@
         placeholder: 'Select Level 3',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-branches' 
+            url: '/hradmin/employeeshares/eorg-branches' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -194,7 +193,7 @@
         placeholder: 'Select Level 4',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-level4' 
+            url: '/hradmin/employeeshares/eorg-level4' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -256,6 +255,7 @@
         $('#edd_level2').val(null).trigger('change');
         $('#edd_level3').val(null).trigger('change');
         $('#edd_level4').val(null).trigger('change');
+        $('#esearch_text').val(null);
     });
 
     </script>

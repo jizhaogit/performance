@@ -274,11 +274,11 @@ return [
                     'url'  => 'my-team/my-employees',
                     'active' => ['my-team/my-employees/*'],
                 ],
-                [
-                    'text' => 'Notify Team Members',
-                    'url'  => 'my-team/notify-team-members',
-                    'active' => ['my-team/members/*'],
-                ]
+                // [
+                //     'text' => 'Notify Team Members',
+                //     'url'  => 'my-team/notify-team-members',
+                //     'active' => ['my-team/members/*'],
+                // ]
             ]
         ],
         [
@@ -296,8 +296,8 @@ return [
                 ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'hradmin/shared/shareemployee',
-                    'active' => ['hradmin/shared/*']
+                    'url'  => 'hradmin/employeeshares/addindex',
+                    'active' => ['hradmin/employeeshares/*']
                 ],
                 [
                     'text' => 'Excuse Employees',
@@ -306,14 +306,14 @@ return [
                 ],
                 [
                     'text' => 'Goal Bank',
-                    'url'  => 'hradmin/goals/addgoals',
-                    'active' => ['hradmin/goals/*']
+                    'url'  => 'hradmin/goalbank/createindex',
+                    'active' => ['hradmin/goalbank/*']
                 ],
-                [
-                    'text' => 'Notifications',
-                    'url'  => 'hradmin/notifications',
-                    'active' => ['hradmin/notifications/*']
-                ],
+                // [
+                //     'text' => 'Notifications',
+                //     'url'  => 'hradmin/notifications',
+                //     'active' => ['hradmin/notifications/*']
+                // ],
                 [
                     'text' => 'Statiscts and Reports',
                     'url'  => 'hradmin/statistics/goalsummary',
@@ -342,8 +342,8 @@ return [
                 // ],
                 [
                     'text' => 'Share Employees',
-                    'url'  => 'sysadmin/sharedemployees/notify',
-                    'active' => ['sysadmin/sharedemployees/*']
+                    'url'  => 'sysadmin/employeeshares/addindex',
+                    'active' => ['sysadmin/employeeshares/*']
                 ],
                 // [
                 //     'text' => 'Excuse Employees (Old)',
@@ -365,14 +365,14 @@ return [
                     'url'  => 'sysadmin/unlock/unlockconversation',
                     'active' => ['sysadmin/unlock/*']
                 ],
-                [
-                    // 'text' => 'Notifications',
-                    // 'url'  => 'sysadmin/notifications/createnotification',
-                    // 'active' => ['sysadmin/notifications/*']
-                    'text' => 'Notifications',
-                    'url'  => 'sysadmin/notifications',
-                    'active' => ['sysadmin/notifications/*']
-                ],
+                // [
+                //     // 'text' => 'Notifications',
+                //     // 'url'  => 'sysadmin/notifications/createnotification',
+                //     // 'active' => ['sysadmin/notifications/*']
+                //     'text' => 'Notifications',
+                //     'url'  => 'sysadmin/notifications',
+                //     'active' => ['sysadmin/notifications/*']
+                // ],
                 // [
                 //     'text' => 'Access and Permissions (Old)',
                 //     'url'  => 'sysadmin/access/createaccess',

@@ -2,7 +2,7 @@
     <div name="header" class="container-header p-n2 "> 
         <div class="container-fluid">
             <h3>Goal Bank</h3>
-            @include('sysadmin.goalbank.partials.tabs')
+            @include('hradmin.goalbank.partials.tabs')
         </div>
     </div>
 
@@ -12,7 +12,7 @@
 			<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
 			<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
-			<form id="notify-form" action="{{ route('sysadmin.goalbank.addnewgoal') }}" method="post">
+			<form id="notify-form" action="{{ route('hradmin.goalbank.addnewgoal') }}" method="post">
 				@csrf
 				<br>
 				<h6 class="text-bold">Step 1. Enter Goal Details</h6>
@@ -86,7 +86,7 @@
 				</div>
 				<!--Modal ends here--->	
 			
-				{{-- @include('sysadmin.goalbank.partials.filter') --}}
+				{{-- @include('hradmin.goalbank.partials.filter') --}}
 
 				<br>
 				<h6 class="text-bold">Step 2. Select audience</h6>
@@ -115,7 +115,7 @@
 
 				<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
-				@include('sysadmin.goalbank.partials.filter2')
+				@include('hradmin.goalbank.partials.filter2')
 
 				<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
 					<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
@@ -252,7 +252,7 @@
                         if($.trim($(target).attr('loaded'))=='') {
                             $.when( 
                                 $.ajax({
-                                    url: '/sysadmin/goalbank/org-tree',
+                                    url: '/hradmin/goalbank/org-tree',
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
@@ -444,7 +444,7 @@
 					// To do -- ajax called to load the tree
 					$.when( 
 						$.ajax({
-							url: '/sysadmin/goalbank/eorg-tree',
+							url: '/hradmin/goalbank/eorg-tree',
 							// url: $url,
 							type: 'GET',
 							data: $("#notify-form").serialize(),

@@ -2,7 +2,7 @@
     <div name="header" class="container-header p-n2 "> 
         <div class="container-fluid">
             <h3>Goal Bank</h3>
-            @include('sysadmin.goalbank.partials.tabs')
+            @include('hradmin.goalbank.partials.tabs')
         </div>
     </div>
 
@@ -10,7 +10,7 @@
     <div class="card">
         <div class="card-body">
             <div class="h5">{{__('Manage Goals in Goal Bank')}}</div>
-            @include('sysadmin.goalbank.partials.filter')
+            @include('hradmin.goalbank.partials.filter')
             {{-- <p></p> --}}
             <div class="p-3">  
                 <table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
@@ -92,7 +92,7 @@
                     deferRender: true,
                     ajax: 
                     {
-                        url: "{{ route('sysadmin.goalbank.managegetlist') }}",
+                        url: "{{ route('hradmin.goalbank.managegetlist') }}",
                         data: function (d) 
                         {
                             // d.dd_level0 = $('#dd_level0').val();
@@ -157,7 +157,7 @@
                         deferRender: false,
                         ajax: {
                             type: 'GET',
-                            url: "/sysadmin/goalbank/manageexistingaccessadmin/"+model_id,
+                            url: "/hradmin/goalbank/manageexistingaccessadmin/"+model_id,
                         },                        
                         columns: [
                             {title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},

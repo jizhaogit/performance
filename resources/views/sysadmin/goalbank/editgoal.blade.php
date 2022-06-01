@@ -5,7 +5,7 @@
         </h2> 
     </x-slot>
 
-	<small><a href="{{ url()->previous() }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
+	<small><a href=" {{ route('sysadmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
 
 	<br><br>
 
@@ -16,10 +16,17 @@
 
 	<form id="notify-form" action="{{ route('sysadmin.goalbank.updategoal') }}" method="post">
 		@csrf
+
 		<br>
 		<h6 class="text-bold">Step 1. Update Goal Details</h6>
 		<br>
 
+		<div class="row">
+			<div class="col m-2">
+				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
+				<small  class="text-danger error-tag_ids"></small>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col m-2">
 				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" :selected="$goaldetail->goal_type_id" />
@@ -54,19 +61,13 @@
 				<small  class="text-danger error-target_date"></small>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col m-2">
-				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
-				<small  class="text-danger error-tag_ids"></small>
-			</div>
-		</div>
 
-		<div class="card">
+		<div class="card m-2">
 			<div class="card-body">
 				<label label="Current Audience" name="current_audience" > Current Organizational Audience </label>
 				@include('sysadmin.goalbank.partials.filter')
 				<div class="p-3">  
-					<table class="table table-bordered filtertable" id="filtertable" style="width: 100%; overflow-x: auto; "></table>
+					<table class="table table-bordered currenttable" id="currenttable" style="width: 100%; overflow-x: auto; "></table>
 				</div>
 			</div>
 		</div>
@@ -115,6 +116,7 @@
 		<br>
 		<h6 class="text-bold">Step 3. Finish</h6>
 		<br>
+
 		<div class="col-md-3 mb-2">
 			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Save Changes</button>
 			<button class="btn btn-secondary mt-2">Cancel</button>
@@ -191,8 +193,14 @@
 
 			$(document).ready(function(){
 
+				$('#blank5th').hide();
+				$('#criteria_group').hide();
+				$('#search_text_group').hide();
+				$('#eblank5th').hide();
+				$('#ecriteria_group').hide();
+				$('#esearch_text_group').hide();
 
-				var table = $('.filtertable').DataTable
+				var table = $('#currenttable').DataTable
 				(
 					{
 						processing: true,
@@ -220,14 +228,94 @@
 							{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
 							{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
 							{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
+							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'id', name: 'id', searchable: false, visible: false},
 						]
 					}
 				);
+
+				$('#delete_org').click(function(e) {
+					e.preventDefault();
+					dd('button clicked');
+					$('#btn_search').hide();
+				});
+
+				$('#btn_search').click(function(e) {
+					e.preventDefault();
+					$('#currenttable').DataTable().destroy();
+					$('#currenttable').empty();
+					$('#currenttable').DataTable(
+						{
+							processing: true,
+							serverSide: true,
+							scrollX: true,
+							stateSave: true,
+							deferRender: true,
+							ajax: {
+								url: "{{ route('sysadmin.goalbank.getgoalorgs', $goaldetail->id) }}",
+								type: 'GET',
+								data: function(d) {
+									d.dd_level0 = $('#dd_level0').val();
+									d.dd_level1 = $('#dd_level1').val();
+									d.dd_level2 = $('#dd_level2').val();
+									d.dd_level3 = $('#dd_level3').val();
+									d.dd_level4 = $('#dd_level4').val();
+									d.criteria = $('#criteria').val();
+									d.search_text = $('#search_text').val();
+								}
+							},
+							columns: [
+								{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
+								{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
+								{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
+								{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
+								{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
+								{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
+								{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
+							]
+						}
+					);
+				});
+
+				$('#dd_level0').change(function (e){
+					e.preventDefault();
+					$('#btn_search').click();
+				});
+
+				$('#dd_level1').change(function (e){
+					e.preventDefault();
+					$('#btn_search').click();
+				});
+
+				$('#dd_level2').change(function (e){
+					e.preventDefault();
+					$('#btn_search').click();
+				});
+
+				$('#dd_level3').change(function (e){
+					e.preventDefault();
+					$('#btn_search').click();
+				});
+				$('#dd_level4').change(function (e){
+					e.preventDefault();
+					$('#btn_search').click();
+				});
+
+				$('#btn_search_reset').click(function(e) {
+					e.preventDefault();
+					$('#search_text').val(null);
+					$('#dd_level0').val(null);
+					$('#dd_level1').val(null);
+					$('#dd_level2').val(null);
+					$('#dd_level3').val(null);
+					$('#dd_level4').val(null);
+					$('#btn_search').click();
+        		});
 
 				$(".tags").multiselect({
                 	enableFiltering: true,
                 	enableCaseInsensitiveFiltering: true
             	});
+
 				$('#pageLoader').hide();
 
 				$('#notify-form').keydown(function (e) {
@@ -299,7 +387,9 @@
                         } else {
                             redrawTreeCheckboxes();
                         }
-                    }
+                    } else {
+						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+					}
 				});
 
 				function redrawTreeCheckboxes() {
@@ -448,45 +538,85 @@
 						$(prev_input).prop("indeterminate", false);
 					}
 				}
-			});
 
-			$('#ebtn_search').click(function(e) {
-				target = $('#enav-tree'); 
+				$('#edd_level0').change(function (e){
+					e.preventDefault();
+					$('#ebtn_search').click();
+				});
 
-				// To do -- ajax called to load the tree
-				$.when( 
-					$.ajax({
-						url: '/sysadmin/goalbank/eorg-tree',
-						// url: $url,
-						type: 'GET',
-						data: $("#notify-form").serialize(),
-						dataType: 'html',
+				$('#edd_level1').change(function (e){
+					e.preventDefault();
+					$('#ebtn_search').click();
+				});
 
-						beforeSend: function() {
-							$("#etree-loading-spinner").show();                    
-						},
+				$('#edd_level2').change(function (e){
+					e.preventDefault();
+					$('#ebtn_search').click();
+				});
 
-						success: function (result) {
-							$('#enav-tree').html(''); 
-							$('#enav-tree').html(result);
-							$('#enav-tree').attr('loaded','loaded');
-						},
+				$('#edd_level3').change(function (e){
+					e.preventDefault();
+					$('#ebtn_search').click();
+				});
+				$('#edd_level4').change(function (e){
+					e.preventDefault();
+					$('#ebtn_search').click();
+				});
 
-						complete: function() {
-							$("#etree-loading-spinner").hide();
-						},
+				$('#ebtn_search_reset').click(function(e) {
+					e.preventDefault();
+					$('#esearch_text').val(null);
+					$('#edd_level0').val(null);
+					$('#edd_level1').val(null);
+					$('#edd_level2').val(null);
+					$('#edd_level3').val(null);
+					$('#edd_level4').val(null);
+					$('#ebtn_search').click();
+       		});
 
-						error: function () {
-							alert("error");
-							$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-						}
-					})
-					
-				).then(function( data, textStatus, jqXHR ) {
-					//alert( jqXHR.status ); // Alerts 200
-					enodes = $('#eaccordion-level0 input:checkbox');
-					eredrawTreeCheckboxes();	
-				}); 
+				$('#ebtn_search').click(function(e) {
+					target = $('#enav-tree'); 
+					ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
+					if(ddnotempty) {
+						// To do -- ajax called to load the tree
+						$.when( 
+							$.ajax({
+								url: '/sysadmin/goalbank/eorg-tree',
+								// url: $url,
+								type: 'GET',
+								data: $("#notify-form").serialize(),
+								dataType: 'html',
+
+								beforeSend: function() {
+									$("#etree-loading-spinner").show();                    
+								},
+
+								success: function (result) {
+									$('#enav-tree').html(''); 
+									$('#enav-tree').html(result);
+									$('#enav-tree').attr('loaded','loaded');
+								},
+
+								complete: function() {
+									$("#etree-loading-spinner").hide();
+								},
+
+								error: function () {
+									alert("error");
+									$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+								}
+							})
+							
+						).then(function( data, textStatus, jqXHR ) {
+							//alert( jqXHR.status ); // Alerts 200
+							enodes = $('#eaccordion-level0 input:checkbox');
+							eredrawTreeCheckboxes();	
+						}); 
+					} else {
+						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+					}
+				});
+
 			});
 
 			$(window).on('beforeunload', function(){

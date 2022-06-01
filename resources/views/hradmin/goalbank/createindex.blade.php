@@ -1,78 +1,62 @@
 <x-side-layout title="{{ __('Dashboard') }}">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            Goal Bank
-        </h2> 
-    </x-slot>
-
-	<small><a href=" {{ route('sysadmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
-
-	<br><br>
-
-	<h4>Edit: {{ $goaldetail->title }}</h4>
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>Goal Bank</h3>
+            @include('hradmin.goalbank.partials.tabs')
+        </div>
+    </div>
 
 	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
 	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
-	<form id="notify-form" action="{{ route('sysadmin.goalbank.updategoalone') }}" method="post">
+	<form id="notify-form" action="{{ route('hradmin.goalbank.savenewgoal') }}" method="post">
 		@csrf
+
 		<br>
-		<h6 class="text-bold">Step 1. Update Goal Details</h6>
+		<h6 class="text-bold">Step 1. Enter Goal Details</h6>
 		<br>
 
-		<div class="row">
-			<div class="col m-2">
-				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" :selected="array_column($goaldetail->tags->toArray(), 'id')" class="tags" multiple />
-				<small  class="text-danger error-tag_ids"></small>
-			</div>
+		<div class="col-sm-6">
+			<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
+			<small  class="text-danger error-tag_ids"></small>
 		</div>
 		<div class="row">
-			<div class="col m-2">
-				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" :selected="$goaldetail->goal_type_id" />
-			</div>
-			<div class="col m-2">
-				<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$goaldetail->title" />
+		<div class="col m-2">
+			<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
+		</div>
+		<div class="col m-2">
+			<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
+				{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
 					<small class="text-danger error-title"></small>
-			</div>
+		</div>
+		<div class="col m-2">
+			<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+		</div>
+		</div>
+		<div class="row">
 			<div class="col m-2">
-				<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="$goaldetail->goal_type_id" ></x-dropdown>
+				<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
+					{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
+						<small class="text-danger error-what"></small>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col m-2">
-				<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$goaldetail->what" />
-					<small class="text-danger error-what"></small>
+				<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
+					{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
+						<small class="text-danger error-measure_of_success"></small>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col m-2">
-				<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$goaldetail->measure_of_success" />
-					<small class="text-danger error-measure_of_success"></small>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col m-2">
-				<x-input label="Start Date " class="error-start" type="date" name="start_date" :value="$goaldetail->start_date ? $goaldetail->start_date->format('Y-m-d') : ''" />
+			<div class="col-sm-6">
+				<x-input label="Start Date " class="error-start" type="date" name="start_date"  />
 				<small  class="text-danger error-start_date"></small>
 			</div>
-			<div class="col m-2">
-				<x-input label="End Date " class="error-target" type="date" name="target_date" :value="$goaldetail->target_date ? $goaldetail->target_date->format('Y-m-d') : ''" />
+			<div class="col-sm-6">
+				<x-input label="End Date " class="error-target" type="date" name="target_date"  />
 				<small  class="text-danger error-target_date"></small>
 			</div>
 		</div>
-
-		<div class="card">
-			<div class="card-body">
-				<label label="Current Audience" name="current_audience" > Current Individual Audience </label>
-				@include('sysadmin.goalbank.partials.filter')
-				<div class="p-3">  
-					<table class="table table-bordered currenttable" id="currenttable" style="width: 100%; overflow-x: auto; "></table>
-				</div>
-			</div>
-		</div>
-
-		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
-		<input type="hidden" id="goal_id" name="goal_id" value={{$goaldetail->id}}>
 
 		<!----modal starts here--->
 		<div id="saveGoalModal" class="modal" role='dialog'>
@@ -81,14 +65,14 @@
 					<div class="modal-header">
 						<h5 class="modal-title">Confirmation</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						    <span aria-hidden="true">&times;</span>
+							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
-						<p>Are you sure to send out this message ?</p>
+						<p>Default ?</p>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Update Goal</button>
+						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Add New Goal</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 					</div>
 					
@@ -96,15 +80,35 @@
 			</div>
 		</div>
 		<!--Modal ends here--->	
-	
 
 		<br>
-		<h6 class="text-bold">Step 2. Select additional individual audience</h6>
+		<h6 class="text-bold">Step 2. Select audience</h6>
 		<br>
 
-		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+		<div class="card" style="width: 100%">
+			<div class="card-body">
+				<h6 class="text-bold">Target Audience</h6>
+				<div class="row form-group pl-4 pb-n4">
+					<div class="col-2">
+						<label>
+							<input type="radio" id="opt_audience1" name="opt_audience" value="byEmp" checked> Individual(s)
+						</label>
+					</div>
+					<div class="col-2">
+						<label>
+							<input type="radio" id="opt_audience2" name="opt_audience" value="byOrg"> Business Unit(s)
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 
-		@include('sysadmin.goalbank.partials.filter')
+		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
+		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
+
+
+		@include('hradmin.goalbank.partials.filter')
 
         <div class="p-3">
             <nav>
@@ -115,7 +119,7 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
-                    @include('sysadmin.goalbank.partials.recipient-list')
+                    @include('hradmin.goalbank.partials.recipient-list')
                 </div>
                 <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
                     <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
@@ -129,7 +133,7 @@
 		<h6 class="text-bold">Step 3. Finish</h6>
 		<br>
 		<div class="col-md-3 mb-2">
-			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Save Changes</button>
+			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Add Goal</button>
 			<button class="btn btn-secondary mt-2">Cancel</button>
 		</div>
 
@@ -182,7 +186,9 @@
 		</style>
 	</x-slot>
 
+
 	<x-slot name="js">
+
 		<script src="{{ asset('js/bootstrap-multiselect.min.js')}} "></script>
 		<script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 
@@ -193,11 +199,22 @@
 			let g_employees_by_org = [];
 
 			function confirmSaveChangesModal(){
-				let count = g_selected_employees.length;
+				// console.log($('#opt_audience').val());			
+				// console.log($(".tags"));			
+				// console.log('input:radio[name="opt_audience');			
+				// console.log($('#'+formType+'sign_off_form').find('input:radio[name="check_two'+(isSupervisor? '_' : '') +'"]:checked').val());			
+				// console.log($('#opt_audience').val());			
+				// 	if($('.opt_audience').val() == 'byEmp'){
+				// 	let count = g_selected_employees.length;
+				// }
+				// if($('.opt_audience').val() == 'byOrg'){
+					let count = g_selected_employees.length;
+				// }
+
 				if (count == 0) {
-					$('#saveGoalModal .modal-body p').html('Are you sure to update goal without additional audience?');
+					$('#saveGoalModal .modal-body p').html('Are you sure to create goal without an audience?');
 				} else {
-					$('#saveGoalModal .modal-body p').html('Are you sure to update goal and assign to selected additional audience?');
+					$('#saveGoalModal .modal-body p').html('Are you sure to create goal and assign to selected audience?');
 				}
 				$('#saveGoalModal').modal();
 			}
@@ -205,89 +222,20 @@
 			$(document).ready(function(){
 
 
-				var table = $('.currenttable').DataTable
-				(
-					{
-						processing: true,
-						serverSide: true,
-						scrollX: true,
-						stateSave: true,
-						deferRender: true,
-						ajax: {
-							url: "{{ route('sysadmin.goalbank.getgoalinds', $goaldetail->id) }}",
-							data: function(d) {
-								d.dd_level0 = $('#dd_level0').val();
-								d.dd_level1 = $('#dd_level1').val();
-								d.dd_level2 = $('#dd_level2').val();
-								d.dd_level3 = $('#dd_level3').val();
-								d.dd_level4 = $('#dd_level4').val();
-								d.criteria = $('#criteria').val();
-								d.search_text = $('#search_text').val();
-							}
-						},
-						columns: [
-							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true},
-							{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true},
-							{title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title', searchable: true},
-							{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
-							{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
-							{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
-							{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
-							{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
-							{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true},
-							{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
-							{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
-							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'share_id', name: 'share_id', searchable: false, visible: false},
-						]
-					}
-				);
-
-				$('#btn_search').click(function(e) {
-					e.preventDefault();
-					$('#currenttable').DataTable().destroy();
-					$('#currenttable').empty();
-					$('#currenttable').DataTable(
-						{
-							processing: true,
-							serverSide: true,
-							scrollX: true,
-							stateSave: true,
-							deferRender: true,
-							ajax: {
-								url: "{{ route('sysadmin.goalbank.getgoalinds', $goaldetail->id) }}",
-								type: 'GET',
-								data: function(d) {
-									d.dd_level0 = $('#dd_level0').val();
-									d.dd_level1 = $('#dd_level1').val();
-									d.dd_level2 = $('#dd_level2').val();
-									d.dd_level3 = $('#dd_level3').val();
-									d.dd_level4 = $('#dd_level4').val();
-									d.criteria = $('#criteria').val();
-									d.search_text = $('#search_text').val();
-								}
-							},
-							columns: [
-								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true},
-								{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true},
-								{title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title', searchable: true},
-								{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
-								{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
-								{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
-								{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
-								{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
-								{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true},
-								{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
-								{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
-								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'share_id', name: 'share_id', searchable: false, visible: false},
-							]
-						}
-					);
+				$("#opt_audience1").on("click", function(){
+					console.log("Radio button clicked: Individual(s)"+document.getElementById("opt_audience1").checked);			
 				});
+
+				$("#opt_audience2").on("click", function(){
+					console.log("Radio button clicked: Business Unit(s)"+$("#opt_audience").val());			
+				});
+
 
 				$(".tags").multiselect({
                 	enableFiltering: true,
                 	enableCaseInsensitiveFiltering: true
             	});
+
 				$('#pageLoader').hide();
 
 				$('#notify-form').keydown(function (e) {
@@ -299,6 +247,7 @@
 
 				$('#notify-form').submit(function() {
 					// console.log('Search Button Clicked');			
+
 					// assign back the selected employees to server
 					var text = JSON.stringify(g_selected_employees);
 					$('#selected_emp_ids').val( text );
@@ -307,17 +256,17 @@
 					return true; // return false to cancel form action
 				});
 
-				CKEDITOR.replace('what', {
-					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
-
-				CKEDITOR.replace('measure_of_success', {
-					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
-
 				// Tab  -- LIST Page  activate
 				$("#nav-list-tab").on("click", function(e) {
 					table  = $('#employee-list-table').DataTable();
 					table.rows().invalidate().draw();
 				});
+
+				CKEDITOR.replace('what', {
+					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
+
+				CKEDITOR.replace('measure_of_success', {
+					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
 
 				// Tab  -- TREE activate
 				$("#nav-tree-tab").on("click", function(e) {
@@ -328,7 +277,7 @@
                         if($.trim($(target).attr('loaded'))=='') {
                             $.when( 
                                 $.ajax({
-                                    url: '/sysadmin/goalbank/org-tree',
+                                    url: '/hradmin/goalbank/org-tree',
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
@@ -511,16 +460,17 @@
 						$(prev_input).prop("indeterminate", false);
 					}
 				}
+
 			});
 
 			$('#ebtn_search').click(function(e) {
 				target = $('#enav-tree'); 
 				ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
-                if(ddnotempty) {
+				if(ddnotempty) {
 					// To do -- ajax called to load the tree
 					$.when( 
 						$.ajax({
-							url: '/sysadmin/goalbank/eorg-tree',
+							url: '/hradmin/goalbank/eorg-tree',
 							// url: $url,
 							type: 'GET',
 							data: $("#notify-form").serialize(),
@@ -555,17 +505,6 @@
 					$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
 				}
 			});
-
-			$('#btn_search_reset').click(function(e) {
-					e.preventDefault();
-					$('#search_text').val(null);
-					$('#dd_level0').val(null);
-					$('#dd_level1').val(null);
-					$('#dd_level2').val(null);
-					$('#dd_level3').val(null);
-					$('#dd_level4').val(null);
-					// $('#btn_search').click();
-        		});
 
 			$(window).on('beforeunload', function(){
 				$('#pageLoader').show();

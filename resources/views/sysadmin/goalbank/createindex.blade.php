@@ -16,18 +16,22 @@
 		<h6 class="text-bold">Step 1. Enter Goal Details</h6>
 		<br>
 
+		<div class="col-sm-6">
+			<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
+			<small  class="text-danger error-tag_ids"></small>
+		</div>
 		<div class="row">
-			<div class="col m-2">
-				<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
-			</div>
-			<div class="col m-2">
-				<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
-					{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
-						<small class="text-danger error-title"></small>
-			</div>
-			<div class="col m-2">
-				<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
-			</div>
+		<div class="col m-2">
+			<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
+		</div>
+		<div class="col m-2">
+			<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
+				{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
+					<small class="text-danger error-title"></small>
+		</div>
+		<div class="col m-2">
+			<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
+		</div>
 		</div>
 		<div class="row">
 			<div class="col m-2">
@@ -51,10 +55,6 @@
 			<div class="col-sm-6">
 				<x-input label="End Date " class="error-target" type="date" name="target_date"  />
 				<small  class="text-danger error-target_date"></small>
-			</div>
-			<div class="col-sm-6">
-				<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
-				<small  class="text-danger error-tag_ids"></small>
 			</div>
 		</div>
 
@@ -103,9 +103,6 @@
 			</div>
 		</div>
 		
-
-
-
 
 		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
 		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
@@ -224,6 +221,7 @@
 
 			$(document).ready(function(){
 
+
 				$("#opt_audience1").on("click", function(){
 					console.log("Radio button clicked: Individual(s)"+document.getElementById("opt_audience1").checked);			
 				});
@@ -312,7 +310,7 @@
                         }
                     } else {
 						// alert("error");
-                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply filter before clicking on Tree.');
+                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
 					}
 				});
 
@@ -467,41 +465,45 @@
 
 			$('#ebtn_search').click(function(e) {
 				target = $('#enav-tree'); 
+				ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
+				if(ddnotempty) {
+					// To do -- ajax called to load the tree
+					$.when( 
+						$.ajax({
+							url: '/sysadmin/goalbank/eorg-tree',
+							// url: $url,
+							type: 'GET',
+							data: $("#notify-form").serialize(),
+							dataType: 'html',
 
-				// To do -- ajax called to load the tree
-				$.when( 
-					$.ajax({
-						url: '/sysadmin/goalbank/eorg-tree',
-						// url: $url,
-						type: 'GET',
-						data: $("#notify-form").serialize(),
-						dataType: 'html',
+							beforeSend: function() {
+								$("#etree-loading-spinner").show();                    
+							},
 
-						beforeSend: function() {
-							$("#etree-loading-spinner").show();                    
-						},
+							success: function (result) {
+								$('#enav-tree').html(''); 
+								$('#enav-tree').html(result);
+								$('#enav-tree').attr('loaded','loaded');
+							},
 
-						success: function (result) {
-							$('#enav-tree').html(''); 
-							$('#enav-tree').html(result);
-							$('#enav-tree').attr('loaded','loaded');
-						},
+							complete: function() {
+								$("#etree-loading-spinner").hide();
+							},
 
-						complete: function() {
-							$("#etree-loading-spinner").hide();
-						},
-
-						error: function () {
-							alert("error");
-							$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-						}
-					})
-					
-				).then(function( data, textStatus, jqXHR ) {
-					//alert( jqXHR.status ); // Alerts 200
-					enodes = $('#eaccordion-level0 input:checkbox');
-					eredrawTreeCheckboxes();	
-				}); 
+							error: function () {
+								alert("error");
+								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							}
+						})
+						
+					).then(function( data, textStatus, jqXHR ) {
+						//alert( jqXHR.status ); // Alerts 200
+						enodes = $('#eaccordion-level0 input:checkbox');
+						eredrawTreeCheckboxes();	
+					}); 
+				} else {
+					$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+				}
 			});
 
 			$(window).on('beforeunload', function(){

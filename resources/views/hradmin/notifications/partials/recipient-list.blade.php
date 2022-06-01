@@ -10,30 +10,30 @@
     </div>
 
 
-<div class="card">
-	<div class="card-body">
-		<h6></h6>
-		<table class="table table-bordered" id="employee-list-table">
-			<thead>
-				<tr>
-                    <th><input name="select_all" value="1" id="employee-list-select-all" type="checkbox" /></th>
-                    <th>Employee ID</th>
-					<th>Employee Name</th>
-                    <th>Job Title</th>
-					<th>Email</th>
-					<th>Organization</th>
-					<th>Program</th>
-					<th>Division</th>
-					<th>Branch</th>
-                    <th>Level 4</th>
-                    <th>Department </th>
-                    <th>Action </th>
-				</tr>
-			</thead>
-		</table>
+    <div class="card">
+        <div class="card-body">
+            <h6></h6>
+            <table class="table table-bordered" id="employee-list-table">
+                <thead>
+                    <tr>
+                        <th><input name="select_all" value="1" id="employee-list-select-all" type="checkbox" /></th>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Job Title</th>
+                        <th>Email</th>
+                        <th>Organization</th>
+                        <th>Program</th>
+                        <th>Division</th>
+                        <th>Branch</th>
+                        <th>Level 4</th>
+                        <th>Department </th>
+                        <th>Action </th>
+                    </tr>
+                </thead>
+            </table>
 
-	</div>    
-</div>   
+        </div>    
+    </div>   
 </div>
 
 

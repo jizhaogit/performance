@@ -5,7 +5,7 @@
         </h2> 
     </x-slot>
 
-	<small><a href=" {{ route('sysadmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
+	<small><a href=" {{ route('hradmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
 
 	<br><br>
 
@@ -14,7 +14,7 @@
 	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
 	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
-	<form id="notify-form" action="{{ route('sysadmin.goalbank.updategoalone') }}" method="post">
+	<form id="notify-form" action="{{ route('hradmin.goalbank.updategoalone') }}" method="post">
 		@csrf
 		<br>
 		<h6 class="text-bold">Step 1. Update Goal Details</h6>
@@ -64,7 +64,7 @@
 		<div class="card">
 			<div class="card-body">
 				<label label="Current Audience" name="current_audience" > Current Individual Audience </label>
-				@include('sysadmin.goalbank.partials.filter')
+				@include('hradmin.goalbank.partials.filter')
 				<div class="p-3">  
 					<table class="table table-bordered currenttable" id="currenttable" style="width: 100%; overflow-x: auto; "></table>
 				</div>
@@ -104,7 +104,7 @@
 
 		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
-		@include('sysadmin.goalbank.partials.filter')
+		@include('hradmin.goalbank.partials.filter')
 
         <div class="p-3">
             <nav>
@@ -115,7 +115,7 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
-                    @include('sysadmin.goalbank.partials.recipient-list')
+                    @include('hradmin.goalbank.partials.recipient-list')
                 </div>
                 <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
                     <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
@@ -214,7 +214,7 @@
 						stateSave: true,
 						deferRender: true,
 						ajax: {
-							url: "{{ route('sysadmin.goalbank.getgoalinds', $goaldetail->id) }}",
+							url: "{{ route('hradmin.goalbank.getgoalinds', $goaldetail->id) }}",
 							data: function(d) {
 								d.dd_level0 = $('#dd_level0').val();
 								d.dd_level1 = $('#dd_level1').val();
@@ -254,7 +254,7 @@
 							stateSave: true,
 							deferRender: true,
 							ajax: {
-								url: "{{ route('sysadmin.goalbank.getgoalinds', $goaldetail->id) }}",
+								url: "{{ route('hradmin.goalbank.getgoalinds', $goaldetail->id) }}",
 								type: 'GET',
 								data: function(d) {
 									d.dd_level0 = $('#dd_level0').val();
@@ -328,7 +328,7 @@
                         if($.trim($(target).attr('loaded'))=='') {
                             $.when( 
                                 $.ajax({
-                                    url: '/sysadmin/goalbank/org-tree',
+                                    url: '/hradmin/goalbank/org-tree',
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
@@ -520,7 +520,7 @@
 					// To do -- ajax called to load the tree
 					$.when( 
 						$.ajax({
-							url: '/sysadmin/goalbank/eorg-tree',
+							url: '/hradmin/goalbank/eorg-tree',
 							// url: $url,
 							type: 'GET',
 							data: $("#notify-form").serialize(),

@@ -100,7 +100,7 @@
         placeholder: 'Select Organization',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-organizations'
+            url: '/hradmin/goalbank/eorg-organizations'
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -122,7 +122,7 @@
         placeholder: 'Select Level 1',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-programs' 
+            url: '/hradmin/goalbank/eorg-programs' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -145,7 +145,7 @@
         placeholder: 'Select Level 2',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-divisions' 
+            url: '/hradmin/goalbank/eorg-divisions' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -169,7 +169,7 @@
         placeholder: 'Select Level 3',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-branches' 
+            url: '/hradmin/goalbank/eorg-branches' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
@@ -194,7 +194,7 @@
         placeholder: 'Select Level 4',
         allowClear: true,
         ajax: {
-            url: '/sysadmin/goalbank/eorg-level4' 
+            url: '/hradmin/goalbank/eorg-level4' 
             , dataType: 'json'
             , delay: 250
             , data: function(params) {
