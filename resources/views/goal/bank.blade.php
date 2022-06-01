@@ -59,6 +59,7 @@
                                         </th>
                                         <th style="width:35%"> Goal Title</th>
                                         <th style="width:20%"> Goal Type</th>
+                                        <th style="width:15%"> Tags</th>
                                         <th style="width:15%"> Date Added</th>
                                         <th style="width:15%"> Created By</th>
                                         <th style="width:15%"> Mandatory/Suggested</th>
@@ -70,17 +71,20 @@
                                         <td>
                                             <input type="checkbox" name="goal_ids[]" value="{{$goal->id}}">
                                         </td>
-                                        <td style="width:35%">
+                                        <td style="width:25%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->title }}</a>
                                         </td>
-                                        <td style="width:35%">
-                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->goalType->name }}</a>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->typename }}</a>
+                                        </td>
+                                        <td style="width:15%">
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->tagnames }}</a>
                                         </td>
                                         <td style="width:15%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->created_at == null ?: $goal->created_at->format('M d, Y') }}</a>
                                         </td>
                                         <td style="width:15%">
-                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->user->name }}</a>
+                                            <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->username }}</a>
                                         </td>
                                         <td style="width:15%">
                                             <a href="#" class="show-goal-detail highlighter" data-id="{{$goal->id}}">{{ $goal->is_mandatory ? 'Mandatory' : 'Suggested' }}</a>

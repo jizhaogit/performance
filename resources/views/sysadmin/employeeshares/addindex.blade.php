@@ -22,6 +22,7 @@
 		<h6 class="text-bold">Step 1. Select employees to share</h6>
 		<br>
 
+		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
 		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
 
@@ -72,6 +73,7 @@
 		<br>
 		<h6 class="text-bold">Step 2. Select who you would like to share the selected employee(s) with</h6> 
 		<br>
+		<input type="hidden" id="eselected_org_nodes" name="eselected_org_nodes" value="">
 		<input type="hidden" id="eselected_emp_ids" name="eselected_emp_ids" value="">
 
 		@include('sysadmin.employeeshares.partials.loader2')
@@ -97,28 +99,22 @@
 		<br>
 		<h6 class="text-bold">Step 3. Enter sharing details</h6> 
 		<br>
-		<div class="row  p-3">
-			<div class="col col-8">
-				<x-input id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
+		<div class="card group form-group ">
+			<div class="col col-2 mx-3 my-1">
+				<label for="elements">Elements to Share</label>
+				<select id="elements" name="elements" class="form-control">
+					@foreach( $sharedElements as $key => $value )
+						<option value="{{ $key }}" {{  old('elements') == $key ? 'selected' : '' }} >{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+			<div class="col col-8 mx-3 my-1">
+				<x-input id="reason" name="reason" label="Reason for sharing" aria-label="Reason for sharing"/>
 			</div>
 		</div>
 
 		<br>
-		<h6 class="text-bold">Step 4. Select ministries to assign to (for HR Administrator only)</h6>
-		<br>
-
-		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
-
-		@include('sysadmin.employeeshares.partials.filter2')
-
-		<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
-			<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
-				<span class="sr-only">Loading...</span>
-			</div>
-		</div>
-
-		<br>
-		<h6 class="text-bold">Step 4. Share selected profile(s)</h6>
+		<h6 class="text-bold">Step 4. Select selected profile(s)</h6>
 		<br>
 		<div class="col-md-3 mb-2">
 			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveAllModal()" name="btn_send" value="btn_send">Share Profiles</button>

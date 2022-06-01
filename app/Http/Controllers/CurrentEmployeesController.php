@@ -82,7 +82,8 @@ class CurrentEmployeesController extends Controller
 
             $query = User::withoutGlobalScopes()
             ->leftjoin('employee_demo', 'users.guid', '=', 'employee_demo.guid')
-            ->wherein('employee_demo.employee_status', ['A', 'L', 'P', 'S'])
+            // ->wherein('employee_demo.employee_status', ['A', 'L', 'P', 'S'])
+            ->whereNull('employee_demo.date_deleted')
             ->when($level0, function($q) use($level0) {return $q->where('employee_demo.organization', $level0->name);})
             ->when($level1, function($q) use($level1) {return $q->where('employee_demo.level1_program', $level1->name);})
             ->when($level2, function($q) use($level2) {return $q->where('employee_demo.level2_division', $level2->name);})

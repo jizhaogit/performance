@@ -221,6 +221,7 @@ Route::group(['middleware' => ['role:Sys Admin']], function () {
         Route::get('/sysadmin/employeeshares/org-branches', [EmployeeSharesController::class,'getBranches']);
         Route::get('/sysadmin/employeeshares/org-level4', [EmployeeSharesController::class,'getLevel4']);
         Route::get('/sysadmin/employeeshares/employee-list', [EmployeeSharesController::class, 'getDatatableEmployees'])->name('sysadmin.employeeshares.employee.list');
+        Route::get('/sysadmin/employeeshares/employees/{id}', [EmployeeSharesController::class,'getEmployees']);
 
         Route::get('/sysadmin/employeeshares/eorg-tree', [EmployeeSharesController::class,'eloadOrganizationTree']);
         Route::get('/sysadmin/employeeshares/eorg-organizations', [EmployeeSharesController::class,'egetOrganizations']);

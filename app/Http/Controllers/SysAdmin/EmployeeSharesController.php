@@ -155,7 +155,9 @@ class EmployeeSharesController extends Controller
         $criteriaList = $this->search_criteria_list();
         $ecriteriaList = $this->search_criteria_list();
 
-        return view('sysadmin.employeeshares.addindex', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'ematched_emp_ids', 'old_selected_emp_ids', 'eold_selected_emp_ids', 'old_selected_org_nodes', 'eold_selected_org_nodes') );
+        $sharedElements = array("A" => "All", "C" => "Conversation", "P" => "Profile" );
+
+        return view('sysadmin.employeeshares.addindex', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'ematched_emp_ids', 'old_selected_emp_ids', 'eold_selected_emp_ids', 'old_selected_org_nodes', 'eold_selected_org_nodes', 'sharedElements') );
     }
 
     public function saveall(Request $request) {
@@ -309,16 +311,16 @@ class EmployeeSharesController extends Controller
             $esql = clone $edemoWhere; 
 
             $eemployees = $esql->select([ 
-                'employee_id as eemployee_id'
-                , 'employee_name as eemployee_name'
-                , 'job_title as ejob_title'
-                , 'employee_email as eemployee_email'
-                , 'organization as eorganization'
-                , 'level1_program as elevel1_program'
-                , 'level2_division as elevel2_division'
-                , 'level3_branch as elevel3_branch'
-                , 'level4 as elevel4'
-                , 'deptid as edeptid']);
+                'employee_demo.employee_id as eemployee_id'
+                , 'employee_demo.employee_name as eemployee_name'
+                , 'employee_demo.job_title as ejob_title'
+                , 'employee_demo.employee_email as eemployee_email'
+                , 'employee_demo.organization as eorganization'
+                , 'employee_demo.level1_program as elevel1_program'
+                , 'employee_demo.level2_division as elevel2_division'
+                , 'employee_demo.level3_branch as elevel3_branch'
+                , 'employee_demo.level4 as elevel4'
+                , 'employee_demo.deptid as edeptid']);
 
             return Datatables::of($eemployees)
                 ->addColumn('eselect_users', static function ($eemployee) {

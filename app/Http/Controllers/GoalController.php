@@ -227,6 +227,7 @@ class GoalController extends Controller
         $tags_input = $request->tag_ids;     
 
         $adminGoals = Goal::withoutGlobalScopes()
+        ->join('users', 'goals.user_id', '=', 'users.id')  
         ->join('goal_bank_orgs', 'goals.id', '=', 'goal_bank_orgs.goal_id')
         ->join('admin_orgs', function($join) use ($request) {
             $join->on('admin_orgs.organization', '=', 'goal_bank_orgs.organization')
@@ -239,13 +240,15 @@ class GoalController extends Controller
         ->where('admin_orgs.version', '=', 1)
         ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
         ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id')    
-        ->select('goals.*');
+        ->leftjoin('goal_types', 'goal_types.id', '=', 'goals.goal_type_id')            
+        ->select('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'goals.is_mandatory','goal_types.name as typename','users.name as username',DB::raw('group_concat(tags.name) as tagnames'));
+        $adminGoals = $adminGoals->groupBy('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'users.name', 'goals.is_mandatory');
         // ->paginate(10);
 
         $query = Goal::withoutGlobalScope(NonLibraryScope::class)
         ->where('is_library', true)
-        ->with('goalType')
-        ->with('user')
+        ->join('users', 'goals.user_id', '=', 'users.id')          
+        ->leftjoin('goal_types', 'goal_types.id', '=', 'goals.goal_type_id')    
         ->leftjoin('goal_tags', 'goal_tags.goal_id', '=', 'goals.id')
         ->leftjoin('tags', 'tags.id', '=', 'goal_tags.tag_id');    
         
@@ -294,11 +297,11 @@ class GoalController extends Controller
         $query->whereHas('sharedWith', function($query) {
             $query->where('user_id', Auth::id());
         });
-        // $query->groupBy('goals.id');
+        $query->groupBy('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'goals.is_mandatory');
         // $bankGoals = $query->get();
         
         // $this->getDropdownValues($mandatoryOrSuggested, $createdBy, $goalTypes, $tagsList);
-        $query = $query->select('goals.*');
+        $query = $query->select('goals.id', 'goals.title', 'goals.goal_type_id', 'goals.created_at', 'goals.user_id', 'goals.is_mandatory','goal_types.name as typename','users.name as username',DB::raw('group_concat(tags.name) as tagnames'));
         $query = $query->union($adminGoals);
         // $query = $query->groupBy('goals.id');
         $bankGoals = $query->paginate(10);
