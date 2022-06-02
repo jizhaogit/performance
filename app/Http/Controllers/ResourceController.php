@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use App\Models\Tag;
 
 class ResourceController extends Controller
 {
@@ -10,8 +11,12 @@ class ResourceController extends Controller
     {
         return view('resource.user-guide');
     }
-    public function goalsetting()
+    public function goalsetting(Request $request)
     {
+        //get goal tags
+        $tags = Tag::all()->toArray();
+        $t = $request->t;
+        
         $data = [
             [
                 'question' => 'What is goal setting?',
@@ -30,6 +35,10 @@ class ResourceController extends Controller
                 'answer_file' => '4'
             ],
             [
+                'question' => 'What are goal tags?',
+                'answer_file' => '8'
+            ],
+            [
                 'question' => 'Examples of Work Goals',
                 'answer_file' => '5'
             ],
@@ -42,7 +51,7 @@ class ResourceController extends Controller
                 'answer_file' => '7'
             ],
         ];
-        return view('resource.goal-setting', compact('data'));
+        return view('resource.goal-setting', compact('data', 'tags', 't'));
     }
     public function conversations()
     {

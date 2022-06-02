@@ -132,19 +132,7 @@ Route::group(['middleware' => ['role:HR Admin']], function ()
     Route::post('/hradmin/notifications/notify-send', [NotificationController::class, 'send'])->name('hradmin.notifications.send');
     Route::get('/hradmin/notifications/users', [NotificationController::class, 'getUsers'])->name('hradmin.notifications.users.list');
     Route::resource('/hradmin/notifications/generic-template', GenericTemplateController::class)->except(['destroy']);
-    Route::get('graph-users', [GenericTemplateController::class,'getUsers']);
-    
-    Route::get('/hradmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
-    Route::get('/hradmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
-    Route::get('/hradmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
-    Route::get('/hradmin/notifications/org-divisions', [NotificationController::class,'getDivisions']);
-    Route::get('/hradmin/notifications/org-branches', [NotificationController::class,'getBranches']);
-    Route::get('/hradmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
-    Route::get('/hradmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);
-    Route::get('/hradmin/notifications/employees/{id}', [NotificationController::class,'getEmployees']);
-    Route::get('/hradmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('hradmin.notifications.employee.list');
-
-    
+        
     Route::get('hradmin/statistics/goalsummary', [StatisticsReportController::class, 'goalsummary'])->name('hradmin.statistics.goalsummary');
     Route::get('hradmin/statistics/goalsummary-export', [StatisticsReportController::class, 'goalSummaryExport'])->name('hradmin.statistics.goalsummary.export');
     Route::get('hradmin/statistics/conversationsummary', [StatisticsReportController::class, 'conversationsummary'])->name('hradmin.statistics.conversationsummary');
@@ -160,4 +148,19 @@ Route::group(['middleware' => ['role:HR Admin']], function ()
     Route::get('hradmin/level4/{id0}/{id1}/{id2}/{id3}', 'App\Http\Controllers\HRadminController@getOrgLevel4')->name('hradmin.level4');
 
 
+});
+
+Route::group(['middleware' => ['auth']], function () 
+{
+    Route::get('/hradmin/notifications/org-tree', [NotificationController::class,'loadOrganizationTree']);
+    Route::get('/hradmin/notifications/org-organizations', [NotificationController::class,'getOrganizations']);
+    Route::get('/hradmin/notifications/org-programs', [NotificationController::class,'getPrograms']);
+    Route::get('/hradmin/notifications/org-divisions', [NotificationController::class,'getDivisions']);
+    Route::get('/hradmin/notifications/org-branches', [NotificationController::class,'getBranches']);
+    Route::get('/hradmin/notifications/org-level4', [NotificationController::class,'getLevel4']);
+    Route::get('/hradmin/notifications/job-titles', [NotificationController::class,'getJobTitles']);
+    Route::get('/hradmin/notifications/employees/{id}', [NotificationController::class,'getEmployees']);
+    Route::get('/hradmin/notifications/employee-list', [NotificationController::class, 'getDatatableEmployees'])->name('hradmin.notifications.employee.list');
+
+    Route::get('graph-users', [GenericTemplateController::class,'getUsers']);
 });

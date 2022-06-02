@@ -100,44 +100,44 @@
                     {title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4'},
                     {title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', data: 'deptid', name: 'deptid'},
                 ],
-                columnDefs: [
-                    {
-                    },
-                    {
-                    },
-                    {
-                        className: "dt-nowrap",
-                        targets: 2
-                    },
-                    {
-                        className: "dt-nowrap",
-                        targets: 3
-                    },
-                    {
-                        className: "dt-nowrap",
-                        targets: 4
-                    },
-                    {
-                        className: "dt-nowrap",
-                        targets: 5
-                    },        
-                    {
-                        className: "dt-nowrap",
-                        targets: 6
-                    },
-                    {
-                        className: "dt-nowrap",
-                        targets: 7
-                    },        
-                    {
-                        className: "dt-nowrap",
-                        targets: 8
-                    },        
-                    {
-                        className: "dt-nowrap",
-                        targets: 9
-                    }        
-                ]
+                // columnDefs: [
+                //     {
+                //     },
+                //     {
+                //     },
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 2
+                //     },
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 3
+                //     },
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 4
+                //     },
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 5
+                //     },        
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 6
+                //     },
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 7
+                //     },        
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 8
+                //     },        
+                //     {
+                //         className: "dt-nowrap",
+                //         targets: 9
+                //     }        
+                // ],
             });
 
 

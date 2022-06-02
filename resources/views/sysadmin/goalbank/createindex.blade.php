@@ -83,12 +83,13 @@
 
 		<br>
 		<h6 class="text-bold">Step 2. Select audience</h6>
-		<br>
+		{{-- <br> --}}
 
 		<div class="card" style="width: 100%">
 			<div class="card-body">
-				<h6 class="text-bold">Target Audience</h6>
-				<div class="row form-group pl-4 pb-n4">
+				{{-- <h6 class="text-bold mt-1">Target Audience</h6> --}}
+				<div class="row form-group">
+					{{-- <div class="row form-group pl-3 pb-n3 mb-n2"> --}}
 					<div class="col-2">
 						<label>
 							<input type="radio" id="opt_audience1" name="opt_audience" value="byEmp" checked> Individual(s)
@@ -102,32 +103,47 @@
 				</div>
 			</div>
 		</div>
-		
 
 		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
-		{{-- <input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value=""> --}}
-
+		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+		<input type="hidden" id="eselected_emp_ids" name="eselected_emp_ids" value="">
+		<input type="hidden" id="eselected_org_nodes" name="eselected_org_nodes" value="">
 
 		@include('sysadmin.goalbank.partials.filter')
+		@include('sysadmin.goalbank.partials.filter2')
 
-        <div class="p-3">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
-                    <a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
-                    @include('sysadmin.goalbank.partials.recipient-list')
-                </div>
-                <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
-                    <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="pl-2">
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
+					<a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+				</div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+				<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+					@include('sysadmin.goalbank.partials.recipient-list')
+				</div>
+				<div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
+					<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+						<span class="sr-only">Loading...</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="pl-2">
+			<nav>
+				<div class="nav nav-tabs" id="enav-tab" role="tablist">
+					{{-- <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a> --}}
+					<a class="nav-item nav-link" id="enav-tree-tab" data-toggle="tab" href="#enav-tree" role="tab" aria-controls="enav-tree" aria-selected="false">Tree</a>
+				</div>
+			</nav>
+			<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
+				<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
+					<span class="sr-only">Loading...</span>
+				</div>
+			</div>
+		</div>
 
 		<br>
 		<h6 class="text-bold">Step 3. Finish</h6>
@@ -196,21 +212,17 @@
 			let g_matched_employees = {!!json_encode($matched_emp_ids)!!};
 			let g_selected_employees = {!!json_encode($old_selected_emp_ids)!!};
 			let g_selected_orgnodes = {!!json_encode($old_selected_org_nodes)!!};
+			let eg_selected_orgnodes = {!!json_encode($eold_selected_org_nodes)!!};
 			let g_employees_by_org = [];
 
-			function confirmSaveChangesModal(){
-				// console.log($('#opt_audience').val());			
-				// console.log($(".tags"));			
-				// console.log('input:radio[name="opt_audience');			
-				// console.log($('#'+formType+'sign_off_form').find('input:radio[name="check_two'+(isSupervisor? '_' : '') +'"]:checked').val());			
-				// console.log($('#opt_audience').val());			
-				// 	if($('.opt_audience').val() == 'byEmp'){
-				// 	let count = g_selected_employees.length;
-				// }
-				// if($('.opt_audience').val() == 'byOrg'){
-					let count = g_selected_employees.length;
-				// }
-
+			function confirmSaveChangesModal() {
+				let count = 0;
+				if($('#opt_audience1').prop('checked')) {
+					count = g_selected_employees.length;
+				};
+				if($('#opt_audience2').prop('checked')) {
+					count = g_selected_orgnodes.length;
+				};
 				if (count == 0) {
 					$('#saveGoalModal .modal-body p').html('Are you sure to create goal without an audience?');
 				} else {
@@ -221,13 +233,44 @@
 
 			$(document).ready(function(){
 
+				$('#eblank5th').hide();
+				$('#ecriteria_group').hide();
+				$('#esearch_text_group').hide();
 
-				$("#opt_audience1").on("click", function(){
-					console.log("Radio button clicked: Individual(s)"+document.getElementById("opt_audience1").checked);			
+				switchTree();
+
+				function switchTree(){
+					if($('#opt_audience2').prop('checked')) {
+						$('#filter1').hide();
+						$('#nav-tab').hide();
+						$('#nav-tabContent').hide();
+						$('#nav-list').hide();
+						$('#nav-tree').hide();
+						
+						$('#filter2').show();
+						$('#enav-tab').show();
+						$('#enav-tree').show();
+					} else {
+						$('#filter1').show();
+						$('#nav-tab').show();
+						$('#nav-tabContent').show();
+						$('#nav-list').show();
+						$('#nav-tree').show();
+						
+						$('#filter2').hide();
+						$('#enav-tab').hide();
+						$('#enav-tree').hide();
+					}
+				}
+
+				$("#opt_audience1").change(function (e){
+					e.preventDefault();
+					switchTree();
 				});
 
-				$("#opt_audience2").on("click", function(){
-					console.log("Radio button clicked: Business Unit(s)"+$("#opt_audience").val());			
+				$("#opt_audience2").change(function (e){
+					e.preventDefault();
+					switchTree();
 				});
 
 
@@ -281,18 +324,18 @@
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
-                                    beforeSend: function() {
-                                        $("#tree-loading-spinner").show();                    
-                                    },
+                                    // beforeSend: function() {
+                                    //     $("#tree-loading-spinner").show();                    
+                                    // },
                                     success: function (result) {
                                         $(target).html(''); 
                                         $(target).html(result);
 
                                         $('#nav-tree').attr('loaded','loaded');
                                     },
-                                    complete: function() {
-                                        $(".tree-loading-spinner").hide();
-                                    },
+                                    // complete: function() {
+                                    //     $(".tree-loading-spinner").hide();
+                                    // },
                                     error: function () {
                                         alert("error");
                                         $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
@@ -356,12 +399,12 @@
 					$.each( enodes, function( index, chkbox ) {
 						if (eg_employees_by_org.hasOwnProperty(chkbox.value)) {
 							eall_emps = eg_employees_by_org[ chkbox.value ].map( function(x) {return x.employee_id} );
-							b = eall_emps.every(v=> g_selected_orgnodes.indexOf(v) !== -1);
+							b = eall_emps.every(v=> eg_selected_orgnodes.indexOf(v) !== -1);
 
-							if (eall_emps.every(v=> g_selected_orgnodes.indexOf(v) !== -1)) {
+							if (eall_emps.every(v=> eg_selected_orgnodes.indexOf(v) !== -1)) {
 								$(chkbox).prop('checked', true);
 								$(chkbox).prop("indeterminate", false);
-							} else if (eall_emps.some(v=> g_selected_orgnodes.indexOf(v) !== -1)) {
+							} else if (eall_emps.some(v=> eg_selected_orgnodes.indexOf(v) !== -1)) {
 								$(chkbox).prop('checked', false);
 								$(chkbox).prop("indeterminate", true);
 							} else {
@@ -370,7 +413,7 @@
 							}
 						} else {
 							if ( $(chkbox).attr('name') == 'userCheck[]') {
-								if (g_selected_orgnodes.includes(chkbox.value)) {
+								if (eg_selected_orgnodes.includes(chkbox.value)) {
 									$(chkbox).prop('checked', true);
 								} else {
 									$(chkbox).prop('checked', false);
@@ -461,58 +504,194 @@
 					}
 				}
 
-			});
+			// });
 
-			$('#ebtn_search').click(function(e) {
-				target = $('#enav-tree'); 
-				ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
-				if(ddnotempty) {
-					// To do -- ajax called to load the tree
-					$.when( 
-						$.ajax({
-							url: '/sysadmin/goalbank/eorg-tree',
-							// url: $url,
+				$('#btn_search').click(function(e) {
+					e.preventDefault();
+					$('#employee-list-table').DataTable().destroy();
+					$('#employee-list-table').empty();
+					$('#employee-list-table').DataTable( {
+						processing: true,
+						serverSide: true,
+						scrollX: true,
+						stateSave: true,
+						deferRender: true,
+						ajax: {
+							url: "{{ route('sysadmin.goalbank.employee.list') }}",
 							type: 'GET',
-							data: $("#notify-form").serialize(),
-							dataType: 'html',
-
-							beforeSend: function() {
-								$("#etree-loading-spinner").show();                    
-							},
-
-							success: function (result) {
-								$('#enav-tree').html(''); 
-								$('#enav-tree').html(result);
-								$('#enav-tree').attr('loaded','loaded');
-							},
-
-							complete: function() {
-								$("#etree-loading-spinner").hide();
-							},
-
-							error: function () {
-								alert("error");
-								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							data: function(d) {
+								d.dd_level0 = $('#dd_level0').val();
+								d.dd_level1 = $('#dd_level1').val();
+								d.dd_level2 = $('#dd_level2').val();
+								d.dd_level3 = $('#dd_level3').val();
+								d.dd_level4 = $('#dd_level4').val();
+								d.criteria = $('#criteria').val();
+								d.search_text = $('#search_text').val();
 							}
-						})
-						
-					).then(function( data, textStatus, jqXHR ) {
-						//alert( jqXHR.status ); // Alerts 200
-						enodes = $('#eaccordion-level0 input:checkbox');
-						eredrawTreeCheckboxes();	
-					}); 
-				} else {
-					$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
-				}
-			});
+						},
+						columns: [
+							{title: '<input name="select_all" value="1" id="employee-list-select-all" type="checkbox" />', ariaTitle: 'employee-list-select-all', target: 0, type: 'string', data: 'select_users', name: 'select_users', orderable: false, searchable: false},
+							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id'},
+							{title: 'Name', ariaTitle: 'Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name'},
+							{title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title'},
+							{title: 'Email', ariaTitle: 'Email', target: 0, type: 'string', data: 'employee_email', name: 'employee_email' },
+							{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization'},
+							{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program'},
+							{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division'},
+							{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch'},
+							{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4'},
+							{title: 'Dept', ariaTitle: 'Dept', target: 0, type: 'string', data: 'deptid', data: 'deptid', name: 'deptid'},
+						],
+						// columnDefs: [
+						// 	{
+						// 	},
+						// 	{
+						// 	},
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 2
+						// 	},
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 3
+						// 	},
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 4
+						// 	},
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 5
+						// 	},        
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 6
+						// 	},
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 7
+						// 	},        
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 8
+						// 	},        
+						// 	{
+						// 		className: "dt-nowrap",
+						// 		targets: 9
+						// 	}        
+						// ]
+					});
+				});
 
-			$(window).on('beforeunload', function(){
-				$('#pageLoader').show();
-			});
+                $('#btn_search_reset').click(function(e) {
+					console.log('resetting...');
+					e.preventDefault();
+					$('#search_text').val(null);
+					$('#dd_level0').val(null);
+					$('#dd_level1').val(null);
+					$('#dd_level2').val(null);
+					$('#dd_level3').val(null);
+					$('#dd_level4').val(null);
+					// $('#btn_search').click();
+				});
 
-			$(window).resize(function(){
-				location.reload();
-				return;
+				$('#edd_level0').change(function (e) {
+					e.preventDefault();
+					// $('#ebtn_search').click();
+				});
+
+				$('#edd_level1').change(function (e) {
+					e.preventDefault();
+					// $('#ebtn_search').click();
+				});
+
+				$('#edd_level2').change(function (e) {
+					e.preventDefault();
+					// $('#ebtn_search').click();
+				});
+
+				$('#edd_level3').change(function (e) {
+					e.preventDefault();
+					// $('#ebtn_search').click();
+				});
+				$('#edd_level4').change(function (e) {
+					e.preventDefault();
+					$('#ebtn_search').click();
+				});
+
+				$('#ebtn_search_reset').click(function(e) {
+					e.preventDefault();
+					$('#esearch_text').val(null);
+					$('#edd_level0').val(null);
+					$('#edd_level1').val(null);
+					$('#edd_level2').val(null);
+					$('#edd_level3').val(null);
+					$('#edd_level4').val(null);
+					$('#ebtn_search').click();
+       			});
+
+                $(window).on('beforeunload', function(){
+                    $('#pageLoader').show();
+                });
+
+                $(window).resize(function(){
+                    location.reload();
+                    return;
+                });
+
+
+				$('#ebtn_search').click(function(e) {
+					e.preventDefault();
+					target = $('#enav-tree'); 
+					ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
+					if(ddnotempty) {
+						// To do -- ajax called to load the tree
+						$.when( 
+							$.ajax({
+								url: '/sysadmin/goalbank/eorg-tree',
+								// url: $url,
+								type: 'GET',
+								data: $("#notify-form").serialize(),
+								dataType: 'html',
+
+								// beforeSend: function() {
+								// 	$("#etree-loading-spinner").show();                    
+								// },
+
+								success: function (result) {
+									$('#enav-tree').html(''); 
+									$('#enav-tree').html(result);
+									$('#enav-tree').attr('loaded','loaded');
+								},
+
+								// complete: function() {
+								// 	$("#etree-loading-spinner").hide();
+								// },
+
+								error: function () {
+									alert("error");
+									$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+								}
+							})
+							
+						).then(function( data, textStatus, jqXHR ) {
+							//alert( jqXHR.status ); // Alerts 200
+							enodes = $('#eaccordion-level0 input:checkbox');
+							eredrawTreeCheckboxes();	
+						}); 
+					} else {
+						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+					}
+				});
+
+				$(window).on('beforeunload', function(){
+					$('#pageLoader').show();
+				});
+
+				$(window).resize(function(){
+					location.reload();
+					return;
+				});
 			});
 
 			// Model -- Confirmation Box

@@ -43,11 +43,20 @@ class GoalController extends Controller
         ->with('user')
         ->with('goalType');
         $type = 'past';
+        
+        $type_desc_arr = array();
+        foreach($goaltypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                array_push($type_desc_arr, $item);
+            }
+        }
+        
         if ($request->is("goal/current")) {
             $goals = $query->where('status', 'active')
             ->paginate(8);
             $type = 'current';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user','employees', 'tags', 'type_desc_arr'));
         } else if ($request->is("goal/supervisor")) {
             //$user = Auth::user();
             // TO remove already copied goals.
@@ -56,11 +65,12 @@ class GoalController extends Controller
             /* ->whereNotIn('goals.id', $referencedGoals ) */
             ->paginate(8);
             $type = 'supervisor';
-            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags'));
+            return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'tags', 'type_desc_arr'));
         }
         $goals = $query->where('status', '<>', 'active')
         ->paginate(4);
-        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags'));
+        
+        return view('goal.index', compact('goals', 'type', 'goaltypes', 'user', 'employees', 'tags', 'type_desc_arr'));
     }
 
     /**
@@ -315,8 +325,15 @@ class GoalController extends Controller
         // dd($compacted);
         // $merged = array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData);
         // dd($merged);
+        $type_desc_arr = array();
+        foreach($goalTypes as $goalType) {
+            if(isset($goalType['description']) && isset($goalType['name'])) {
+                $item = "<b>" . $goalType['name'] . " Goals</b> ". $goalType['description'];
+                array_push($type_desc_arr, $item);
+            }
+        }
 
-        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
+        return view('goal.bank', array_merge(compact('bankGoals', 'tags', 'tagsList', 'goalTypes', 'type_desc_arr', 'mandatoryOrSuggested', 'createdBy'), $suggestedGoalsData));
     }
 
     private function getDropdownValues(&$mandatoryOrSuggested, &$createdBy, &$goalTypes, &$tagsList) {

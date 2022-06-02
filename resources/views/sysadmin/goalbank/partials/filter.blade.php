@@ -1,4 +1,4 @@
-<div class="card p-3">
+<div class="card p-3" id="filter1">
     <div class="form-row">
         <div class="form-group col-md-2" id="lvlgroup0">
             <label for="dd_level0">Organization</label>
@@ -52,19 +52,15 @@
         </div>
         <div class="form-group col-md-2" id="search_text_group">
             <label for="search_text">Search Text</label>
-            <input type="text" id="search_text" name="search_text" class="form-control" 
-                    value="{{ old('search_text') }}" placeholder="Search Text">
+            <input type="text" id="search_text" name="search_text" class="form-control" value="{{ old('search_text') }}" placeholder="Search Text">
         </div>
         <div class="form-group col-md-2 p-3 float-left float-bottom" style="display: flex; flex-direction: column;">
             <div class="form-group row"> </div>
-                <div class="form-group row">
-                    <span class="float-left float-bottom">  
-                        {{-- <button type="submit" class="btn btn-primary" name="btn_search" 
-                            value="btn_search" formaction="{{ route('sysadmin.goalbank.search') }}">Filter</button> --}}
-                        <button type="button" class="btn btn-primary" id="btn_search" name="btn_search" value="btn_search" >Filter</button>
-                        <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
-                    </span>
-                </div>
+            <div class="form-group row">
+                <span class="float-left float-bottom">  
+                    <button type="button" class="btn btn-primary" id="btn_search" name="btn_search" value="btn_search" >Filter</button>
+                    <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
+                </span>
             </div>
         </div>
     </div>

@@ -1,9 +1,9 @@
 <x-side-layout title="{{ __('Dashboard') }}">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-primary leading-tight" role="banner">
-            Goal Bank
-        </h2> 
-    </x-slot>
+    <div name="header" class="container-header p-n2 "> 
+        <div class="container-fluid">
+            <h3>Goal Bank</h3>
+        </div>
+    </div>
 
 	<small><a href=" {{ route('sysadmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
 
@@ -572,7 +572,7 @@
 					$('#edd_level3').val(null);
 					$('#edd_level4').val(null);
 					$('#ebtn_search').click();
-       		});
+       			});
 
 				$('#ebtn_search').click(function(e) {
 					target = $('#enav-tree'); 

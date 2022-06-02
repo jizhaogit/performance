@@ -51,6 +51,9 @@ class GoalBankController extends Controller
         $old_selected_emp_ids = []; // $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
         $old_selected_org_nodes = []; // $request->old_selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
 
+        $eold_selected_emp_ids = []; // $request->eselected_emp_ids ? json_decode($request->eselected_emp_ids) : [];
+        $eold_selected_org_nodes = []; // $request->eold_selected_org_nodes ? json_decode($request->eselected_org_nodes) : [];
+
         if ($errors) {
             $old = session()->getOldInput();
 
@@ -60,6 +63,7 @@ class GoalBankController extends Controller
             $request->dd_level3 = isset($old['dd_level3']) ? $old['dd_level3'] : null;
             $request->dd_level4 = isset($old['dd_level4']) ? $old['dd_level4'] : null;
 
+            $request->criteria = isset($old['criteria']) ? $old['criteria'] : null;
             $request->search_text = isset($old['search_text']) ? $old['search_text'] : null;
             
             $request->orgCheck = isset($old['orgCheck']) ? $old['orgCheck'] : null;
@@ -74,9 +78,14 @@ class GoalBankController extends Controller
             $request->edd_level3 = isset($old['edd_level3']) ? $old['edd_level3'] : null;
             $request->edd_level4 = isset($old['edd_level4']) ? $old['edd_level4'] : null;
 
-            $old_selected_emp_ids = isset($old['selected_emp_ids']) ? json_decode($old['selected_emp_ids']) : [];
-            $old_selected_org_nodes = isset($old['selected_org_nodes']) ? json_decode($old['selected_org_nodes']) : [];
+            $request->ecriteria = isset($old['ecriteria']) ? $old['ecriteria'] : null;
+            $request->esearch_text = isset($old['esearch_text']) ? $old['esearch_text'] : null;
+            
+            $request->eorgCheck = isset($old['eorgCheck']) ? $old['eorgCheck'] : null;
+            $request->euserCheck = isset($old['euserCheck']) ? $old['euserCheck'] : null;
 
+            $eold_selected_emp_ids = isset($old['eselected_emp_ids']) ? json_decode($old['eselected_emp_ids']) : [];
+            $eold_selected_org_nodes = isset($old['eselected_org_nodes']) ? json_decode($old['eselected_org_nodes']) : [];
         } 
 
         // no validation and move filter variable to old 
@@ -122,6 +131,7 @@ class GoalBankController extends Controller
         $elevel2 = $request->edd_level2 ? OrganizationTree::where('id', $request->edd_level2)->first() : null;
         $elevel3 = $request->edd_level3 ? OrganizationTree::where('id', $request->edd_level3)->first() : null;
         $elevel4 = $request->edd_level4 ? OrganizationTree::where('id', $request->edd_level4)->first() : null;
+        $request->session()->flash('euserCheck', $request->euserCheck);  // Dynamic load 
 
         $request->session()->flash('elevel0', $elevel0);
         $request->session()->flash('elevel1', $elevel1);
@@ -132,19 +142,45 @@ class GoalBankController extends Controller
         // Matched Employees 
         $demoWhere = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
         $sql = clone $demoWhere; 
-        $matched_emp_ids = $sql->select([ 'employee_demo.employee_id', 'employee_demo.employee_name', 'employee_demo.job_title', 'employee_demo.employee_email', 
-                'employee_demo.organization', 'employee_demo.level1_program', 'employee_demo.level2_division',
-                'employee_demo.level3_branch','employee_demo.level4', 'employee_demo.deptid', 'employee_demo.job_title'])
-            ->orderBy('employee_id')
-                ->pluck('employee_demo.employee_id');        
+        $matched_emp_ids = $sql->select([ 
+            'employee_demo.employee_id'
+            , 'employee_demo.employee_name'
+            , 'employee_demo.job_title'
+            , 'employee_demo.employee_email'
+            , 'employee_demo.organization'
+            , 'employee_demo.level1_program'
+            , 'employee_demo.level2_division'
+            , 'employee_demo.level3_branch'
+            , 'employee_demo.level4'
+            , 'employee_demo.deptid'
+            , 'employee_demo.job_title'
+        ])
+        ->orderBy('employee_demo.employee_id')
+        ->pluck('employee_demo.employee_id');        
         
-        $criteriaList = $this->search_criteria_list();
-        $roles = DB::table('roles')
-        ->whereIntegerInRaw('id', [3, 4])
-        ->pluck('longname', 'id');
+        // $edemoWhere = $this->ebaseFilteredWhere($request, $elevel0, $elevel1, $elevel2, $elevel3, $elevel4);
+        // $esql = clone $edemoWhere; 
+        // $ematched_emp_ids = $esql->select([ 
+        //     'employee_demo.employee_id'
+        //     , 'employee_demo.employee_name'
+        //     , 'employee_demo.job_title'
+        //     , 'employee_demo.employee_email'
+        //     , 'employee_demo.organization'
+        //     , 'employee_demo.level1_program'
+        //     , 'employee_demo.level2_division'
+        //     , 'employee_demo.level3_branch'
+        //     , 'employee_demo.level4'
+        //     , 'employee_demo.deptid'
+        //     , 'employee_demo.job_title'
+        // ])
+        // ->orderBy('employee_demo.employee_id')
+        // ->pluck('employee_demo.employee_id');        
+        $ematched_emp_ids = [];
 
-        return view('sysadmin.goalbank.createindex', compact('criteriaList','matched_emp_ids', 'old_selected_emp_ids', 'old_selected_org_nodes', 'roles', 'goalTypes', 'mandatoryOrSuggested', 'tags') );
-    
+        $criteriaList = $this->search_criteria_list();
+        $ecriteriaList = $this->search_criteria_list();
+
+        return view('sysadmin.goalbank.createindex', compact('criteriaList', 'ecriteriaList', 'matched_emp_ids', 'ematched_emp_ids', 'old_selected_emp_ids', 'eold_selected_emp_ids', 'old_selected_org_nodes', 'eold_selected_org_nodes', 'goalTypes', 'mandatoryOrSuggested', 'tags') );
     }
 
 
@@ -315,7 +351,7 @@ class GoalBankController extends Controller
         return redirect()->back();
     }
 
-    public function editpage(Request $request, $id) 
+    public function editpage(CreateGoalRequest $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
         $this->getDropdownValues($mandatoryOrSuggested);
@@ -426,7 +462,7 @@ class GoalBankController extends Controller
     
     }
 
-    public function editone(Request $request, $id) 
+    public function editone(CreateGoalRequest $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
         $this->getDropdownValues($mandatoryOrSuggested);
@@ -545,11 +581,9 @@ class GoalBankController extends Controller
     
     }
 
-    public function savenewgoal(Request $request) 
+    public function savenewgoal(CreateGoalRequest $request) 
     {
-        $selected_emp_ids = $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
-        $request->userCheck = $selected_emp_ids;
-        // $selected_org_nodes = $request->selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
+        $request->userCheck = $request->selected_emp_ids;
 
         $current_user = User::find(Auth::id());
 
@@ -571,28 +605,54 @@ class GoalBankController extends Controller
         
         $resultrec->tags()->sync($request->tag_ids);
 
-
         $employee_ids = ($request->userCheck) ? $request->userCheck : [];
 
-        $toRecipients = EmployeeDemo::select('users.id')
+        if($request->opt_audience == "byEmp") {
+            $selected_emp_ids = $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
+            $toRecipients = EmployeeDemo::select('users.id')
             ->join('users', 'employee_demo.guid', 'users.guid')
             ->whereIn('employee_demo.employee_id', $selected_emp_ids )
             ->distinct()
             ->select ('users.id')
             ->orderBy('employee_demo.employee_name')
             ->get() ;
-
-        foreach ($toRecipients as $newId) {
-            $result = DB::table('goals_shared_with')
-            ->updateOrInsert(
-                ['goal_id' => $resultrec->id
-                , 'user_id' => $newId->id
-                ],
-                []
-            );
-
+            foreach ($toRecipients as $newId) {
+                $result = DB::table('goals_shared_with')
+                ->updateOrInsert(
+                    ['goal_id' => $resultrec->id
+                    , 'user_id' => $newId->id
+                    ],
+                    []
+                );
+            }
         }
 
+        if($request->opt_audience == "byOrg") {
+            $selected_org_nodes = $request->selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
+            $organizationList = OrganizationTree::select('id', 'organization', 'level1_program', 'level2_division', 'level3_branch', 'level4')
+            ->whereIn('id', $selected_org_nodes)
+            ->distinct()
+            ->orderBy('id')
+            ->get();
+            foreach($organizationList as $org1) {
+                $result = DB::table('goal_bank_orgs')
+                ->insert(
+                    ['goal_id' => $resultrec->id
+                    // , 'version' => '5'
+                    , 'version' => '1'
+                    , 'organization' => $org1->organization
+                    , 'level1_program' => $org1->level1_program
+                    , 'level2_division' => $org1->level2_division
+                    , 'level3_branch' => $org1->level3_branch
+                    , 'level4' => $org1->level4
+                    , 'created_at' => date('Y-m-d H:i:s')
+                    , 'updated_at' => date('Y-m-d H:i:s') ],
+                );
+                if(!$result){
+                    break;
+                }
+            }
+        }
         return redirect()->route('sysadmin.goalbank.createindex')
             ->with('success', 'Create new goal bank successful.');
     }

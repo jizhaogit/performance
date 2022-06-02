@@ -162,7 +162,9 @@ class UnlockConversationController extends Controller
             $sql = $this->baseFilteredWhere($request, $level0, $level1, $level2, $level3, $level4);
 
             $conversations = $sql->where(function($q) use ($request) {
-                $q->whereNotNull('initial_signoff');
+                // $q->whereNotNull('initial_signoff');
+                $q->whereNotNull('signoff_user_id')
+                    ->whereNotNull('supervisor_signoff_id');
             })->where(function($q) use ($request) {
                 $q->whereNull('conversations.unlock_until')
                     ->orWhere('conversations.unlock_until','<', today() );
@@ -335,48 +337,52 @@ class UnlockConversationController extends Controller
              ->when( $request->due_date_to, function ($q) use($request) {
                 return $q->where('conversations.unlock_until', '<=', $request->due_date_to);
              })
-            ->whereIn('id', function($q) use ($request, $level0, $level1, $level2, $level3, $level4) {
-                $q->select('conversation_id')->from('conversation_participants')
-                ->join('users', 'users.id', 'conversation_participants.participant_id')
-                ->whereIn('users.guid', function($q) use ($request, $level0, $level1, $level2, $level3, $level4) {
-                    $q->select('guid')->from('employee_demo')
-                        ->when( $level0, function ($q) use($level0) {
-                            return $q->where('employee_demo.organization', $level0->name);
-                        })
-                        ->when( $level1, function ($q) use($level1) {
-                            return $q->where('employee_demo.level1_program', $level1->name);
-                        })
-                        ->when( $level2, function ($q) use($level2) {
-                            return $q->where('employee_demo.level2_division', $level2->name);
-                        })
-                        ->when( $level3, function ($q) use($level3) {
-                            return $q->where('employee_demo.level3_branch', $level3->name);
-                        })
-                        ->when( $level4, function ($q) use($level4) {
-                            return $q->where('employee_demo.level4', $level4->name);
-                        })
-                        ->when( $request->search_text && $request->criteria == 'all', function ($q) use($request) {
-                            $q->where(function($query) use ($request) {
-                                
-                                return $query->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'")
-                                    ->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'")
-                                    ->orWhereRaw("LOWER(employee_demo.classification_group) LIKE '%" . strtolower($request->search_text) . "%'")
-                                    ->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
+             ->when( $level0 or $level1 or $level2 or $level3 or $level4 or $request->search_text, function ($q) 
+                        use($request, $level0, $level1, $level2, $level3, $level4) {
+
+                return $q->whereIn('id', function($q) use ($request, $level0, $level1, $level2, $level3, $level4) {
+                    $q->select('conversation_id')->from('conversation_participants')
+                    ->join('users', 'users.id', 'conversation_participants.participant_id')
+                    ->whereIn('users.guid', function($q) use ($request, $level0, $level1, $level2, $level3, $level4) {
+                        $q->select('guid')->from('employee_demo')
+                            ->when( $level0, function ($q) use($level0) {
+                                return $q->where('employee_demo.organization', $level0->name);
+                            })
+                            ->when( $level1, function ($q) use($level1) {
+                                return $q->where('employee_demo.level1_program', $level1->name);
+                            })
+                            ->when( $level2, function ($q) use($level2) {
+                                return $q->where('employee_demo.level2_division', $level2->name);
+                            })
+                            ->when( $level3, function ($q) use($level3) {
+                                return $q->where('employee_demo.level3_branch', $level3->name);
+                            })
+                            ->when( $level4, function ($q) use($level4) {
+                                return $q->where('employee_demo.level4', $level4->name);
+                            })
+                            ->when( $request->search_text && $request->criteria == 'all', function ($q) use($request) {
+                                $q->where(function($query) use ($request) {
+                                    
+                                    return $query->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'")
+                                        ->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'")
+                                        ->orWhereRaw("LOWER(employee_demo.classification_group) LIKE '%" . strtolower($request->search_text) . "%'")
+                                        ->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
+                                });
+                            })
+                            ->when( $request->search_text && $request->criteria == 'emp', function ($q) use($request) {
+                                return $q->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'");
+                            })
+                            ->when( $request->search_text && $request->criteria == 'name', function ($q) use($request) {
+                                return $q->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
+                            })
+                            ->when( $request->search_text && $request->criteria == 'cls', function ($q) use($request) {
+                                return $q->orWhereRaw("LOWER(employee_demo.classification_group) LIKE '%" . strtolower($request->search_text) . "%'");
+                            })
+                            ->when( $request->search_text && $request->criteria == 'dpt', function ($q) use($request) {
+                                return $q->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
                             });
-                        })
-                        ->when( $request->search_text && $request->criteria == 'emp', function ($q) use($request) {
-                            return $q->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'");
-                        })
-                        ->when( $request->search_text && $request->criteria == 'name', function ($q) use($request) {
-                            return $q->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
-                        })
-                        ->when( $request->search_text && $request->criteria == 'cls', function ($q) use($request) {
-                            return $q->orWhereRaw("LOWER(employee_demo.classification_group) LIKE '%" . strtolower($request->search_text) . "%'");
-                        })
-                        ->when( $request->search_text && $request->criteria == 'dpt', function ($q) use($request) {
-                            return $q->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
-                        });
                 });
+            });    
         });
             
         return $sql;

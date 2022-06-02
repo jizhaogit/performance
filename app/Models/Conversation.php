@@ -79,7 +79,7 @@ class Conversation extends Model
             $authId = $userID;
         }
         $user = User::find($authId);
-        $reportingManager = $user->reportingManager()->first();
+        $reportingManager = $user ? $user->reportingManager()->first() : null;
         if (!$reportingManager) {
             return false;
         }

@@ -1447,8 +1447,8 @@ class GoalBankController extends Controller
             ->on('employee_demo.level2_division', '=', 'admin_orgs.level2_division')
             ->on('employee_demo.level3_branch', '=', 'admin_orgs.level3_branch')
             ->on('employee_demo.level4', '=', 'admin_orgs.level4');
-            ->where('admin_orgs.user_id', '=', Auth::id())
         })
+        ->where('admin_orgs.user_id', '=', Auth::id())
         ->when( $level0, function ($q) use($level0) {
             return $q->where('employee_demo.organization', $level0->name);
         })

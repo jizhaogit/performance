@@ -3,7 +3,7 @@
 <{{($attributes['href'] ?? '' ? 'a' : 'button')}} 
     role="{{$role}}"
     @if ($tooltip) 
-        data-toggle="popover" data-placement="{{ $tooltipPosition }}" data-html="true" data-content="{{ $tooltip }}" data-trigger="hover"
+        data-toggle-body="popover" data-placement="{{ $tooltipPosition }}" data-html="true" data-content="{{ $tooltip }}" data-trigger="hover"
     @endif
     {{ $attributes->merge(['class' => 'btn btn-'.$style. ' btn-'.$size]) }}
     >
