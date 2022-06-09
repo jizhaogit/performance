@@ -68,13 +68,6 @@
                     {{ __('adminlte::menu.profile') }}
                 </a>
             @endif
-            @if(Session::has('user_is_switched'))
-            <a class="btn btn-default btn-flat float-right @if(!$profile_url) btn-block @endif"
-               href="/dashboard/revert-identity">
-                <i class="fa fa-fw fa-user"></i>
-                {{ __('adminlte::adminlte.revert_identity') }}
-            </a>
-            @endif
             <a class="btn btn-default btn-flat float-right @if(!$profile_url) btn-block @endif"
                href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fa fa-fw fa-power-off text-red"></i>

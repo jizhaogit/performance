@@ -5,7 +5,7 @@
         </div>
     </div>
 
-	<small><a href=" {{ route('sysadmin.goalbank.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
+	<small><a href=" {{ route('sysadmin.excuseemployees.manageindex') }}" class="btn btn-md btn-primary"><i class="fa fa-arrow-left"></i> Back to goals</a></small>
 
 	<br><br>
 
@@ -14,9 +14,8 @@
 	<p class="px-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt, nibh nec interdum fermentum, est metus rutrum elit, in molestie ex massa ut urna. Duis dignissim tortor ipsum, dignissim rutrum quam gravida sed. Mauris auctor malesuada luctus. Praesent vitae ante et diam gravida lobortis. Donec eleifend euismod scelerisque. Curabitur laoreet erat sit amet tortor rutrum tristique. Sed lobortis est ac mauris lobortis euismod. Morbi tincidunt porta orci eu elementum. Donec lorem lacus, hendrerit a augue sed, tempus rhoncus arcu. Praesent a enim vel eros elementum porta. Nunc ut leo eu augue dapibus efficitur ac ac risus. Maecenas risus tellus, tincidunt vitae finibus vel, ornare vel neque. Curabitur imperdiet orci ac risus tempor semper. Integer nec varius urna, sit amet rhoncus diam. Aenean finibus, sapien eu placerat tristique, sapien dui maximus neque, id tempor dui magna eget lorem. Suspendisse egestas mauris non feugiat bibendum.</p>
 	<p class="px-3">Cras quis augue quis risus auctor facilisis quis ac ligula. Fusce vehicula consequat dui, et egestas augue sodales aliquam. In hac habitasse platea dictumst. Curabitur sit amet nulla nibh. Morbi mollis malesuada diam ut egestas. Pellentesque blandit placerat nisi ac facilisis. Vivamus consequat, nisl a lacinia ultricies, velit leo consequat magna, sit amet condimentum justo nibh id nisl. Quisque mattis condimentum cursus. Nullam eget congue augue, a molestie leo. Aenean sollicitudin convallis arcu non maximus. Curabitur ut lacinia nisi. Nam cursus venenatis lacus aliquet dapibus. Nulla facilisi.</p>
 
-	<form id="notify-form" action="{{ route('sysadmin.goalbank.updategoal') }}" method="post">
+	<form id="notify-form" action="{{ route('sysadmin.excuseemployees.updategoalone') }}" method="post">
 		@csrf
-
 		<br>
 		<h6 class="text-bold">Step 1. Update Goal Details</h6>
 		<br>
@@ -62,10 +61,10 @@
 			</div>
 		</div>
 
-		<div class="card m-2">
+		<div class="card">
 			<div class="card-body">
-				<label label="Current Audience" name="current_audience" > Current Organizational Audience </label>
-				@include('sysadmin.goalbank.partials.filter')
+				<label label="Current Audience" name="current_audience" > Current Individual Audience </label>
+				@include('sysadmin.excuseemployees.partials.filter')
 				<div class="p-3">  
 					<table class="table table-bordered currenttable" id="currenttable" style="width: 100%; overflow-x: auto; "></table>
 				</div>
@@ -100,23 +99,35 @@
 	
 
 		<br>
-		<h6 class="text-bold">Step 2. Select additional organizational audience</h6>
+		<h6 class="text-bold">Step 2. Select additional individual audience</h6>
 		<br>
 
 		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
 
-		@include('sysadmin.goalbank.partials.filter2')
+		@include('sysadmin.excuseemployees.partials.filter')
 
-		<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
-			<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
-				<span class="sr-only">Loading...</span>
-			</div>
-		</div>
+        <div class="p-3">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
+                    <a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+                    @include('sysadmin.excuseemployees.partials.recipient-list')
+                </div>
+                <div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
+                    <div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 		<br>
 		<h6 class="text-bold">Step 3. Finish</h6>
 		<br>
-
 		<div class="col-md-3 mb-2">
 			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Save Changes</button>
 			<button class="btn btn-secondary mt-2">Cancel</button>
@@ -182,7 +193,7 @@
 			let g_employees_by_org = [];
 
 			function confirmSaveChangesModal(){
-				count = g_selected_orgnodes.length;
+				let count = g_selected_employees.length;
 				if (count == 0) {
 					$('#saveGoalModal .modal-body p').html('Are you sure to update goal without additional audience?');
 				} else {
@@ -193,14 +204,8 @@
 
 			$(document).ready(function(){
 
-				$('#blank5th').hide();
-				$('#criteria_group').hide();
-				$('#search_text_group').hide();
-				$('#eblank5th').hide();
-				$('#ecriteria_group').hide();
-				$('#esearch_text_group').hide();
 
-				var table = $('#currenttable').DataTable
+				var table = $('.currenttable').DataTable
 				(
 					{
 						processing: true,
@@ -209,7 +214,7 @@
 						stateSave: true,
 						deferRender: true,
 						ajax: {
-							url: "{{ route('sysadmin.goalbank.getgoalorgs', $goaldetail->id) }}",
+							url: "{{ route('sysadmin.excuseemployees.getgoalinds', $goaldetail->id) }}",
 							data: function(d) {
 								d.dd_level0 = $('#dd_level0').val();
 								d.dd_level1 = $('#dd_level1').val();
@@ -221,23 +226,21 @@
 							}
 						},
 						columns: [
+							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true},
+							{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true},
+							{title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title', searchable: true},
 							{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
 							{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
 							{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
 							{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
 							{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
+							{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true},
 							{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
 							{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
-							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'id', name: 'id', searchable: false, visible: false},
+							{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'share_id', name: 'share_id', searchable: false, visible: false},
 						]
 					}
 				);
-
-				$('#delete_org').click(function(e) {
-					e.preventDefault();
-					dd('button clicked');
-					$('#btn_search').hide();
-				});
 
 				$('#btn_search').click(function(e) {
 					e.preventDefault();
@@ -251,7 +254,7 @@
 							stateSave: true,
 							deferRender: true,
 							ajax: {
-								url: "{{ route('sysadmin.goalbank.getgoalorgs', $goaldetail->id) }}",
+								url: "{{ route('sysadmin.excuseemployees.getgoalinds', $goaldetail->id) }}",
 								type: 'GET',
 								data: function(d) {
 									d.dd_level0 = $('#dd_level0').val();
@@ -264,58 +267,27 @@
 								}
 							},
 							columns: [
+								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id', searchable: true},
+								{title: 'Name', ariaTitle: 'Employee Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name', searchable: true},
+								{title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title', searchable: true},
 								{title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization', searchable: true},
 								{title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program', searchable: true},
 								{title: 'Level 2', ariaTitle: 'Level 2', target: 0, type: 'string', data: 'level2_division', name: 'level2_division', searchable: true},
 								{title: 'Level 3', ariaTitle: 'Level 3', target: 0, type: 'string', data: 'level3_branch', name: 'level3_branch', searchable: true},
 								{title: 'Level 4', ariaTitle: 'Level 4', target: 0, type: 'string', data: 'level4', name: 'level4', searchable: true},
+								{title: 'Dept ID', ariaTitle: 'Dept ID', target: 0, type: 'string', data: 'deptid', name: 'deptid', searchable: true},
 								{title: 'Action', ariaTitle: 'Action', target: 0, type: 'string', data: 'action', name: 'action', orderable: false, searchable: false},
 								{title: 'Goal ID', ariaTitle: 'Goal ID', target: 0, type: 'num', data: 'goal_id', name: 'goal_id', searchable: false, visible: false},
+								{title: 'ID', ariaTitle: 'ID', target: 0, type: 'num', data: 'share_id', name: 'share_id', searchable: false, visible: false},
 							]
 						}
 					);
 				});
 
-				$('#dd_level0').change(function (e){
-					e.preventDefault();
-					$('#btn_search').click();
-				});
-
-				$('#dd_level1').change(function (e){
-					e.preventDefault();
-					$('#btn_search').click();
-				});
-
-				$('#dd_level2').change(function (e){
-					e.preventDefault();
-					$('#btn_search').click();
-				});
-
-				$('#dd_level3').change(function (e){
-					e.preventDefault();
-					$('#btn_search').click();
-				});
-				$('#dd_level4').change(function (e){
-					e.preventDefault();
-					$('#btn_search').click();
-				});
-
-				$('#btn_search_reset').click(function(e) {
-					e.preventDefault();
-					$('#search_text').val(null);
-					$('#dd_level0').val(null);
-					$('#dd_level1').val(null);
-					$('#dd_level2').val(null);
-					$('#dd_level3').val(null);
-					$('#dd_level4').val(null);
-					$('#btn_search').click();
-        		});
-
 				$(".tags").multiselect({
                 	enableFiltering: true,
                 	enableCaseInsensitiveFiltering: true
             	});
-
 				$('#pageLoader').hide();
 
 				$('#notify-form').keydown(function (e) {
@@ -341,7 +313,7 @@
 				CKEDITOR.replace('measure_of_success', {
 					toolbar: [ ["Bold", "Italic", "Underline", "-", "NumberedList", "BulletedList", "-", "Outdent", "Indent"] ],disableNativeSpellChecker: false});
 
-			// Tab  -- LIST Page  activate
+				// Tab  -- LIST Page  activate
 				$("#nav-list-tab").on("click", function(e) {
 					table  = $('#employee-list-table').DataTable();
 					table.rows().invalidate().draw();
@@ -356,7 +328,7 @@
                         if($.trim($(target).attr('loaded'))=='') {
                             $.when( 
                                 $.ajax({
-                                    url: '/sysadmin/goalbank/org-tree',
+                                    url: '/sysadmin/excuseemployees/org-tree',
                                     type: 'GET',
                                     data: $("#notify-form").serialize(),
                                     dataType: 'html',
@@ -388,7 +360,8 @@
                             redrawTreeCheckboxes();
                         }
                     } else {
-						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+						// alert("error");
+                        $(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
 					}
 				});
 
@@ -538,86 +511,61 @@
 						$(prev_input).prop("indeterminate", false);
 					}
 				}
-
-				$('#edd_level0').change(function (e){
-					e.preventDefault();
-					$('#ebtn_search').click();
-				});
-
-				$('#edd_level1').change(function (e){
-					e.preventDefault();
-					$('#ebtn_search').click();
-				});
-
-				$('#edd_level2').change(function (e){
-					e.preventDefault();
-					$('#ebtn_search').click();
-				});
-
-				$('#edd_level3').change(function (e){
-					e.preventDefault();
-					$('#ebtn_search').click();
-				});
-				$('#edd_level4').change(function (e){
-					e.preventDefault();
-					$('#ebtn_search').click();
-				});
-
-				$('#ebtn_search_reset').click(function(e) {
-					e.preventDefault();
-					$('#esearch_text').val(null);
-					$('#edd_level0').val(null);
-					$('#edd_level1').val(null);
-					$('#edd_level2').val(null);
-					$('#edd_level3').val(null);
-					$('#edd_level4').val(null);
-					$('#ebtn_search').click();
-       			});
-
-				$('#ebtn_search').click(function(e) {
-					target = $('#enav-tree'); 
-					ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
-					if(ddnotempty) {
-						// To do -- ajax called to load the tree
-						$.when( 
-							$.ajax({
-								url: '/sysadmin/goalbank/eorg-tree',
-								// url: $url,
-								type: 'GET',
-								data: $("#notify-form").serialize(),
-								dataType: 'html',
-
-								beforeSend: function() {
-									$("#etree-loading-spinner").show();                    
-								},
-
-								success: function (result) {
-									$('#enav-tree').html(''); 
-									$('#enav-tree').html(result);
-									$('#enav-tree').attr('loaded','loaded');
-								},
-
-								complete: function() {
-									$("#etree-loading-spinner").hide();
-								},
-
-								error: function () {
-									alert("error");
-									$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
-								}
-							})
-							
-						).then(function( data, textStatus, jqXHR ) {
-							//alert( jqXHR.status ); // Alerts 200
-							enodes = $('#eaccordion-level0 input:checkbox');
-							eredrawTreeCheckboxes();	
-						}); 
-					} else {
-						$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
-					}
-				});
-
 			});
+
+			$('#ebtn_search').click(function(e) {
+				target = $('#enav-tree'); 
+				ddnotempty = $('#edd_level0').val() + $('#edd_level1').val() + $('#edd_level2').val() + $('#edd_level3').val() + $('#edd_level4').val();
+                if(ddnotempty) {
+					// To do -- ajax called to load the tree
+					$.when( 
+						$.ajax({
+							url: '/sysadmin/excuseemployees/eorg-tree',
+							// url: $url,
+							type: 'GET',
+							data: $("#notify-form").serialize(),
+							dataType: 'html',
+
+							beforeSend: function() {
+								$("#etree-loading-spinner").show();                    
+							},
+
+							success: function (result) {
+								$('#enav-tree').html(''); 
+								$('#enav-tree').html(result);
+								$('#enav-tree').attr('loaded','loaded');
+							},
+
+							complete: function() {
+								$("#etree-loading-spinner").hide();
+							},
+
+							error: function () {
+								alert("error");
+								$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+							}
+						})
+						
+					).then(function( data, textStatus, jqXHR ) {
+						//alert( jqXHR.status ); // Alerts 200
+						enodes = $('#eaccordion-level0 input:checkbox');
+						eredrawTreeCheckboxes();	
+					}); 
+				} else {
+					$(target).html('<i class="glyphicon glyphicon-info-sign"></i> Tree result is too big.  Please apply organization filter before clicking on Tree.');
+				}
+			});
+
+			$('#btn_search_reset').click(function(e) {
+					e.preventDefault();
+					$('#search_text').val(null);
+					$('#dd_level0').val(null);
+					$('#dd_level1').val(null);
+					$('#dd_level2').val(null);
+					$('#dd_level3').val(null);
+					$('#dd_level4').val(null);
+					// $('#btn_search').click();
+        		});
 
 			$(window).on('beforeunload', function(){
 				$('#pageLoader').show();
@@ -628,6 +576,22 @@
 				return;
 			});
 
+			// Model -- Confirmation Box
+
+			var modalConfirm = function(callback) {
+				$("#btn-confirm").on("click", function(){
+					$("#mi-modal").modal('show');
+				});
+				$("#modal-btn-si").on("click", function(){
+					callback(true);
+					$("#mi-modal").modal('hide');
+				});
+				
+				$("#modal-btn-no").on("click", function(){
+					callback(false);
+					$("#mi-modal").modal('hide');
+				});
+			};
 
 		</script>
 	</x-slot>

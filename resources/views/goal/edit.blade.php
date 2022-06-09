@@ -12,7 +12,7 @@
             @method('PUT')
             <div class="row">
                 <div class="col-12">
-                    <x-tooltip-dropdown name="goal_type_id" :options="$goaltypes" label="Goal Type" tooltipField="description" displayField="name" :selectedValue="$goal->goal_type_id" />
+                    <x-tooltip-dropdown-outside name="goal_type_id" :options="$goaltypes" label="Goal Type" popoverstr="{{$type_desc_str}}" tooltipField="description" displayField="name" />
                     <x-input label="Goal Title" name="title" :value="$goal->title"/>
                 </div>                                
                 <div class="col-12">
@@ -88,6 +88,11 @@
                 return "If you continue you will lose any unsaved information";
             }
         };
+        
+        $('body').popover({
+            selector: '[data-toggle-select]',
+            trigger: 'click',
+        });
     </script>
     @endpush
 </x-side-layout>

@@ -59,8 +59,9 @@
             <div class="form-group row"> </div>
                 <div class="form-group row">
                     <span class="float-left float-bottom">  
-                        <button type="button" class="btn btn-primary" id="btn_search" name="btn_search" value="button" >Filter</button>
-                        <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_search_reset" value="btn_reset">Reset</button>
+                        <button type="submit" class="btn btn-primary" name="btn_search" 
+                            value="btn_search" formaction="{{ route('sysadmin.excuseemployees.search') }}">Filter</button>
+                        <button type="button" class="btn btn-secondary  " id="btn_search_reset" name="btn_reset" value="btn_reset">Reset</button>
                     </span>
                 </div>
             </div>
@@ -97,7 +98,7 @@
             placeholder: 'Select Organization',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/employeeshares/org-organizations'
+                url: '/sysadmin/excuseemployees/org-organizations'
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -119,7 +120,7 @@
             placeholder: 'Select Level 1',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/employeeshares/org-programs' 
+                url: '/sysadmin/excuseemployees/org-programs' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -142,7 +143,7 @@
             placeholder: 'Select Level 2',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/employeeshares/org-divisions' 
+                url: '/sysadmin/excuseemployees/org-divisions' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -166,7 +167,7 @@
             placeholder: 'Select Level 3',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/employeeshares/org-branches' 
+                url: '/sysadmin/excuseemployees/org-branches' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {
@@ -191,7 +192,7 @@
             placeholder: 'Select level 4',
             allowClear: true,
             ajax: {
-                url: '/sysadmin/employeeshares/org-level4' 
+                url: '/sysadmin/excuseemployees/org-level4' 
                 , dataType: 'json'
                 , delay: 250
                 , data: function(params) {

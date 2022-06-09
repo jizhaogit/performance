@@ -351,7 +351,8 @@ class GoalBankController extends Controller
         return redirect()->back();
     }
 
-    public function editpage(CreateGoalRequest $request, $id) 
+    // public function editpage(CreateGoalRequest $request, $id) 
+    public function editpage(Request $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
         $this->getDropdownValues($mandatoryOrSuggested);
@@ -462,7 +463,8 @@ class GoalBankController extends Controller
     
     }
 
-    public function editone(CreateGoalRequest $request, $id) 
+    // public function editone(CreateGoalRequest $request, $id) 
+    public function editone(Request $request, $id) 
     {
         $goalTypes = GoalType::all()->toArray();
         $this->getDropdownValues($mandatoryOrSuggested);
@@ -827,7 +829,7 @@ class GoalBankController extends Controller
             ->with('success', 'Add new goal successful.');
     }
 
-    public function updategoal(Request $request) 
+    public function updategoal(CreateGoalRequest $request) 
     {
         $selected_org_nodes = $request->selected_org_nodes ? json_decode($request->selected_org_nodes) : [];
         $current_user = Auth::id();
@@ -873,7 +875,7 @@ class GoalBankController extends Controller
 
     }
 
-    public function updategoalone(Request $request) 
+    public function updategoalone(CreateGoalRequest $request) 
     {
         $selected_emp_ids = $request->selected_emp_ids ? json_decode($request->selected_emp_ids) : [];
         $request->userCheck = $selected_emp_ids;
@@ -1263,13 +1265,13 @@ class GoalBankController extends Controller
             return $q->whereRaw("LOWER(employee_demo.employee_id) LIKE '%" . strtolower($request->search_text) . "%'");
         })
         ->when( $request->search_text && $request->criteria == 'name', function ($q) use($request) {
-            return $q->orWhereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
+            return $q->whereRaw("LOWER(employee_demo.employee_name) LIKE '%" . strtolower($request->search_text) . "%'");
         })
         ->when( $request->search_text && $request->criteria == 'job', function ($q) use($request) {
-            return $q->orWhereRaw("LOWER(employee_demo.job_title) LIKE '%" . strtolower($request->search_text) . "%'");
+            return $q->whereRaw("LOWER(employee_demo.job_title) LIKE '%" . strtolower($request->search_text) . "%'");
         })
         ->when( $request->search_text && $request->criteria == 'dpt', function ($q) use($request) {
-            return $q->orWhereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
+            return $q->whereRaw("LOWER(employee_demo.deptid) LIKE '%" . strtolower($request->search_text) . "%'");
         });
 
         return $demoWhere;

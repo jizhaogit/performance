@@ -52,7 +52,7 @@
                     No Conversations
                 </div>
             @endforelse
-            @if(Auth::user()->hasSupervisorRole())
+            @if($user->hasRole('Supervisor'))
             <b class="p-2">Conversations with My Team</b>
             @forelse ($myTeamConversations as $c)
             <div class="col-12 col-md-12">
@@ -370,6 +370,8 @@
                     , success: function(result) {
                         if (result.success) {
                             location.reload();
+                        } else {
+                            $('.error').html(result.Message);
                         }
                     }
                     , error: function(error) {

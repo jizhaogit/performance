@@ -43,9 +43,10 @@ class DashboardController extends Controller
         // $notifications = DashboardNotification::where('user_id', Auth::id())->get();
         $notifications = DashboardNotification::where('user_id', Auth::id())->orderby('status', 'asc')->orderby('created_at', 'desc')->paginate(8);
         $notifications_unread = DashboardNotification::where('user_id', Auth::id())->where('status', null);
-        $supervisorTooltip = 'If your current supervisor within My Performance is incorrect, please have your supervisor submit an AskMyHR ticket and choose the category: <span class="text-primary">My Team of Organization > HR Software > Systems Support > Position / Reporting Updates</span>';
+        $supervisorTooltip = 'If your current supervisor in the Performance Development Platform is incorrect, please have your supervisor submit an AskMyHR ticket and choose the category: <span class="text-primary">My Team or Organization > HR Software Systems Support > Position / Reporting Updates</span>';        
         $sharedList = SharedProfile::where('shared_id', Auth::id())->with('sharedWithUser')->get();
-        return view('dashboard.index', compact('greetings', 'tab', 'supervisorTooltip', 'sharedList', 'notifications', 'notifications_unread'));
+        $profilesharedTooltip = 'If this information is incorrect, please discuss with your supervisor first and escalate to your organization\'s Strategic Human Resources shop if you are unable to resolve.';
+        return view('dashboard.index', compact('greetings', 'tab', 'supervisorTooltip', 'sharedList', 'profilesharedTooltip', 'notifications', 'notifications_unread'));
     }
 
     public function destroy($id)
@@ -104,7 +105,9 @@ class DashboardController extends Controller
          Auth::loginUsingId($oldUserId);
          $request->session()->forget('existing_user_id');
          $request->session()->forget('user_is_switched');
-         return redirect()->back();
+         //return redirect()->back();
+         return redirect()->to('/');
+
     }
 
 }

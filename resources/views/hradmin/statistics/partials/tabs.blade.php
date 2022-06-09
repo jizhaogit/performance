@@ -9,4 +9,15 @@
           Conversations Summary
         </x-button>
     </div>
+    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'hradmin.statistics.sharedsummary' ? 'border-primary' : ''}}">
+      <x-button role="tab" :href="route('hradmin.statistics.sharedsummary')" style="">
+        Shared Employees Summary
+      </x-button>
+    </div>
+    <div class="px-4 py-1 mr-2 border-bottom {{Route::current()->getName() == 'hradmin.statistics.excusedsummary' ? 'border-primary' : ''}}">
+      <x-button role="tab" :href="route('hradmin.statistics.excusedsummary')" style="">
+        Excused Employee Summary
+      </x-button>
+    </div>
+
 </div>

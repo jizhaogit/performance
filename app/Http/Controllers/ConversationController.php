@@ -12,6 +12,7 @@ use App\Models\ConversationTopic;
 use App\Models\Participant;
 use App\Models\SharedProfile;
 use App\Models\User;
+use App\Models\EmployeeDemo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class ConversationController extends Controller
         $conversationTopics = ConversationTopic::all();
         // $participants = Participant::all();
         $query = Conversation::with('conversationParticipants');
+                
         $type = 'upcoming';
         if ($request->is('conversation/past') || $request->is('my-team/conversations/past')) {
             $query->where(function($query) use ($authId, $supervisorId, $viewType) {
@@ -45,7 +47,8 @@ class ConversationController extends Controller
                             $query->where('participant_id', '<>', $supervisorId);
                         return $query;
                     });
-            })->whereNotNull('signoff_user_id')->whereNotNull('supervisor_signoff_id');
+            })->whereNotNull('signoff_user_id')->whereNotNull('supervisor_signoff_id')
+            ->whereDate('unlock_until', '<', Carbon::today());
 
             if ($request->has('user_id') && $request->user_id) {
                 $user_id = $request->user_id;
@@ -105,8 +108,15 @@ class ConversationController extends Controller
                         $query->where('participant_id', $authId);
                     });
             })->where(function($query) {
-                $query->whereNull('signoff_user_id')
-                    ->orWhereNull('supervisor_signoff_id');
+                $query->where(function($query) {
+                    $query->whereNull('signoff_user_id')
+                        ->orWhereNull('supervisor_signoff_id');
+                })
+                ->orWhere(function($query) {
+                    $query->whereNotNull('signoff_user_id')
+                          ->whereNotNull('supervisor_signoff_id')
+                          ->whereDate('unlock_until', '>=', Carbon::today() );
+                });
             });
             if ($request->has('user_id') && $request->user_id) {
                 $user_id = $request->user_id;
@@ -166,14 +176,12 @@ class ConversationController extends Controller
         $reportees = $user->reportees()->get();
         $topics = ConversationTopic::all();
         if ($type === 'past') {
-            $textAboveFilter = 'Below are all completed conversations between you and your supervisor, and you and your direct reports. Use the filters to search for conversations by employee
-            name, conversation type, and completion date range. Conversations marked with an "unlocked" icon are still within the two-week window of time that allows for any
-            additional content edits by either conversation participant. Conversations marked with a locked icon have passed the two-week window of time to allow for any
-            additonal content edits by either conversation participant. If you need to unlock the conversation, contact your system administrator.';
-        } else {
-            $textAboveFilter = 'Below are all open conversations between you and your supervisor, and you and your direct reports. Use the filters to search for open conversations by employe name and conversation type. Conversations marked with an "unlocked" icon have been unlocked because of a special request made to your system administrator.';
+            $textAboveFilter = 'The list below contains all conversations that have been signed by both employee and supervisor. There is a two week period from the date of sign-off when either participant can un-sign the conversation and return it to the Open Conversations tab for further edits. Conversations marked with a locked icon have passed the two-week time period and require approval and assistance to re-open. If you need to unlock a conversation, submit an AskMyHR request to Myself > HR Software Systems Support > Performance Development Platform.';            
+        } else {            
+            $textAboveFilter = 'The list below contains all planned conversations that have yet to be signed-off by both employee and supervisor. Once a conversation has been signed-off by both participants, it will move to the Completed Conversations tab and become an official performance development record for the employee.';
         }
-        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter'));
+                
+        return view($view, compact('type', 'conversations', 'myTeamConversations', 'conversationTopics', 'conversationMessage', 'viewType', 'reportees', 'topics', 'textAboveFilter', 'user'));
     }
 
     /**
@@ -308,6 +316,16 @@ class ConversationController extends Controller
     public function signOff(SignoffRequest $request, Conversation $conversation)
     {
         $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        $current_employee = DB::table('employee_demo')
+                            ->select('employee_id')
+                            ->join('users', 'employee_demo.guid', '=', 'users.guid')
+                            ->where('users.id', $authId)
+                            ->get();
+        
+        if ($current_employee[0]->employee_id != $request->employee_id) {
+            return response()->json(['success' => false, 'Message' => 'Invalide Employee ID', 'data' => $conversation]);            
+        }
+        
         if (!$conversation->is_with_supervisor) {
             $conversation->supervisor_signoff_id = $authId;
             $conversation->supervisor_signoff_time = Carbon::now();
@@ -334,6 +352,17 @@ class ConversationController extends Controller
 
     public function unsignOff(UnSignoffRequest $request, Conversation $conversation)
     {
+        $authId = session()->has('original-auth-id') ? session()->get('original-auth-id') : Auth::id();
+        $current_employee = DB::table('employee_demo')
+                            ->select('employee_id')
+                            ->join('users', 'employee_demo.guid', '=', 'users.guid')
+                            ->where('users.id', $authId)
+                            ->get();
+        
+        if ($current_employee[0]->employee_id != $request->employee_id) {
+            return response()->json(['success' => false, 'Message' => 'Invalide Employee ID', 'data' => $conversation]);            
+        }
+        
         if (!$conversation->is_with_supervisor) {
             $conversation->supervisor_signoff_id = null;
             $conversation->supervisor_signoff_time = null;

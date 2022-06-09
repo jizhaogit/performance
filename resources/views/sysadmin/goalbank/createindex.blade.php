@@ -12,145 +12,132 @@
 	<form id="notify-form" action="{{ route('sysadmin.goalbank.savenewgoal') }}" method="post">
 		@csrf
 
-		<br>
-		<h6 class="text-bold">Step 1. Enter Goal Details</h6>
-		<br>
+        <div class="container-fluid">
+			<br>
+			<h6 class="text-bold">Step 1. Enter Goal Details</h6>
+			<br>
 
-		<div class="col-sm-6">
-			<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
-			<small  class="text-danger error-tag_ids"></small>
-		</div>
-		<div class="row">
-		<div class="col m-2">
-			<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
-		</div>
-		<div class="col m-2">
-			<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
-				{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
-					<small class="text-danger error-title"></small>
-		</div>
-		<div class="col m-2">
-			<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
-		</div>
-		</div>
-		<div class="row">
-			<div class="col m-2">
-				<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
-					{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
-						<small class="text-danger error-what"></small>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col m-2">
-				<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
-					{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
-						<small class="text-danger error-measure_of_success"></small>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-6">
-				<x-input label="Start Date " class="error-start" type="date" name="start_date"  />
-				<small  class="text-danger error-start_date"></small>
-			</div>
-			<div class="col-sm-6">
-				<x-input label="End Date " class="error-target" type="date" name="target_date"  />
-				<small  class="text-danger error-target_date"></small>
-			</div>
-		</div>
-
-		<!----modal starts here--->
-		<div id="saveGoalModal" class="modal" role='dialog'>
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Confirmation</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<p>Default ?</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Add New Goal</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-					</div>
-					
+			<div class="row">
+				<div class="col col-md-2">
+					<x-dropdown :list="$goalTypes" label="Goal Type" name="goal_type_id" />
+				</div>
+				<div class="col col-md-8">
+					<x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' />
+						{{-- <x-input label="Goal Title" name="title" tooltip='A short title (1-3 words) used to reference the goal throughout the Performance platform.' :value="$bankgoal->title"/> --}}
+							<small class="text-danger error-title"></small>
+				</div>
+				<div class="col col-md-2">
+					<x-dropdown :list="$mandatoryOrSuggested" label="Mandatory/Suggested" name="is_mandatory" :selected="request()->is_mandatory"></x-dropdown>
 				</div>
 			</div>
-		</div>
-		<!--Modal ends here--->	
-
-		<br>
-		<h6 class="text-bold">Step 2. Select audience</h6>
-		{{-- <br> --}}
-
-		<div class="card" style="width: 100%">
-			<div class="card-body">
-				{{-- <h6 class="text-bold mt-1">Target Audience</h6> --}}
-				<div class="row form-group">
-					{{-- <div class="row form-group pl-3 pb-n3 mb-n2"> --}}
-					<div class="col-2">
-						<label>
-							<input type="radio" id="opt_audience1" name="opt_audience" value="byEmp" checked> Individual(s)
-						</label>
-					</div>
-					<div class="col-2">
-						<label>
-							<input type="radio" id="opt_audience2" name="opt_audience" value="byOrg"> Business Unit(s)
-						</label>
-					</div>
+			<div class="row">
+				<div class="col-md-2">
+					<x-dropdown :list="$tags" label="Tags" name="tag_ids[]" class="tags" multiple/>
+					<small  class="text-danger error-tag_ids"></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".'  />
+						{{-- <x-textarea label="Description" name="what" tooltip='A concise opening statement of what you plan to achieve. For example, "My goal is to deliver informative MyPerformance sessions to ministry audiences".' :value="$bankgoal->what" /> --}}
+							<small class="text-danger error-what"></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"'/>
+						{{-- <x-textarea label="Measures of Success" name="measure_of_success" tooltip='A qualitative or quantitative measure of success for your goal. For example, "Deliver a minimum of 2 sessions per month that reach at least 100 people"' :value="$bankgoal->measure_of_success" /> --}}
+							<small class="text-danger error-measure_of_success"></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-md-2">
+					<x-input label="Start Date " class="error-start" type="date" name="start_date"  />
+					<small  class="text-danger error-start_date"></small>
+				</div>
+				<div class="col col-md-2">
+					<x-input label="End Date " class="error-target" type="date" name="target_date"  />
+					<small  class="text-danger error-target_date"></small>
 				</div>
 			</div>
 		</div>
 
-		<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
-		<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
-		<input type="hidden" id="eselected_emp_ids" name="eselected_emp_ids" value="">
-		<input type="hidden" id="eselected_org_nodes" name="eselected_org_nodes" value="">
+        <div class="container-fluid">
+			<br>
+			<h6 class="text-bold">Step 2. Select audience</h6>
+			<br>
 
-		@include('sysadmin.goalbank.partials.filter')
-		@include('sysadmin.goalbank.partials.filter2')
+			<div class="card col-md-4" >
+				<div class="card-body">
+					{{-- <h6 class="text-bold mt-1">Target Audience</h6> --}}
+					<div class="row">
+						{{-- <div class="row form-group pl-3 pb-n3 mb-n2"> --}}
+						<div class="col">
+							<label>
+								<input type="radio" id="opt_audience1" name="opt_audience" value="byEmp" checked> Individual(s)
+							</label>
+						</div>
+						<div class="col">
+							<label>
+								<input type="radio" id="opt_audience2" name="opt_audience" value="byOrg"> Business Unit(s)
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
 
-		<div class="pl-2">
-			<nav>
-				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
-					<a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+			<input type="hidden" id="selected_emp_ids" name="selected_emp_ids" value="">
+			<input type="hidden" id="selected_org_nodes" name="selected_org_nodes" value="">
+			<input type="hidden" id="eselected_emp_ids" name="eselected_emp_ids" value="">
+			<input type="hidden" id="eselected_org_nodes" name="eselected_org_nodes" value="">
+
+			@include('sysadmin.goalbank.partials.filter')
+			@include('sysadmin.goalbank.partials.filter2')
+
+			<div class="pl-2">
+				<nav>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a>
+						<a class="nav-item nav-link" id="nav-tree-tab" data-toggle="tab" href="#nav-tree" role="tab" aria-controls="nav-tree" aria-selected="false">Tree</a>
+					</div>
+				</nav>
+				<div class="tab-content" id="nav-tabContent">
+					<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+						@include('sysadmin.goalbank.partials.recipient-list')
+					</div>
+					<div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
+						<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+							<span class="sr-only">Loading...</span>
+						</div>
+					</div>
 				</div>
-			</nav>
-			<div class="tab-content" id="nav-tabContent">
-				<div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
-					@include('sysadmin.goalbank.partials.recipient-list')
-				</div>
-				<div class="tab-pane fade" id="nav-tree" role="tabpanel" aria-labelledby="nav-tree-tab" loaded="">
-					<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="tree-loading-spinner" role="status" style="display:none">
+			</div>
+
+			<div class="pl-2">
+				<nav>
+					<div class="nav nav-tabs" id="enav-tab" role="tablist">
+						{{-- <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a> --}}
+						<a class="nav-item nav-link" id="enav-tree-tab" data-toggle="tab" href="#enav-tree" role="tab" aria-controls="enav-tree" aria-selected="false">Tree</a>
+					</div>
+				</nav>
+				<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
+					<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
 						<span class="sr-only">Loading...</span>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="pl-2">
-			<nav>
-				<div class="nav nav-tabs" id="enav-tab" role="tablist">
-					{{-- <a class="nav-item nav-link active" id="nav-list-tab" data-toggle="tab" href="#nav-list" role="tab" aria-controls="nav-list" aria-selected="true">List</a> --}}
-					<a class="nav-item nav-link" id="enav-tree-tab" data-toggle="tab" href="#enav-tree" role="tab" aria-controls="enav-tree" aria-selected="false">Tree</a>
-				</div>
-			</nav>
-			<div id="enav-tree" aria-labelledby="enav-tree-tab" loaded="loaded">
-				<div class="mt-2 fas fa-spinner fa-spin fa-3x fa-fw loading-spinner" id="etree-loading-spinner" role="status" style="display:none">
-					<span class="sr-only">Loading...</span>
+        <div class="container-fluid">
+			<br>
+			<h6 class="text-bold">Step 3. Finish</h6>
+			<br>
+			<div class="row">
+				<div class="col-md-3 mb-2">
+					<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Add Goal</button>
+					<button class="btn btn-secondary mt-2">Cancel</button>
 				</div>
 			</div>
-		</div>
-
-		<br>
-		<h6 class="text-bold">Step 3. Finish</h6>
-		<br>
-		<div class="col-md-3 mb-2">
-			<button class="btn btn-primary mt-2" type="button" onclick="confirmSaveChangesModal()" name="btn_send" value="btn_send">Add Goal</button>
-			<button class="btn btn-secondary mt-2">Cancel</button>
 		</div>
 
 	</form>
@@ -159,6 +146,28 @@
 	<h6 class="m-20">&nbsp;</h6>
 	<h6 class="m-20">&nbsp;</h6>
 
+	<!----modal starts here--->
+	<div id="saveGoalModal" class="modal" role='dialog'>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Confirmation</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Default ?</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary mt-2" type="submit" name="btn_send" value="btn_send">Add New Goal</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!--Modal ends here--->	
 
     @push('css')
         <link rel="stylesheet" href="{{ asset('css/bootstrap-multiselect.min.css') }}">

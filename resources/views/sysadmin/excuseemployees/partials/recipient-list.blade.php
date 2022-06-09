@@ -48,7 +48,7 @@
                 select: true,
                 'order': [[1, 'asc']],
                 ajax: {
-                    url: '{!! route('sysadmin.goalbank.employee.list') !!}',
+                    url: '{!! route('sysadmin.excuseemployees.employee.list') !!}',
                     data: function (d) {
                         d.dd_level0 = $('#dd_level0').val();
                         d.dd_level1 = $('#dd_level1').val();
@@ -91,7 +91,7 @@
                     {title: '<input name="select_all" value="1" id="employee-list-select-all" type="checkbox" />', ariaTitle: 'employee-list-select-all', target: 0, type: 'string', data: 'select_users', name: 'select_users', orderable: false, searchable: false},
                     {title: 'ID', ariaTitle: 'ID', target: 0, type: 'string', data: 'employee_id', name: 'employee_id'},
                     {title: 'Name', ariaTitle: 'Name', target: 0, type: 'string', data: 'employee_name', name: 'employee_name'},
-                    {title: 'Job Title', ariaTitle: 'Job Title', target: 0, type: 'string', data: 'job_title', name: 'job_title'},
+                    {title: 'Classification', ariaTitle: 'Classification', target: 0, type: 'string', data: 'job_title', name: 'job_title'},
                     {title: 'Email', ariaTitle: 'Email', target: 0, type: 'string', data: 'employee_email', name: 'employee_email' },
                     {title: 'Organization', ariaTitle: 'Organization', target: 0, type: 'string', data: 'organization', name: 'organization'},
                     {title: 'Level 1', ariaTitle: 'Level 1', target: 0, type: 'string', data: 'level1_program', name: 'level1_program'},

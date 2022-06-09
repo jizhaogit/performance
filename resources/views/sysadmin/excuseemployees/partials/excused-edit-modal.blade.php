@@ -1,4 +1,4 @@
-<form id="modal-form" class="form-control" action="manageexistingaccessupdate" method="post" enctype="multipart/form-data">
+<form id="modal-form" class="form-control" action="manageindexupdate" method="post" enctype="multipart/form-data">
     
     <div class="modal fade editModal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 
@@ -7,8 +7,7 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    {{-- <h5 class="modal-title" id="accessDetailLabel">Edit Employee Access Level</h5> --}}
-                    <h5 class="modal-title" type="hidden" id="accessDetailLabel">Edit Employee Access Level</h5>
+                    <h5 class="modal-title" type="hidden" id="excusedDetailLabel">Edit Employee Excuse Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -22,25 +21,26 @@
                 </div>
                 <div class="modal-body p-3">
                     <div class="row  p-3">
-                        <div class="col col-4">
-                            <input id="model_id" name="model_id" type="hidden" value="secret">
-                            <label for='accessselect' title='Access Level Tooltip'>Access Level
-                            <select name="accessselect" class="form-control" id="accessselect">
-                                @foreach($roles as $rid => $desc)
-                                    <option value = {{ $rid }} > {{ $desc }} </option>
-                                @endforeach
-                            </select>
-                            </label>
+                        <div class="col col-md-4">
+                            <x-input label="Start Date " class="error-start" type="date" id="start_date" name="start_date" />
                         </div>
-                        <div class="col col-8">
-                            <x-input class="form-control" id="reason" name="reason" label="Reason for assigning" data-toggle="tooltip" data-placement="top" data-trigger="hover-focus" tooltip="Reason tooltip"/>
+                        <div class="col col-md-4">
+                            <x-input label="End Date " class="error-target" type="date" id="target_date" name="target_date" />
                         </div>
                     </div>
-                    <table class="table table-bordered admintable" id="admintable" name="admintable" style="width: 100%; overflow-x: auto; "></table>
+                    <div class="row  p-3">
+                        <label for='reasons' title='Excused Reasons Tooltip'>Reason
+                            <select name="reasons" class="form-control" id="reasons">
+                                @foreach($reasons as $reason)
+                                    <option value = {{ $reason->id }} {{ '$reason->id' == '$excused_reason_id' ? "selected" : "" }}> {{ $reason->name }} </option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </div>
                 </div>
                 <div class="modal-footer p-3">
                     <div class="col">
-                        <button id="removeButton" name="removeButton" type="button" class="btn btn-outline-danger float-left" onClick="return confirm('Are you sure?')" aria-label="Remove Access">Remove Access</button>
+                        <button id="removeButton" name="removeButton" type="button" class="btn btn-outline-danger float-left" onClick="return confirm('Are you sure?')" aria-label="Remove Access">Remove Excuse</button>
                     </div>
                     <div class="col">
                         <button id="cancelButton" name="cancelButton" type="button" class="btn btn-secondary float-right" style="margin:5px;" data-dismiss="modal" aria-label="Cancel">Cancel</button>                    

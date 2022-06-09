@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
         // return view('welcome');
         return redirect('/login');
     });
+
     Route::middleware(['ViewShare'])->group(function () {
         Route::match(['get', 'post', 'delete', 'put'], '/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
         Route::delete('/dashboard/{id}',[DashboardController::class, 'destroy'])->name('dashboard.destroy');
@@ -35,8 +36,10 @@ use Illuminate\Support\Facades\Route;
             require __DIR__ . '/poc.php';
         });
     });
+
     Route::get('/my-performance', function () {
         return view('my-performance');
     })->middleware(['auth'])->name('my-performance');
+    
     require __DIR__.'/auth.php';
     Route::get('dashboard/revert-identity', [DashboardController::class, 'revertIdentity'])->name('dashboard.revert-identity');

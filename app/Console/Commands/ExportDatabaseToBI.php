@@ -13,31 +13,31 @@ class ExportDatabaseToBI extends Command
 {
 
     protected $db_tables = [
-        ['name' => 'admin_orgs',                    'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'admin_orgs',                    'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'conversations',                 'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'conversation_participants',     'delta' => null,            'hidden' => null ],
         ['name' => 'conversation_topics',           'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'dashboard_notifications',       'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'excused_reasons',               'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'generic_templates',             'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'generic_template_binds',        'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'dashboard_notifications',       'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'excused_reasons',               'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'generic_templates',             'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'generic_template_binds',        'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goals',                         'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goals_shared_with',             'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goal_comments',                 'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goal_tags',                     'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'goal_types',                    'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'job_sched_audit',               'delta' => null,            'hidden' => null ],
-        ['name' => 'linked_goals',                  'delta' => null,            'hidden' => null ],
-        ['name' => 'migrations',                    'delta' => null,            'hidden' => null ],
-        ['name' => 'model_has_permissions',         'delta' => null,            'hidden' => null ],
-        ['name' => 'model_has_roles',               'delta' => null,            'hidden' => null ],
-        ['name' => 'notification_logs',             'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'notification_log_recipients',   'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'permissions',                   'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'roles',                         'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'role_has_permissions',          'delta' => null,            'hidden' => null ],
-        ['name' => 'shared_profiles',               'delta' => 'updated_at',    'hidden' => null ],
-        ['name' => 'stored_dates',                  'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'job_sched_audit',               'delta' => null,            'hidden' => null ],
+        // ['name' => 'linked_goals',                  'delta' => null,            'hidden' => null ],
+        // ['name' => 'migrations',                    'delta' => null,            'hidden' => null ],
+        // ['name' => 'model_has_permissions',         'delta' => null,            'hidden' => null ],
+        // ['name' => 'model_has_roles',               'delta' => null,            'hidden' => null ],
+        // ['name' => 'notification_logs',             'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'notification_log_recipients',   'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'permissions',                   'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'roles',                         'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'role_has_permissions',          'delta' => null,            'hidden' => null ],
+        // ['name' => 'shared_profiles',               'delta' => 'updated_at',    'hidden' => null ],
+        // ['name' => 'stored_dates',                  'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'tags',                          'delta' => 'updated_at',    'hidden' => null ],
         ['name' => 'users',                         'delta' => 'updated_at',    'hidden' => ['password', 'remember_token'] ],
         ['name' => 'user_reporting_tos',            'delta' => 'updated_at',    'hidden' => null ],
@@ -58,7 +58,7 @@ class ExportDatabaseToBI extends Command
      *
      * @var string
      */
-    protected $description = 'Sending Greenfield database to Datawarehouse vis ODS';
+    protected $description = 'Sending Performance database to Datawarehouse vis ODS';
 
     /**
      * Create a new command instance.
@@ -114,9 +114,6 @@ class ExportDatabaseToBI extends Command
                 $this->info( 'Last Bulk Upload Date not found.  Using ' . $last_cutoff_time);
             }
         }
-
-
-
   
         $this->info( now() );
 
@@ -158,9 +155,6 @@ class ExportDatabaseToBI extends Command
           );
       
           $this->info( 'Bulk Database Upload to ODS, Completed: ' . $end_time);
-        
-      
-
 
         return 0;
     }

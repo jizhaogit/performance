@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserRoleSeeder::class);
         $this->call(UserRoleSeederAdmins::class);
         $this->call(GoalTypeSeeder::class);
+        $this->call(GoalTypeSeeder_Update20220607::class);
         $this->call(TopicSeeder::class);
         $this->call(TagSeeder::class);
         $this->call(ExcusedReasonSeeder::class);

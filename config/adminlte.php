@@ -315,7 +315,7 @@ return [
                 //     'active' => ['hradmin/notifications/*']
                 // ],
                 [
-                    'text' => 'Statiscts and Reports',
+                    'text' => 'Statistic and Reports',
                     'url'  => 'hradmin/statistics/goalsummary',
                     'active' => ['hradmin/statistics/*']
                 ]
@@ -352,8 +352,8 @@ return [
                 // ],
                 [
                     'text' => 'Excuse Employees',
-                    'url'  => 'sysadmin/excusedemployees/notify',
-                    'active' => ['sysadmin/excusedemployees/*']
+                    'url'  => 'sysadmin/excuseemployees/addindex',
+                    'active' => ['sysadmin/excuseemployees/*']
                 ],
                 [
                     'text' => 'Goal Bank',
